@@ -116,4 +116,15 @@ public class Trajet {
         return dateArrivee.isAfter(dateDepart);
     }
 
+    @AssertTrue(message = "La ville de départ doit être différente de la ville d'arrivée")
+    public boolean isVillesDifferentes() {
+        if (villeDepart == null || villeArrivee == null) {
+            return true;
+        }
+
+        return !villeDepart.trim()
+                .equalsIgnoreCase(villeArrivee.trim());
+    }
+
+
 }

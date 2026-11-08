@@ -138,4 +138,39 @@ class TrajetValidationTest {
         ));
     }
 
+    @Test
+    void shouldRejectSameDepartureAndArrivalCity() {
+        // Arrange
+        Trajet trajet = creerTrajetValide();
+        trajet.setVilleDepart("Agadir");
+        trajet.setVilleArrivee("Agadir");
+
+        // Act
+        var violations = validator.validate(trajet);
+
+        // Assert
+        assertTrue(violations.stream().anyMatch(v ->
+                v.getPropertyPath().toString()
+                        .equals("villesDifferentes")
+        ));
+    }
+
+    @Test
+    void shouldRejectSameCityIgnoringCaseAndSpaces() {
+        // Arrange
+        Trajet trajet = creerTrajetValide();
+        trajet.setVilleDepart(" Agadir ");
+        trajet.setVilleArrivee("agadir");
+
+        // Act
+        var violations = validator.validate(trajet);
+
+        // Assert
+        assertTrue(violations.stream().anyMatch(v ->
+                v.getPropertyPath().toString()
+                        .equals("villesDifferentes")
+        ));
+    }
+
+
 }
