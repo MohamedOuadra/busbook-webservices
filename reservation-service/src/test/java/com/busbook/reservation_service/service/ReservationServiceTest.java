@@ -3,11 +3,15 @@ package com.busbook.reservation_service.service;
 import com.busbook.reservation_service.entity.Reservation;
 import com.busbook.reservation_service.enums.ReservationStatus;
 import com.busbook.reservation_service.repository.ReservationRepository;
+import com.busbook.reservation_service.repository.SeatRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.busbook.reservation_service.dto.ReservationRequest;
+import com.busbook.reservation_service.dto.ReservationResponse;
+import com.busbook.reservation_service.entity.Seat;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +25,8 @@ class ReservationServiceTest {
 
     @Mock
     private ReservationRepository reservationRepository;
+    @Mock
+    private SeatRepository seatRepository;
 
     @InjectMocks
     private ReservationService reservationService;
@@ -119,6 +125,103 @@ class ReservationServiceTest {
 
         assertThrows(IllegalStateException.class,
                 () -> reservationService.cancelReservation(1L));
+
+        verify(reservationRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldCreateReservationSuccessfully() {
+        ReservationRequest request = new ReservationRequest();
+        request.setTripId(1L);
+        request.setTravelerId(5L);
+        request.setSeatId(12L);
+
+        Seat seat = mock(Seat.class);
+        when(seat.getId()).thenReturn(12L);
+        when(seat.getSeatNumber()).thenReturn("A12");
+
+        when(seatRepository.findById(12L))
+                .thenReturn(Optional.of(seat));
+
+        when(reservationRepository.existsByTripIdAndSeat_IdAndStatusIn(
+                eq(1L), eq(12L), anyList()
+        )).thenReturn(false);
+
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        ReservationResponse response =
+                reservationService.createReservation(request);
+
+        assertNotNull(response);
+        assertEquals(1L, response.getTripId());
+        assertEquals(5L, response.getTravelerId());
+        assertEquals(12L, response.getSeatId());
+        assertEquals("A12", response.getSeatNumber());
+        assertEquals(ReservationStatus.EN_ATTENTE, response.getStatus());
+
+        verify(reservationRepository).save(any(Reservation.class));
+    }
+
+    @Test
+    void shouldRejectReservationWhenSeatDoesNotExist() {
+        ReservationRequest request = new ReservationRequest();
+        request.setTripId(1L);
+        request.setTravelerId(5L);
+        request.setSeatId(99L);
+
+        when(seatRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> reservationService.createReservation(request));
+
+        verify(reservationRepository, never()).save(any());
+    }
+
+
+    @Test
+    void shouldRejectReservationWhenSeatIsAlreadyReserved() {
+        ReservationRequest request = new ReservationRequest();
+        request.setTripId(1L);
+        request.setTravelerId(5L);
+        request.setSeatId(12L);
+
+        Seat seat = mock(Seat.class);
+
+        when(seatRepository.findById(12L))
+                .thenReturn(Optional.of(seat));
+
+        when(reservationRepository.existsByTripIdAndSeat_IdAndStatusIn(
+                eq(1L), eq(12L), anyList()
+        )).thenReturn(true);
+
+        assertThrows(IllegalStateException.class,
+                () -> reservationService.createReservation(request));
+
+        verify(reservationRepository, never()).save(any());
+    }
+
+
+    @Test
+    void shouldRejectReservationWithInvalidIds() {
+        ReservationRequest request = new ReservationRequest();
+        request.setTripId(0L);
+        request.setTravelerId(5L);
+        request.setSeatId(12L);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> reservationService.createReservation(request));
+
+        verify(seatRepository, never()).findById(any());
+        verify(reservationRepository, never()).save(any());
+    }
+
+
+    @Test
+    void shouldRejectNullReservationRequest() {
+        assertThrows(IllegalArgumentException.class,
+                () -> reservationService.createReservation(null));
 
         verify(reservationRepository, never()).save(any());
     }
