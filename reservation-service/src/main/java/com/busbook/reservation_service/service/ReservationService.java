@@ -159,4 +159,57 @@ public class ReservationService {
             );
         }
     }
+
+    /**
+     * Récupérer une réservation par son identifiant.
+     */
+    public ReservationResponse getReservationById(Long reservationId) {
+
+        if (reservationId == null || reservationId <= 0) {
+            throw new IllegalArgumentException(
+                    "L'identifiant de la réservation doit être positif."
+            );
+        }
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Réservation introuvable."
+                ));
+
+        return ReservationResponse.fromEntity(reservation);
+    }
+
+    /**
+     * Récupérer toutes les réservations d'un trajet.
+     */
+    public List<ReservationResponse> getReservationsByTripId(Long tripId) {
+
+        if (tripId == null || tripId <= 0) {
+            throw new IllegalArgumentException(
+                    "L'identifiant du trajet doit être positif."
+            );
+        }
+
+        return reservationRepository.findByTripId(tripId)
+                .stream()
+                .map(ReservationResponse::fromEntity)
+                .toList();
+    }
+
+    /**
+     * Récupérer toutes les réservations d'un voyageur.
+     */
+    public List<ReservationResponse> getReservationsByTravelerId(Long travelerId) {
+
+        if (travelerId == null || travelerId <= 0) {
+            throw new IllegalArgumentException(
+                    "L'identifiant du voyageur doit être positif."
+            );
+        }
+
+        return reservationRepository.findByTravelerId(travelerId)
+                .stream()
+                .map(ReservationResponse::fromEntity)
+                .toList();
+    }
 }
