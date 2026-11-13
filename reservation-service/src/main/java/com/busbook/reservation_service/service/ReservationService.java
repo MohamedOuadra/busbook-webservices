@@ -1,4 +1,3 @@
-
 package com.busbook.reservation_service.service;
 
 import com.busbook.reservation_service.dto.ReservationRequest;
@@ -6,9 +5,11 @@ import com.busbook.reservation_service.dto.ReservationResponse;
 import com.busbook.reservation_service.entity.Reservation;
 import com.busbook.reservation_service.entity.Seat;
 import com.busbook.reservation_service.enums.ReservationStatus;
+import com.busbook.reservation_service.exception.ResourceNotFoundException;
 import com.busbook.reservation_service.repository.ReservationRepository;
 import com.busbook.reservation_service.repository.SeatRepository;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,9 @@ import java.util.List;
 
 @Service
 public class ReservationService {
+
+    private static final String SEAT_CONSTRAINT =
+            "uk_active_reservation_trip_seat";
 
     private final ReservationRepository reservationRepository;
     private final SeatRepository seatRepository;
@@ -74,7 +78,7 @@ public class ReservationService {
         }
 
         Seat seat = seatRepository.findById(request.getSeatId())
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Le siège demandé est introuvable."
                 ));
 
@@ -91,9 +95,22 @@ public class ReservationService {
         reservation.setSeat(seat);
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
 
-        Reservation savedReservation = reservationRepository.save(reservation);
+        try {
+            Reservation savedReservation =
+                    reservationRepository.saveAndFlush(reservation);
 
-        return ReservationResponse.fromEntity(savedReservation);
+            return ReservationResponse.fromEntity(savedReservation);
+
+        } catch (DataIntegrityViolationException exception) {
+
+            if (isSeatConstraintViolation(exception)) {
+                throw new IllegalStateException(
+                        "Ce siège est déjà réservé pour ce trajet."
+                );
+            }
+
+            throw exception;
+        }
     }
 
     /**
@@ -106,7 +123,7 @@ public class ReservationService {
 
         Reservation reservation = reservationRepository
                 .findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Réservation introuvable."
                 ));
 
@@ -132,12 +149,13 @@ public class ReservationService {
 
         Reservation reservation = reservationRepository
                 .findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Réservation introuvable."
                 ));
 
         if (reservation.getStatus() != ReservationStatus.EN_ATTENTE
                 && reservation.getStatus() != ReservationStatus.CONFIRMEE) {
+
             throw new IllegalStateException(
                     "Cette réservation ne peut pas être annulée."
             );
@@ -161,18 +179,14 @@ public class ReservationService {
     }
 
     /**
-     * Récupérer une réservation par son identifiant.
+     * Récupère une réservation par son identifiant.
      */
     public ReservationResponse getReservationById(Long reservationId) {
 
-        if (reservationId == null || reservationId <= 0) {
-            throw new IllegalArgumentException(
-                    "L'identifiant de la réservation doit être positif."
-            );
-        }
+        validateReservationId(reservationId);
 
         Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Réservation introuvable."
                 ));
 
@@ -180,7 +194,7 @@ public class ReservationService {
     }
 
     /**
-     * Récupérer toutes les réservations d'un trajet.
+     * Récupère toutes les réservations d'un trajet.
      */
     public List<ReservationResponse> getReservationsByTripId(Long tripId) {
 
@@ -197,7 +211,7 @@ public class ReservationService {
     }
 
     /**
-     * Récupérer toutes les réservations d'un voyageur.
+     * Récupère toutes les réservations d'un voyageur.
      */
     public List<ReservationResponse> getReservationsByTravelerId(Long travelerId) {
 
@@ -211,5 +225,27 @@ public class ReservationService {
                 .stream()
                 .map(ReservationResponse::fromEntity)
                 .toList();
+    }
+
+    /**
+     * Vérifie si une violation concerne la contrainte
+     * d'unicité des réservations actives d'un siège.
+     */
+    private boolean isSeatConstraintViolation(Throwable exception) {
+
+        Throwable cause = exception;
+
+        while (cause != null) {
+
+            String message = cause.getMessage();
+
+            if (message != null && message.contains(SEAT_CONSTRAINT)) {
+                return true;
+            }
+
+            cause = cause.getCause();
+        }
+
+        return false;
     }
 }
