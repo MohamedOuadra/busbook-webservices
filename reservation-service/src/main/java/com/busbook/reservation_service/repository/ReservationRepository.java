@@ -4,6 +4,7 @@ import com.busbook.reservation_service.entity.Reservation;
 import com.busbook.reservation_service.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -21,5 +22,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             Long tripId,
             Long seatId,
             List<ReservationStatus> statuses
+    );
+
+    List<Reservation> findByStatusAndExpiresAtLessThanEqual(
+            ReservationStatus status,
+            LocalDateTime now
     );
 }

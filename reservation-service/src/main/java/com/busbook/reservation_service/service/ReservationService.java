@@ -21,6 +21,7 @@ public class ReservationService {
 
     private static final String SEAT_CONSTRAINT =
             "uk_active_reservation_trip_seat";
+    private static final int RESERVATION_EXPIRATION_MINUTES = 10;
 
     private final ReservationRepository reservationRepository;
     private final SeatRepository seatRepository;
@@ -94,6 +95,9 @@ public class ReservationService {
         reservation.setTravelerId(request.getTravelerId());
         reservation.setSeat(seat);
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
+        reservation.setExpiresAt(
+                LocalDateTime.now().plusMinutes(RESERVATION_EXPIRATION_MINUTES)
+        );
 
         try {
             Reservation savedReservation =
@@ -126,6 +130,15 @@ public class ReservationService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Réservation introuvable."
                 ));
+
+        if (reservation.getStatus() == ReservationStatus.EN_ATTENTE
+                && reservation.getExpiresAt() != null
+                && !reservation.getExpiresAt().isAfter(LocalDateTime.now())) {
+
+            throw new IllegalStateException(
+                    "Le délai de confirmation de cette réservation est expiré."
+            );
+        }
 
         if (reservation.getStatus() != ReservationStatus.EN_ATTENTE) {
             throw new IllegalStateException(
@@ -178,6 +191,29 @@ public class ReservationService {
         }
     }
 
+    /**
+     * Expire automatiquement les réservations en attente
+     * dont le délai de 10 minutes est dépassé.
+     */
+    @Transactional
+    public int expirePendingReservations() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Reservation> expiredReservations =
+                reservationRepository.findByStatusAndExpiresAtLessThanEqual(
+                        ReservationStatus.EN_ATTENTE,
+                        now
+                );
+
+        for (Reservation reservation : expiredReservations) {
+            reservation.setStatus(ReservationStatus.EXPIREE);
+        }
+
+        reservationRepository.saveAll(expiredReservations);
+
+        return expiredReservations.size();
+    }
     /**
      * Récupère une réservation par son identifiant.
      */
