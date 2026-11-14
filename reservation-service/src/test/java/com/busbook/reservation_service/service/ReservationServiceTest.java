@@ -18,6 +18,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -241,5 +242,107 @@ class ReservationServiceTest {
                 () -> reservationService.createReservation(null));
 
         verify(reservationRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldExpirePendingReservations() {
+        Reservation reservation = new Reservation();
+        reservation.setStatus(ReservationStatus.EN_ATTENTE);
+        reservation.setExpiresAt(
+                LocalDateTime.now().minusMinutes(1)
+        );
+
+        when(reservationRepository
+                .findByStatusAndExpiresAtLessThanEqual(
+                        eq(ReservationStatus.EN_ATTENTE),
+                        any(LocalDateTime.class)
+                ))
+                .thenReturn(List.of(reservation));
+
+        int result = reservationService.expirePendingReservations();
+
+        assertEquals(1, result);
+        assertEquals(ReservationStatus.EXPIREE, reservation.getStatus());
+
+        verify(reservationRepository).saveAll(List.of(reservation));
+    }
+
+    @Test
+    void shouldNotExpirePendingReservationBeforeExpirationDate() {
+        when(reservationRepository
+                .findByStatusAndExpiresAtLessThanEqual(
+                        eq(ReservationStatus.EN_ATTENTE),
+                        any(LocalDateTime.class)
+                ))
+                .thenReturn(List.of());
+
+        int result = reservationService.expirePendingReservations();
+
+        assertEquals(0, result);
+
+        verify(reservationRepository).saveAll(List.of());
+    }
+
+    @Test
+    void shouldNotExpireConfirmedReservation() {
+        Reservation reservation = new Reservation();
+        reservation.setStatus(ReservationStatus.CONFIRMEE);
+        reservation.setExpiresAt(
+                LocalDateTime.now().minusMinutes(5)
+        );
+
+        when(reservationRepository
+                .findByStatusAndExpiresAtLessThanEqual(
+                        eq(ReservationStatus.EN_ATTENTE),
+                        any(LocalDateTime.class)
+                ))
+                .thenReturn(List.of());
+
+        int result = reservationService.expirePendingReservations();
+
+        assertEquals(0, result);
+        assertEquals(ReservationStatus.CONFIRMEE, reservation.getStatus());
+
+        verify(reservationRepository).saveAll(List.of());
+    }
+
+    @Test
+    void shouldRejectConfirmationOfExpiredReservation() {
+        Reservation reservation = new Reservation();
+        reservation.setStatus(ReservationStatus.EN_ATTENTE);
+        reservation.setExpiresAt(
+                LocalDateTime.now().minusMinutes(1)
+        );
+
+        when(reservationRepository.findById(1L))
+                .thenReturn(Optional.of(reservation));
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> reservationService.confirmReservation(1L)
+        );
+
+        assertEquals(
+                ReservationStatus.EN_ATTENTE,
+                reservation.getStatus()
+        );
+
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
+
+    @Test
+    void shouldMakeSeatAvailableAfterReservationExpires() {
+        Reservation reservation = new Reservation();
+        reservation.setStatus(ReservationStatus.EXPIREE);
+
+        when(reservationRepository.existsByTripIdAndSeat_IdAndStatusIn(
+                eq(1L),
+                eq(5L),
+                anyList()
+        )).thenReturn(false);
+
+        boolean result = reservationService.isSeatAvailable(1L, 5L);
+
+        assertTrue(result);
     }
 }
