@@ -2,6 +2,7 @@ package com.busbook.reservation_service.service;
 
 import com.busbook.reservation_service.entity.Reservation;
 import com.busbook.reservation_service.enums.ReservationStatus;
+import com.busbook.reservation_service.exception.ResourceNotFoundException;
 import com.busbook.reservation_service.repository.ReservationRepository;
 import com.busbook.reservation_service.repository.SeatRepository;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.busbook.reservation_service.dto.ReservationRequest;
 import com.busbook.reservation_service.dto.ReservationResponse;
 import com.busbook.reservation_service.entity.Seat;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
@@ -95,8 +100,9 @@ class ReservationServiceTest {
         when(reservationRepository.findById(99L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
-                () -> reservationService.confirmReservation(99L));
+        assertThrows(ResourceNotFoundException.class, () -> {
+            reservationService.confirmReservation(99L);
+        });
     }
 
     @Test
@@ -129,6 +135,7 @@ class ReservationServiceTest {
         verify(reservationRepository, never()).save(any());
     }
 
+
     @Test
     void shouldCreateReservationSuccessfully() {
         ReservationRequest request = new ReservationRequest();
@@ -147,21 +154,30 @@ class ReservationServiceTest {
                 eq(1L), eq(12L), anyList()
         )).thenReturn(false);
 
-        when(reservationRepository.save(any(Reservation.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+        when(reservationRepository.saveAndFlush(any(Reservation.class)))
+                .thenAnswer(invocation -> {
+                    Reservation reservation = invocation.getArgument(0);
+
+                    // Simuler l'identifiant généré par la base de données
+                    ReflectionTestUtils.setField(reservation, "id", 1L);
+
+                    return reservation;
+                });
 
         ReservationResponse response =
                 reservationService.createReservation(request);
 
         assertNotNull(response);
+        assertEquals(1L, response.getId());
         assertEquals(1L, response.getTripId());
         assertEquals(5L, response.getTravelerId());
         assertEquals(12L, response.getSeatId());
         assertEquals("A12", response.getSeatNumber());
         assertEquals(ReservationStatus.EN_ATTENTE, response.getStatus());
 
-        verify(reservationRepository).save(any(Reservation.class));
+        verify(reservationRepository).saveAndFlush(any(Reservation.class));
     }
+
 
     @Test
     void shouldRejectReservationWhenSeatDoesNotExist() {
@@ -173,8 +189,9 @@ class ReservationServiceTest {
         when(seatRepository.findById(99L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
-                () -> reservationService.createReservation(request));
+        assertThrows(ResourceNotFoundException.class, () -> {
+            reservationService.createReservation(request);
+        });
 
         verify(reservationRepository, never()).save(any());
     }
