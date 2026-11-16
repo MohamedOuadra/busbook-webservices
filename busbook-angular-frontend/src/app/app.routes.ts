@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { AuthLayout } from './layouts/auth-layout/auth-layout';
 import { Home } from './features/home/pages/home/home';
 import { Reservation } from './features/reservations/pages/reservation/reservation';
 import { PaymentPage } from './features/payment/pages/payment/payment';
@@ -11,6 +12,22 @@ import { LoginPage } from './features/auth/pages/login/login';
 import { RegisterPage } from './features/auth/pages/register/register';
 
 export const routes: Routes = [
+  // Auth Layout dedicated to login & register
+  {
+    path: '',
+    component: AuthLayout,
+    children: [
+      {
+        path: 'login',
+        component: LoginPage,
+      },
+      {
+        path: 'register',
+        component: RegisterPage,
+      },
+    ],
+  },
+  // Main Layout for all application pages
   {
     path: '',
     component: MainLayout,
@@ -22,14 +39,6 @@ export const routes: Routes = [
       {
         path: 'trips',
         component: TripsCatalogPage,
-      },
-      {
-        path: 'login',
-        component: LoginPage,
-      },
-      {
-        path: 'register',
-        component: RegisterPage,
       },
       {
         path: 'reservation/:tripId',

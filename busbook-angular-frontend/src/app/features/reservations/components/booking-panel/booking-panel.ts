@@ -1,12 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { BookingSummary } from '../booking-summary/booking-summary';
 import { Trip } from '../../../trips/models/trip';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-booking-panel',
-  imports: [BookingSummary, FormsModule],
+  standalone: true,
+  imports: [BookingSummary, FormsModule, RouterLink],
   templateUrl: './booking-panel.html',
   styleUrl: './booking-panel.css',
 })
@@ -26,7 +28,12 @@ export class BookingPanel implements OnInit {
   phoneNumber = '';
   email = '';
 
-  constructor(private authService: AuthService) {}
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
 
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
@@ -37,7 +44,19 @@ export class BookingPanel implements OnInit {
   }
 
   onContinueBooking(): void {
-    if (this.seatNumber === null || !this.fullName || !this.email) {
+    if (this.seatNumber === null) {
+      return;
+    }
+
+    // Si non authentifié, rediriger vers login
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: `/reservation/${this.trip.id}` }
+      });
+      return;
+    }
+
+    if (!this.fullName || !this.email) {
       return;
     }
 

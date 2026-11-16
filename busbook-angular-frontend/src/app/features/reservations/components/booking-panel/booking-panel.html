@@ -1,15 +1,40 @@
 <aside class="booking-panel">
 
-  <div class="traveler-form glass">
+  @if (!isLoggedIn) {
+    <div class="auth-required-box glass">
+      <div class="auth-notice-header">
+        <span class="lock-icon">🔒</span>
+        <div>
+          <h4>Authentication Required</h4>
+          <p>Please sign in or create an account to book this trip.</p>
+        </div>
+      </div>
+      <a
+        routerLink="/login"
+        [queryParams]="{ returnUrl: '/reservation/' + trip.id }"
+        class="btn-auth-redirect"
+      >
+        Sign In / Register
+      </a>
+    </div>
+  }
+
+  <div class="traveler-form glass" [class.disabled-form]="!isLoggedIn">
     <div class="form-header">
       <span class="section-label">PASSENGER DETAILS</span>
       <h2>Traveler information</h2>
-      <p>Please enter your contact information</p>
+      <p>
+        @if (isLoggedIn) {
+          Pre-filled from your BusBook profile
+        } @else {
+          Please sign in to verify your information
+        }
+      </p>
     </div>
 
     <form #travelerForm="ngForm">
       <div class="form-group">
-        <label for="fullName">Full name</label>
+        <label for="fullName">Full name *</label>
         <input
           id="fullName"
           type="text"
@@ -17,6 +42,7 @@
           [(ngModel)]="fullName"
           placeholder="Enter your full name"
           required
+          [disabled]="!isLoggedIn"
         />
       </div>
 
@@ -28,12 +54,12 @@
           name="phoneNumber"
           [(ngModel)]="phoneNumber"
           placeholder="Enter your phone number"
-          required
+          [disabled]="!isLoggedIn"
         />
       </div>
 
       <div class="form-group">
-        <label for="email">Email address</label>
+        <label for="email">Email address *</label>
         <input
           id="email"
           type="email"
@@ -42,26 +68,31 @@
           placeholder="Enter your email address"
           required
           email
+          [disabled]="!isLoggedIn"
         />
       </div>
     </form>
   </div>
 
   <app-booking-summary
-  [from]="trip.villeDepart"
-  [to]="trip.villeArrivee"
-  [date]="trip.dateDepart"
-  [seatNumber]="seatNumber"
-  [price]="trip.prix"
-/>
+    [from]="trip.villeDepart"
+    [to]="trip.villeArrivee"
+    [date]="trip.dateDepart"
+    [seatNumber]="seatNumber"
+    [price]="trip.prix"
+  />
 
   <button
     class="continue-button"
-    [disabled]="seatNumber === null || !travelerForm.valid || isSubmitting"
+    [class.btn-login-action]="!isLoggedIn"
+    [disabled]="seatNumber === null || (isLoggedIn && !travelerForm.valid) || isSubmitting"
     (click)="onContinueBooking()"
   >
     @if (isSubmitting) {
       <span>Holding seat (10 min)...</span>
+    } @else if (!isLoggedIn) {
+      <span>Sign In to Book Seat</span>
+      <span>→</span>
     } @else {
       <span>Continue booking</span>
       <span>→</span>

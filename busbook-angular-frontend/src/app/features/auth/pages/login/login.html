@@ -69,7 +69,7 @@
 
     <div class="auth-footer">
       <span>Don't have an account yet?</span>
-      <a routerLink="/register" class="auth-link">Create Account</a>
+      <a routerLink="/register" [queryParams]="{ returnUrl: returnUrl }" class="auth-link">Create Account</a>
     </div>
   </div>
 </div>

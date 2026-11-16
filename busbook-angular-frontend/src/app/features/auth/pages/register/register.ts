@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { RegisterRequest } from '../../../../core/models/auth.model';
 
@@ -23,12 +23,16 @@ export class RegisterPage {
   confirmPassword = '';
   isLoading = false;
   errorMessage = '';
+  returnUrl = '/';
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
 
   onSubmit(): void {
     if (!this.form.fullName || !this.form.email || !this.form.password) {
@@ -53,7 +57,7 @@ export class RegisterPage {
       next: () => {
         this.isLoading = false;
         this.cdr.markForCheck();
-        this.router.navigate(['/']);
+        this.router.navigateByUrl(this.returnUrl);
       },
       error: (err) => {
         this.isLoading = false;

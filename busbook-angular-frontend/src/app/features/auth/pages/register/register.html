@@ -119,7 +119,7 @@
 
     <div class="auth-footer">
       <span>Already have an account?</span>
-      <a routerLink="/login" class="auth-link">Sign In</a>
+      <a routerLink="/login" [queryParams]="{ returnUrl: returnUrl }" class="auth-link">Sign In</a>
     </div>
   </div>
 </div>

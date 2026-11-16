@@ -114,6 +114,14 @@ export class Reservation implements OnInit, OnDestroy {
       return;
     }
 
+    // Obliger l'authentification avant de créer une réservation
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: `/reservation/${this.trip.id}` }
+      });
+      return;
+    }
+
     this.isCreatingReservation = true;
     this.errorMessage = null;
     this.bookingService.setTravelerInfo(traveler);
