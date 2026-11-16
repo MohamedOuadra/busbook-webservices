@@ -1,0 +1,124 @@
+<div class="my-reservations-page">
+  <div class="page-header glass">
+    <div>
+      <span class="section-label">CUSTOMER DASHBOARD</span>
+      <h2>My Bookings & Tickets</h2>
+      <p>View your upcoming trips, confirm pending holds, or access your e-tickets.</p>
+    </div>
+
+    <div class="traveler-selector">
+      <label>Traveler ID:</label>
+      <input type="number" [(ngModel)]="travelerId" (change)="loadReservations()" min="1" />
+      <button class="btn-refresh" (click)="loadReservations()">Refresh</button>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-card glass">
+      <div class="spinner"></div>
+      <p>Loading your reservations...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-card glass error">
+      <span>⚠️</span>
+      <p>{{ errorMessage }}</p>
+      <button class="btn-refresh" (click)="loadReservations()">Retry</button>
+    </div>
+  } @else if (reservations.length === 0) {
+    <div class="state-card glass">
+      <span class="icon">🎟️</span>
+      <h3>No Reservations Found</h3>
+      <p>You haven't made any reservations yet.</p>
+      <button class="btn-new" routerLink="/">Find a Trip</button>
+    </div>
+  } @else {
+    <div class="reservations-grid">
+      @for (item of reservations; track item.reservation.id) {
+        <div class="reservation-card glass">
+          <div class="card-header">
+            <div class="route">
+              <strong>
+                @if (item.trip) {
+                  {{ item.trip.villeDepart }} → {{ item.trip.villeArrivee }}
+                } @else {
+                  Trip #{{ item.reservation.tripId }}
+                }
+              </strong>
+              <small>{{ item.reservation.reservationDate }}</small>
+            </div>
+
+            <!-- Status badge -->
+            <div
+              class="status-badge"
+              [class.pending]="item.reservation.status === 'EN_ATTENTE' && !item.isExpired"
+              [class.confirmed]="item.reservation.status === 'CONFIRMEE'"
+              [class.expired]="item.isExpired"
+              [class.cancelled]="item.reservation.status === 'ANNULEE'"
+            >
+              @if (item.isExpired) {
+                EXPIRED (10m)
+              } @else if (item.reservation.status === 'EN_ATTENTE') {
+                PENDING PAYMENT
+              } @else if (item.reservation.status === 'CONFIRMEE') {
+                CONFIRMED
+              } @else {
+                CANCELLED
+              }
+            </div>
+          </div>
+
+          <div class="card-details">
+            <div class="detail-item">
+              <span>Reservation ID</span>
+              <strong>#{{ item.reservation.id }}</strong>
+            </div>
+
+            <div class="detail-item">
+              <span>Seat Number</span>
+              <strong class="seat-badge">Seat #{{ item.reservation.seatNumber || item.reservation.seatId }}</strong>
+            </div>
+
+            <div class="detail-item">
+              <span>Bus Type</span>
+              <strong>{{ item.trip?.bus?.type || 'Standard' }}</strong>
+            </div>
+
+            <div class="detail-item">
+              <span>Price</span>
+              <strong>{{ item.trip ? item.trip.prix : 120 }} MAD</strong>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="card-actions">
+            @if (item.reservation.status === 'EN_ATTENTE' && !item.isExpired) {
+              <button class="btn-action btn-pay" [routerLink]="['/payment', item.reservation.id]">
+                <span>💳</span>
+                Complete Payment
+              </button>
+            }
+
+            @if (item.reservation.status === 'CONFIRMEE') {
+              <button class="btn-action btn-ticket" (click)="viewTicket(item.reservation.id)">
+                <span>🎫</span>
+                View E-Ticket
+              </button>
+            }
+
+            @if (item.reservation.status === 'EN_ATTENTE' && !item.isExpired) {
+              <button class="btn-action btn-cancel" (click)="cancelReservation(item.reservation.id)">
+                Cancel
+              </button>
+            }
+
+            @if (item.isExpired || item.reservation.status === 'ANNULEE') {
+              <button class="btn-action btn-rebook" [routerLink]="['/reservation', item.reservation.tripId]">
+                Book Again
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

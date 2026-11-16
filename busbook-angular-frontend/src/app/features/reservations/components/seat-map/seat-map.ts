@@ -1,9 +1,9 @@
-
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Seat } from '../seat/seat';
 import { SeatLegend } from '../seat-legend/seat-legend';
+import { ReservationApiService } from '../../../../core/services/reservation.service';
 
-interface SeatData {
+export interface SeatData {
   number: number;
   occupied: boolean;
 }
@@ -14,38 +14,104 @@ interface SeatData {
   templateUrl: './seat-map.html',
   styleUrl: './seat-map.css',
 })
-export class SeatMap {
+export class SeatMap implements OnInit, OnChanges {
+  @Input() tripId?: number;
+  @Input() capacity: number = 40;
   @Output() seatSelected = new EventEmitter<number>();
 
   selectedSeat: number | null = null;
+  seats: SeatData[] = [];
 
-  // Données temporaires pour tester l'interface
-  seats: SeatData[] = Array.from({ length: 20 }, (_, index) => ({
-    number: index + 1,
-    occupied: [4, 12].includes(index + 1),
-  }));
+  constructor(
+    private reservationApi: ReservationApiService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.initSeats();
+    this.loadOccupiedSeats();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['capacity'] || changes['tripId']) {
+      this.initSeats();
+      this.loadOccupiedSeats();
+    }
+  }
+
+  initSeats(): void {
+    const total = this.capacity > 0 ? this.capacity : 40;
+    this.seats = Array.from({ length: total }, (_, index) => ({
+      number: index + 1,
+      occupied: false,
+    }));
+  }
+
+  loadOccupiedSeats(): void {
+    if (!this.tripId) {
+      return;
+    }
+
+    this.reservationApi.getReservationsByTripId(this.tripId).subscribe({
+      next: (reservations) => {
+        const now = new Date();
+        const occupiedSeatIds = new Set<number>();
+
+        for (const res of reservations) {
+          const seatNum = res.seatNumber ? Number(res.seatNumber) : res.seatId;
+          if (res.status === 'CONFIRMEE') {
+            occupiedSeatIds.add(seatNum);
+          } else if (res.status === 'EN_ATTENTE' && res.expiresAt) {
+            const expires = new Date(res.expiresAt);
+            if (expires > now) {
+              occupiedSeatIds.add(seatNum);
+            }
+          }
+        }
+
+        this.seats = this.seats.map((seat) => ({
+          ...seat,
+          occupied: occupiedSeatIds.has(seat.number),
+        }));
+
+        if (this.selectedSeat && occupiedSeatIds.has(this.selectedSeat)) {
+          this.selectedSeat = null;
+          this.seatSelected.emit(0);
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        // Fallback en cas d'erreur de connexion au microservice
+        this.cdr.markForCheck();
+      }
+    });
+  }
 
   get leftSeats(): SeatData[] {
-    return this.seats.filter(seat => seat.number <= 10);
+    const half = Math.ceil(this.seats.length / 2);
+    return this.seats.slice(0, half);
   }
 
   get rightSeats(): SeatData[] {
-    return this.seats.filter(seat => seat.number > 10);
+    const half = Math.ceil(this.seats.length / 2);
+    return this.seats.slice(half);
   }
 
   getSeatStatus(seat: SeatData): 'available' | 'occupied' | 'selected' {
     if (seat.occupied) {
       return 'occupied';
     }
-
     if (seat.number === this.selectedSeat) {
       return 'selected';
     }
-
     return 'available';
   }
 
   selectSeat(number: number): void {
+    const targetSeat = this.seats.find(s => s.number === number);
+    if (targetSeat && targetSeat.occupied) {
+      return;
+    }
     this.selectedSeat = number;
     this.seatSelected.emit(number);
   }

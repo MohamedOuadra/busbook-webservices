@@ -1,0 +1,190 @@
+.payment-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.trip-details {
+  padding: 24px;
+  border-radius: 20px;
+}
+
+.section-label {
+  display: inline-block;
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  margin-bottom: 8px;
+}
+
+.trip-details h2 {
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-ink);
+}
+
+.trip-information {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.trip-information > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trip-information span {
+  font-size: 11px;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.trip-information strong {
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.seat-badge {
+  color: #2563EB !important;
+}
+
+.payment-box {
+  padding: 24px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.passenger-recap .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form-row input {
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  outline: none;
+}
+
+.methods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.method-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1.5px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.method-card input {
+  display: none;
+}
+
+.method-card.selected {
+  border-color: var(--color-coral);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 14px rgba(249, 146, 113, 0.15);
+}
+
+.method-card .icon {
+  font-size: 24px;
+}
+
+.method-card .info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.method-card strong {
+  font-size: 13px;
+  color: var(--color-ink);
+}
+
+.method-card small {
+  font-size: 11px;
+  color: var(--color-muted);
+}
+
+.qa-toggle {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-pay {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 14px;
+  background: var(--color-leaf);
+  color: white;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-pay:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-cancel {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.error-banner {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  color: #991B1B;
+  font-size: 13px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.loading-state, .error-state, .expired-state {
+  padding: 30px;
+  text-align: center;
+  border-radius: 18px;
+}

@@ -1,18 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar {
-  @Input() active = 'Buy Tickets';
-
-  readonly tabs = [
-    'Buy Tickets',
-    'Schedules',
-    'Trips',
-    'Vehicles',
+  readonly navItems = [
+    { label: 'Book Tickets', route: '/', exact: true },
+    { label: 'Schedules', route: '/trips', exact: false },
+    { label: 'My Bookings', route: '/my-reservations', exact: false },
+    { label: 'Verify Ticket', route: '/verify-ticket', exact: false },
   ];
 }

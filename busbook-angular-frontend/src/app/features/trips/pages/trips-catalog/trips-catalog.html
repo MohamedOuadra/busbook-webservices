@@ -1,0 +1,28 @@
+<div class="trips-catalog-page">
+  <div class="catalog-header glass">
+    <span class="section-label">INTERCITY NETWORK</span>
+    <h2>Bus Schedules & Destinations</h2>
+    <p>Browse our network across Moroccan cities with daily departures, modern buses, and comfortable seating.</p>
+  </div>
+
+  <app-trip-search (search)="onSearch($event)" />
+
+  <section class="results-section">
+    <div class="results-header">
+      <span class="section-label">SCHEDULED DEPARTURES</span>
+      <span class="count-badge">{{ trips.length }} trips available</span>
+    </div>
+
+    @if (trips.length > 0) {
+      <div class="trips-grid">
+        @for (trip of trips; track trip.id) {
+          <app-trip-card [trip]="trip" (tripSelected)="onTripSelected($event)" />
+        }
+      </div>
+    } @else {
+      <div class="empty-state glass">
+        <p>No trips matching your criteria.</p>
+      </div>
+    }
+  </section>
+</div>

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -51,10 +52,24 @@ public class ReservationService {
                 ReservationStatus.CONFIRMEE
         );
 
-        return !reservationRepository
+        boolean existsById = reservationRepository
                 .existsByTripIdAndSeat_IdAndStatusIn(
                         tripId, seatId, activeStatuses
                 );
+
+        if (existsById) {
+            return false;
+        }
+
+        // Vérifier également si seatId correspond au numéro de siège
+        Optional<Seat> seatByNumber = seatRepository.findByBusIdAndSeatNumber(tripId, String.valueOf(seatId));
+        if (seatByNumber.isPresent()) {
+            return !reservationRepository.existsByTripIdAndSeat_IdAndStatusIn(
+                    tripId, seatByNumber.get().getId(), activeStatuses
+            );
+        }
+
+        return true;
     }
 
     /**
@@ -79,11 +94,10 @@ public class ReservationService {
         }
 
         Seat seat = seatRepository.findById(request.getSeatId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Le siège demandé est introuvable."
-                ));
+                .or(() -> seatRepository.findByBusIdAndSeatNumber(request.getTripId(), String.valueOf(request.getSeatId())))
+                .orElseGet(() -> seatRepository.save(new Seat(String.valueOf(request.getSeatId()), request.getTripId())));
 
-        if (!isSeatAvailable(request.getTripId(), request.getSeatId())) {
+        if (!isSeatAvailable(request.getTripId(), seat.getId())) {
             throw new IllegalStateException(
                     "Ce siège est déjà réservé pour ce trajet."
             );
@@ -94,6 +108,7 @@ public class ReservationService {
         reservation.setTripId(request.getTripId());
         reservation.setTravelerId(request.getTravelerId());
         reservation.setSeat(seat);
+        reservation.setCreatedAt(LocalDateTime.now());
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
         reservation.setExpiresAt(
                 LocalDateTime.now().plusMinutes(RESERVATION_EXPIRATION_MINUTES)

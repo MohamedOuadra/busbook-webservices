@@ -1,0 +1,131 @@
+<div class="payment-page">
+  @if (isLoading) {
+    <div class="loading-state glass">
+      <p>Loading reservation details...</p>
+    </div>
+  } @else if (reservation) {
+    <section class="trip-details glass">
+      <span class="section-label">PAYMENT STEP</span>
+      <h2>
+        @if (trip) {
+          {{ trip.villeDepart }} → {{ trip.villeArrivee }}
+        } @else {
+          Trip #{{ reservation.tripId }}
+        }
+      </h2>
+
+      <div class="trip-information">
+        <div>
+          <span>Reservation ID</span>
+          <strong>#{{ reservation.id }}</strong>
+        </div>
+        <div>
+          <span>Seat Number</span>
+          <strong class="seat-badge">Seat #{{ reservation.seatNumber || reservation.seatId }}</strong>
+        </div>
+        <div>
+          <span>Status</span>
+          <strong>{{ reservation.status }}</strong>
+        </div>
+        <div>
+          <span>Amount</span>
+          <strong>{{ trip ? trip.prix : 120 }} MAD</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Minuteur 10 min -->
+    <app-countdown-timer
+      [seconds]="remainingSeconds"
+      [isExpired]="isExpired"
+    />
+
+    @if (errorMessage) {
+      <div class="error-banner">
+        <span>❌</span>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <div class="payment-box glass">
+      @if (!isExpired) {
+        <div class="passenger-recap">
+          <span class="section-label">PASSENGER DETAILS</span>
+          <div class="form-row">
+            <input type="text" [(ngModel)]="travelerName" placeholder="Full name" />
+            <input type="email" [(ngModel)]="travelerEmail" placeholder="Email" />
+          </div>
+        </div>
+
+        <div class="methods-section">
+          <span class="section-label">SELECT PAYMENT METHOD</span>
+
+          <div class="methods-list">
+            <label class="method-card" [class.selected]="selectedMethod === 'CARTE_BANCAIRE'">
+              <input type="radio" name="method" value="CARTE_BANCAIRE" [(ngModel)]="selectedMethod" />
+              <span class="icon">💳</span>
+              <div class="info">
+                <strong>Credit Card</strong>
+                <small>Instant validation</small>
+              </div>
+            </label>
+
+            <label class="method-card" [class.selected]="selectedMethod === 'PORTEFEUILLE_MOBILE'">
+              <input type="radio" name="method" value="PORTEFEUILLE_MOBILE" [(ngModel)]="selectedMethod" />
+              <span class="icon">📱</span>
+              <div class="info">
+                <strong>Mobile Wallet</strong>
+                <small>Orange Money, inwi money</small>
+              </div>
+            </label>
+
+            <label class="method-card" [class.selected]="selectedMethod === 'ESPECES'">
+              <input type="radio" name="method" value="ESPECES" [(ngModel)]="selectedMethod" />
+              <span class="icon">💵</span>
+              <div class="info">
+                <strong>Cash at Counter</strong>
+                <small>Pay before departure</small>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="qa-toggle">
+          <label>
+            <input type="checkbox" [(ngModel)]="simulateFailure" />
+            Simulate payment failure (QA testing)
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="btn-pay" [disabled]="isProcessing" (click)="onPay()">
+            @if (isProcessing) {
+              <span>Processing payment...</span>
+            } @else {
+              <span>Confirm & Pay {{ trip ? trip.prix : 120 }} MAD</span>
+              <span>➔</span>
+            }
+          </button>
+
+          <button class="btn-cancel" [disabled]="isProcessing" (click)="onCancel()">
+            Cancel Reservation
+          </button>
+        </div>
+      } @else {
+        <div class="expired-state">
+          <h3>Hold Expired</h3>
+          <p>The 10-minute payment deadline has passed. This seat has been released.</p>
+          <button class="btn-pay" [routerLink]="['/reservation', reservation.tripId]">
+            Choose Another Seat
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="error-state glass">
+      <h3>Reservation Not Found</h3>
+      <p>{{ errorMessage || 'Unable to load reservation.' }}</p>
+      <button class="btn-cancel" routerLink="/">Back to Home</button>
+    </div>
+  }
+</div>

@@ -1,0 +1,189 @@
+.verify-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.verify-header {
+  padding: 28px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--color-muted);
+}
+
+.verify-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.verify-header p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.search-form input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  outline: none;
+}
+
+.btn-verify {
+  padding: 14px 22px;
+  background: var(--color-leaf);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-verify:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ticket-result {
+  padding: 24px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.valid-border {
+  border-color: rgba(87, 195, 82, 0.5);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.invalid-border {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(254, 226, 226, 0.7);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge-valid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(87, 195, 82, 0.2);
+  color: #2E7D32;
+  font-weight: 800;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+.badge-invalid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #B91C1C;
+  font-weight: 800;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+.ticket-code {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.result-body {
+  display: flex;
+  gap: 20px;
+}
+
+.info-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-item span {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.info-item strong {
+  font-size: 13px;
+  color: var(--color-ink);
+}
+
+.seat-num {
+  color: #2563EB !important;
+  font-size: 14px !important;
+}
+
+.qr-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr-box small {
+  font-size: 10px;
+  color: var(--color-muted);
+}
+
+.btn-view {
+  width: 100%;
+  padding: 12px;
+  background: var(--color-ink);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.error-desc {
+  margin: 0;
+  color: #991B1B;
+  font-weight: 600;
+  font-size: 14px;
+}
