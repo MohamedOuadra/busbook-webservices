@@ -164,7 +164,7 @@ class TicketServiceTest {
         Ticket ticket = new Ticket("TCK-VERIFY-001", 30L, 10L, "C3", "Nadia", "nadia@example.com", "QR3");
         ReflectionTestUtils.setField(ticket, "id", 70L);
 
-        when(ticketRepository.findByTicketNumber("TCK-VERIFY-001")).thenReturn(Optional.of(ticket));
+        when(ticketRepository.findByTicketNumberIgnoreCase("TCK-VERIFY-001")).thenReturn(Optional.of(ticket));
 
         TicketResponse response = ticketService.verifyTicket("TCK-VERIFY-001");
 
@@ -175,7 +175,7 @@ class TicketServiceTest {
 
     @Test
     void shouldThrowWhenVerifyingNonExistentTicket() {
-        when(ticketRepository.findByTicketNumber("UNKNOWN")).thenReturn(Optional.empty());
+        when(ticketRepository.findByTicketNumberIgnoreCase("UNKNOWN")).thenReturn(Optional.empty());
 
         assertThrows(
                 ResourceNotFoundException.class,

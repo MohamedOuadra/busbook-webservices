@@ -11,5 +11,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     Optional<Ticket> findByTicketNumber(String ticketNumber);
 
+    Optional<Ticket> findByTicketNumberIgnoreCase(String ticketNumber);
+
     boolean existsByReservationId(Long reservationId);
 }

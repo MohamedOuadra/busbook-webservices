@@ -11,7 +11,6 @@ import { AuthService } from '../../../core/services/auth.service';
 export class Navbar {
   readonly navItems = [
     { label: 'Book Tickets', route: '/', exact: true },
-    { label: 'Schedules', route: '/trips', exact: false },
     { label: 'My Bookings', route: '/my-reservations', exact: false },
     { label: 'Verify Ticket', route: '/verify-ticket', exact: false },
   ];
