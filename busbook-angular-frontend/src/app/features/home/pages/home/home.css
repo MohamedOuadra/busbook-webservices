@@ -20,24 +20,58 @@
 .hero-headline {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 4px 0;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 4px 0 2px 0;
 }
 
-.hero-headline h1 {
+.hero-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.hero-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-leaf);
+  box-shadow: 0 0 6px var(--color-leaf);
+}
+
+.hero-tag-text {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #4b5563;
+}
+
+.hero-title {
   margin: 0;
   font-size: 34px;
   font-weight: 800;
   color: var(--color-ink);
   letter-spacing: -0.8px;
-  line-height: 1.2;
+  line-height: 1.22;
+}
+
+.highlight-morocco {
+  color: #c75635;
+  background: linear-gradient(120deg, #c75635 0%, #ea580c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-sub {
   margin: 0;
-  max-width: 720px;
+  max-width: 740px;
   font-size: 14.5px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: #4b5563;
   font-weight: 500;
 }
@@ -209,7 +243,7 @@
 
 /* Responsive */
 @media (max-width: 850px) {
-  .hero-headline h1 {
+  .hero-title {
     font-size: 26px;
   }
 }

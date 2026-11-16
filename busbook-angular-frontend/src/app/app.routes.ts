@@ -9,6 +9,7 @@ import { MyReservationsPage } from './features/reservations/pages/my-reservation
 import { VerifyTicketPage } from './features/tickets/pages/verify-ticket/verify-ticket';
 import { LoginPage } from './features/auth/pages/login/login';
 import { RegisterPage } from './features/auth/pages/register/register';
+import { SettingsPage } from './features/settings/pages/settings/settings';
 
 export const routes: Routes = [
   // Auth Layout dedicated to login & register
@@ -65,6 +66,10 @@ export const routes: Routes = [
       {
         path: 'verify-ticket',
         component: VerifyTicketPage,
+      },
+      {
+        path: 'settings',
+        component: SettingsPage,
       },
     ],
   },

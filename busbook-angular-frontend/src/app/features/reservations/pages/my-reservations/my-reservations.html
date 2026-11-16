@@ -1,36 +1,60 @@
 <div class="my-reservations-page">
+
+  <!-- Header Section with Passenger Details & Stats -->
   <div class="page-header glass">
-    <div>
-      <span class="section-label">CUSTOMER DASHBOARD</span>
-      <h2>My Bookings &amp; Tickets</h2>
-      <p>
+    <div class="header-intro">
+      <div class="badge-row">
+        <span class="section-label">PASSENGER DASHBOARD</span>
         @if (currentUser()) {
-          Bookings registered for <strong>{{ currentUser()!.fullName }}</strong> ({{ currentUser()!.email }}).
+          <span class="account-pill">
+            <span class="status-dot-active"></span>
+            Account Active
+          </span>
+        }
+      </div>
+      <h2>My Bookings & E-Tickets</h2>
+      <p>
+        @if (currentUser(); as user) {
+          Displaying reservations registered under <strong>{{ user.fullName }}</strong> ({{ user.email }}).
         } @else {
-          View your upcoming trips, confirm pending holds, or access your e-tickets.
+          Review your upcoming trips, confirm pending holds, or download your e-tickets.
         }
       </p>
     </div>
 
     @if (currentUser()) {
-      <button class="btn-refresh glass" (click)="loadReservations()" [disabled]="isLoading()" aria-label="Refresh bookings">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          class="refresh-icon"
-          [class.spinning]="isLoading()"
-        >
-          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-        </svg>
-        <span>Refresh</span>
-      </button>
+      <div class="header-right-actions">
+        <!-- Quick Stats Pill -->
+        <div class="stats-pills">
+          <div class="stat-pill" title="Confirmed Journeys">
+            <span class="stat-number">{{ confirmedCount() }}</span>
+            <span class="stat-label">Confirmed</span>
+          </div>
+          <div class="stat-pill pending-stat" title="Pending Payment">
+            <span class="stat-number">{{ pendingCount() }}</span>
+            <span class="stat-label">Pending</span>
+          </div>
+        </div>
+
+        <button class="btn-refresh glass" (click)="loadReservations()" [disabled]="isLoading()" aria-label="Refresh bookings">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            class="refresh-icon"
+            [class.spinning]="isLoading()"
+          >
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          <span>Refresh</span>
+        </button>
+      </div>
     }
   </div>
 
   @if (!currentUser()) {
-    <!-- State when user is not logged in -->
+    <!-- Not logged in state -->
     <div class="state-card glass auth-prompt">
       <div class="auth-icon-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-lg">
@@ -38,60 +62,120 @@
           <circle cx="12" cy="7" r="4"/>
         </svg>
       </div>
-      <h3>Sign in to View Your Bookings</h3>
-      <p>Please log in to your BusBook account to view and manage your bus ticket reservations.</p>
+      <h3>Sign in to Access Your Trips</h3>
+      <p>Please log in with your traveler account to view, pay or download tickets for your reservations.</p>
       <div class="auth-prompt-actions">
         <a routerLink="/login" [queryParams]="{ returnUrl: '/my-reservations' }" class="btn-primary">
-          Sign In
+          Sign In to BusBook
         </a>
         <a routerLink="/register" class="btn-secondary">
-          Create Account
+          Create New Account
         </a>
       </div>
     </div>
   } @else if (isLoading()) {
     <div class="state-card glass">
       <div class="spinner"></div>
-      <p>Loading your reservations...</p>
+      <p>Retrieving your ticket reservations...</p>
     </div>
   } @else if (errorMessage()) {
     <div class="state-card glass error">
-      <span class="error-emoji">
+      <div class="error-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="state-svg">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
           <line x1="12" y1="9" x2="12" y2="13"/>
           <line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
-      </span>
+      </div>
       <p>{{ errorMessage() }}</p>
-      <button class="btn-retry" (click)="loadReservations()">Retry</button>
+      <button class="btn-retry" (click)="loadReservations()">Try Again</button>
     </div>
   } @else if (reservations().length === 0) {
-    <div class="state-card glass">
-      <span class="icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="state-svg">
-          <rect x="2" y="6" width="20" height="12" rx="2"/>
-          <path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/>
+    <!-- Empty Bookings State -->
+    <div class="state-card glass empty-card">
+      <div class="empty-icon-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="empty-icon-svg">
+          <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
+          <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+          <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
         </svg>
-      </span>
-      <h3>No Reservations Found</h3>
-      <p>You haven't made any reservations with this account yet.</p>
-      <button class="btn-new" routerLink="/">Find a Trip</button>
+      </div>
+      <h3>No Bookings Yet</h3>
+      <p>You haven't reserved any intercity bus seats under this account yet. Ready to travel?</p>
+      <a routerLink="/" class="btn-find-trip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-icon">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        Find & Book a Trip
+      </a>
     </div>
   } @else {
+    <!-- Filter Tabs -->
+    <div class="filters-bar">
+      <div class="filters-group">
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="activeFilter() === 'ALL'"
+          (click)="setFilter('ALL')"
+        >
+          All ({{ reservations().length }})
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="activeFilter() === 'CONFIRMED'"
+          (click)="setFilter('CONFIRMED')"
+        >
+          Confirmed ({{ confirmedCount() }})
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="activeFilter() === 'PENDING'"
+          (click)="setFilter('PENDING')"
+        >
+          Pending Hold ({{ pendingCount() }})
+        </button>
+        <button
+          type="button"
+          class="filter-pill"
+          [class.active]="activeFilter() === 'CANCELLED'"
+          (click)="setFilter('CANCELLED')"
+        >
+          Expired & Cancelled
+        </button>
+      </div>
+    </div>
+
+    <!-- Reservations Grid -->
     <div class="reservations-grid">
-      @for (item of reservations(); track item.reservation.id) {
+      @for (item of filteredReservations(); track item.reservation.id) {
         <div class="reservation-card glass">
+
+          <!-- Top header with route & status -->
           <div class="card-header">
-            <div class="route">
-              <strong>
+            <div class="route-block">
+              <span class="route-carrier">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="carrier-bus-svg">
+                  <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
+                  <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+                  <circle cx="7" cy="19" r="2"/>
+                  <circle cx="17" cy="19" r="2"/>
+                </svg>
+                {{ item.trip?.bus?.immatriculation || 'Moroccan Express' }}
+              </span>
+
+              <h3 class="route-title">
                 @if (item.trip) {
-                  {{ item.trip.villeDepart }} → {{ item.trip.villeArrivee }}
+                  {{ item.trip.villeDepart }}
+                  <span class="route-arrow">➔</span>
+                  {{ item.trip.villeArrivee }}
                 } @else {
-                  Trip #{{ item.reservation.tripId }}
+                  Trip Reference #{{ item.reservation.tripId }}
                 }
-              </strong>
-              <small>{{ item.reservation.reservationDate }}</small>
+              </h3>
             </div>
 
             <!-- Status badge -->
@@ -103,48 +187,90 @@
               [class.cancelled]="item.reservation.status === 'ANNULEE'"
             >
               @if (item.isExpired) {
-                EXPIRED (10m)
+                <span class="badge-dot"></span>
+                EXPIRED HOLD
               } @else if (item.reservation.status === 'EN_ATTENTE') {
+                <span class="badge-dot pulse"></span>
                 PENDING PAYMENT
               } @else if (item.reservation.status === 'CONFIRMEE') {
-                CONFIRMED
+                <span class="badge-dot"></span>
+                CONFIRMED & VALID
               } @else {
                 CANCELLED
               }
             </div>
           </div>
 
-          <div class="card-details">
-            <div class="detail-item">
-              <span>Reservation ID</span>
-              <strong>#{{ item.reservation.id }}</strong>
+          <!-- Schedule & Departure details banner -->
+          @if (item.trip) {
+            <div class="schedule-strip">
+              <div class="schedule-station">
+                <span class="time-main">{{ formatTime(item.trip.dateDepart) }}</span>
+                <span class="station-meta">{{ item.trip.villeDepart }}</span>
+                <span class="date-meta">{{ formatDate(item.trip.dateDepart) }}</span>
+              </div>
+
+              <div class="schedule-duration-line">
+                <span class="duration-label">{{ item.trip.bus.type || 'Comfort' }}</span>
+                <div class="road-track">
+                  <div class="road-dot start"></div>
+                  <div class="road-line"></div>
+                  <div class="road-dot end"></div>
+                </div>
+              </div>
+
+              <div class="schedule-station text-right">
+                <span class="time-main">{{ formatTime(item.trip.dateArrivee) }}</span>
+                <span class="station-meta">{{ item.trip.villeArrivee }}</span>
+                <span class="date-meta">{{ formatDate(item.trip.dateArrivee) }}</span>
+              </div>
+            </div>
+          }
+
+          <!-- Details 4-box layout -->
+          <div class="card-details-grid">
+            <div class="detail-cell">
+              <span class="cell-label">SEAT ASSIGNED</span>
+              <strong class="cell-val seat-pill">Seat #{{ item.reservation.seatNumber || item.reservation.seatId }}</strong>
             </div>
 
-            <div class="detail-item">
-              <span>Seat Number</span>
-              <strong class="seat-badge">Seat #{{ item.reservation.seatNumber || item.reservation.seatId }}</strong>
+            <div class="detail-cell">
+              <span class="cell-label">RESERVATION REF</span>
+              <strong class="cell-val mono">#{{ item.reservation.id }}</strong>
             </div>
 
-            <div class="detail-item">
-              <span>Bus Type</span>
-              <strong>{{ item.trip?.bus?.type || 'Standard' }}</strong>
+            <div class="detail-cell">
+              <span class="cell-label">TOTAL FARE</span>
+              <strong class="cell-val price">{{ item.trip ? item.trip.prix : 120 }} MAD</strong>
             </div>
 
-            <div class="detail-item">
-              <span>Price</span>
-              <strong>{{ item.trip ? item.trip.prix : 120 }} MAD</strong>
+            <div class="detail-cell">
+              <span class="cell-label">HOLD EXPIRES</span>
+              <strong class="cell-val" [class.text-danger]="item.isExpired">
+                @if (item.reservation.status === 'CONFIRMEE') {
+                  Paid & Guaranteed
+                } @else if (item.isExpired) {
+                  Expired
+                } @else {
+                  10 min window
+                }
+              </strong>
             </div>
           </div>
 
-          <!-- Actions -->
+          <!-- Actions Footer -->
           <div class="card-actions">
             @if (item.reservation.status === 'EN_ATTENTE' && !item.isExpired) {
-              <button class="btn-action btn-pay" [routerLink]="['/payment', item.reservation.id]">
+              <a class="btn-action btn-pay" [routerLink]="['/payment', item.reservation.id]">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
                   <rect x="2" y="5" width="20" height="14" rx="2"/>
                   <line x1="2" y1="10" x2="22" y2="10"/>
                 </svg>
-                Complete Payment
+                Complete Payment Now
+              </a>
+
+              <button class="btn-action btn-cancel" (click)="cancelReservation(item.reservation.id)">
+                Cancel Hold
               </button>
             }
 
@@ -155,18 +281,20 @@
                   <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
                   <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
                 </svg>
-                View E-Ticket
+                View &amp; Print E-Ticket
               </button>
             }
 
-            @if (item.reservation.status === 'EN_ATTENTE' && !item.isExpired) {
-              <button class="btn-action btn-cancel" (click)="cancelReservation(item.reservation.id)">
-                Cancel
-              </button>
+            @if (item.isExpired || item.reservation.status === 'ANNULEE') {
+              <a class="btn-action btn-rebook" routerLink="/">
+                Book Again
+              </a>
             }
           </div>
+
         </div>
       }
     </div>
   }
+
 </div>

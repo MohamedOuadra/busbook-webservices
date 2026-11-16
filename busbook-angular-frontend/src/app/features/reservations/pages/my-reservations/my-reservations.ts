@@ -15,6 +15,8 @@ export interface ReservationWithTrip {
   isExpired: boolean;
 }
 
+export type BookingFilter = 'ALL' | 'CONFIRMED' | 'PENDING' | 'CANCELLED';
+
 @Component({
   selector: 'app-my-reservations',
   standalone: true,
@@ -23,13 +25,43 @@ export interface ReservationWithTrip {
   styleUrl: './my-reservations.css',
 })
 export class MyReservationsPage implements OnInit {
-  // Signals for reactive state (zoneless compatible)
+  // Reactive state signals
   readonly reservations = signal<ReservationWithTrip[]>([]);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly activeFilter = signal<BookingFilter>('ALL');
 
-  // Expose auth signal directly so the template reacts to login/logout
+  // Expose current auth user
   readonly currentUser = computed(() => this.authService.currentUser());
+
+  // Filtered reservations computed
+  readonly filteredReservations = computed(() => {
+    const list = this.reservations();
+    const filter = this.activeFilter();
+
+    switch (filter) {
+      case 'CONFIRMED':
+        return list.filter((item) => item.reservation.status === 'CONFIRMEE');
+      case 'PENDING':
+        return list.filter(
+          (item) => item.reservation.status === 'EN_ATTENTE' && !item.isExpired
+        );
+      case 'CANCELLED':
+        return list.filter(
+          (item) => item.reservation.status === 'ANNULEE' || item.isExpired
+        );
+      default:
+        return list;
+    }
+  });
+
+  // Summary counts
+  readonly confirmedCount = computed(
+    () => this.reservations().filter((i) => i.reservation.status === 'CONFIRMEE').length
+  );
+  readonly pendingCount = computed(
+    () => this.reservations().filter((i) => i.reservation.status === 'EN_ATTENTE' && !i.isExpired).length
+  );
 
   constructor(
     private reservationApi: ReservationApiService,
@@ -43,6 +75,10 @@ export class MyReservationsPage implements OnInit {
     if (this.currentUser()) {
       this.loadReservations();
     }
+  }
+
+  setFilter(filter: BookingFilter): void {
+    this.activeFilter.set(filter);
   }
 
   loadReservations(): void {
@@ -69,8 +105,7 @@ export class MyReservationsPage implements OnInit {
 
           this.tripService.getTripById(res.tripId).subscribe((trip) => {
             item.trip = trip;
-            // Trigger signal update so the template re-renders with trip data
-            this.reservations.update(r => [...r]);
+            this.reservations.update((r) => [...r]);
           });
 
           return item;
@@ -110,5 +145,32 @@ export class MyReservationsPage implements OnInit {
         alert(err.error?.message || 'Error cancelling reservation.');
       },
     });
+  }
+
+  formatDate(dateStr?: string): string {
+    if (!dateStr) return '—';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      });
+    } catch {
+      return dateStr;
+    }
+  }
+
+  formatTime(dateStr?: string): string {
+    if (!dateStr) return '—';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return dateStr;
+    }
   }
 }
