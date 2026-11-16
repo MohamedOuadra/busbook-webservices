@@ -1,68 +1,162 @@
 <div class="reservation-page">
 
   @if (trip) {
-    <!-- Information du trajet sélectionné -->
-    <section class="trip-details glass">
-      <div class="trip-header-row">
-        <div>
-          <span class="section-label">SELECTED JOURNEY</span>
-          <h2>{{ trip.villeDepart }} → {{ trip.villeArrivee }}</h2>
-        </div>
-        <div class="step-indicator">
-          <span class="step-dot" [class.active]="currentStep === 'SELECTION'">1. Seats</span>
-          <span class="step-sep">→</span>
-          <span class="step-dot" [class.active]="currentStep === 'PAYMENT'">2. Payment</span>
-          <span class="step-sep">→</span>
-          <span class="step-dot" [class.active]="currentStep === 'TICKET'">3. Ticket</span>
-        </div>
-      </div>
-
-      <div class="trip-information">
-        <div>
-          <span>Departure</span>
-          <strong>{{ trip.dateDepart }}</strong>
-        </div>
-
-        <div>
-          <span>Arrival</span>
-          <strong>{{ trip.dateArrivee }}</strong>
-        </div>
-
-        <div>
-          <span>Bus type</span>
-          <strong>{{ trip.bus.type }} ({{ trip.bus.immatriculation }})</strong>
-        </div>
-
-        <div>
-          <span>Price</span>
-          <strong>{{ trip.prix }} MAD</strong>
-        </div>
-      </div>
-    </section>
-
     <!-- Étape 1 : Sélection du siège et coordonnées -->
     @if (currentStep === 'SELECTION') {
       @if (errorMessage) {
-        <div class="error-banner">
+        <div class="error-banner glass">
           <span class="error-icon">⚠️</span>
           <span class="error-text">{{ errorMessage }}</span>
         </div>
       }
 
-      <app-bus-illustration />
+      <div class="reservation-screen-layout">
+        <!-- LEFT COLUMN: Trip Header, Coach Illustration, Route Card, Trending Searches -->
+        <div class="screen-left-col">
+          <!-- Back button + Title -->
+          <div class="trip-title-row">
+            <button
+              type="button"
+              class="btn-back-circle glass"
+              (click)="onResetAll()"
+              title="Back to trips"
+              aria-label="Back to trips"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <div class="trip-titles">
+              <h2>{{ trip.villeDepart }} → {{ trip.villeArrivee }}</h2>
+              <p>{{ trip.bus.type }} Class • Coach #{{ trip.bus.immatriculation }} (AC)</p>
+            </div>
+          </div>
 
-      <app-seat-map
-        [tripId]="trip.id"
-        [capacity]="trip.bus.capacite"
-        (seatSelected)="onSeatSelected($event)"
-      />
+          <!-- Coach Bus Illustration -->
+          <div class="bus-illustration-container">
+            <app-bus-illustration />
+          </div>
 
-      <app-booking-panel
-        [trip]="trip"
-        [seatNumber]="selectedSeat"
-        [isSubmitting]="isCreatingReservation"
-        (startBooking)="onStartBooking($event)"
-      />
+          <!-- Route Stations & Stats Card -->
+          <div class="route-station-card glass">
+            <div class="stations-row">
+              <div class="station-side">
+                <div class="station-icon-wrap glass">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+                  </svg>
+                </div>
+                <div class="station-details">
+                  <strong>{{ trip.villeDepart }}-Central Station</strong>
+                  <small>Starting Point</small>
+                </div>
+              </div>
+
+              <div class="station-side">
+                <div class="station-icon-wrap glass">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                  </svg>
+                </div>
+                <div class="station-details">
+                  <strong>{{ trip.villeArrivee }}-Terminus Counter</strong>
+                  <small>End Point</small>
+                </div>
+              </div>
+
+              <button type="button" class="btn-diag-arrow glass" title="Route details">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="card-hr"></div>
+
+            <div class="stations-stats">
+              <div class="stat-cell">
+                <span class="stat-time">{{ trip.dateDepart | date:'hh:mm a' }}</span>
+                <span class="stat-caption">Departure time</span>
+              </div>
+              <div class="stat-cell">
+                <span class="stat-time">{{ trip.dateArrivee | date:'hh:mm a' }}</span>
+                <span class="stat-caption">Arrival time</span>
+              </div>
+              <div class="stat-cell">
+                <span class="stat-time">{{ trip.bus.capacite }}</span>
+                <span class="stat-caption">Seats Available</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Related Trending Searches Card -->
+          <div class="trending-searches-card glass">
+            <div class="trending-top">
+              <h4>Related Trending Searches</h4>
+              <button type="button" class="btn-diag-arrow glass" title="Trending searches">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+              </button>
+            </div>
+            <div class="trending-tags-grid">
+              <span class="trend-tag">Agadir - Casablanca</span>
+              <span class="trend-tag">Dhaka - Rangpur</span>
+              <span class="trend-tag">Casablanca - Marrakech</span>
+              <span class="trend-tag">Agadir - Marrakech</span>
+              <span class="trend-tag">Rabat - Tanger</span>
+              <span class="trend-tag">Fès - Meknès</span>
+              <span class="trend-tag">Marrakech - Ouarzazate</span>
+              <span class="trend-tag">Casablanca - Tanger</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: THE UNIFIED SEAT BOOKING PANEL -->
+        <div class="screen-right-col">
+          <div class="unified-booking-box glass">
+            <!-- 1. Top Legend (Sold, Blocked, Selected, Available) -->
+            <app-seat-legend />
+
+            <!-- 2. Boarding & Dropping Point Dropdown Selectors -->
+            <div class="point-dropdowns-row">
+              <div class="point-dropdown-pill glass">
+                <div class="point-texts">
+                  <span class="point-val">{{ trip.villeDepart }}-Station</span>
+                  <small class="point-sub">Boarding Point</small>
+                </div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="caret-icon">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </div>
+
+              <div class="point-dropdown-pill glass">
+                <div class="point-texts">
+                  <span class="point-val">{{ trip.villeArrivee }}-Terminus</span>
+                  <small class="point-sub">Dropping Point</small>
+                </div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="caret-icon">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- 3. Coach Seat Map & Fare details with Buy Now -->
+            <app-booking-panel
+              [trip]="trip"
+              [seatNumber]="selectedSeat"
+              [isSubmitting]="isCreatingReservation"
+              (startBooking)="onStartBooking($event)"
+            >
+              <app-seat-map
+                [tripId]="trip.id"
+                [capacity]="trip.bus.capacite"
+                (seatSelected)="onSeatSelected($event)"
+              />
+            </app-booking-panel>
+          </div>
+        </div>
+      </div>
     }
 
     <!-- Étape 2 : Paiement et Compte à rebours 10 min -->
@@ -91,6 +185,7 @@
 
   } @else {
     <div class="loading-state glass">
+      <div class="spinner"></div>
       <p>Loading journey details...</p>
     </div>
   }

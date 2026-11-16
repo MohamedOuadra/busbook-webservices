@@ -1,102 +1,100 @@
-<aside class="booking-panel">
+<div class="booking-split-grid">
+  <!-- Column 1: Coach Seat Map (projected) + Contact input -->
+  <div class="col-seat-selection">
+    <ng-content></ng-content>
 
-  @if (!isLoggedIn) {
-    <div class="auth-required-box glass">
-      <div class="auth-notice-header">
-        <span class="lock-icon">🔒</span>
-        <div>
-          <h4>Authentication Required</h4>
-          <p>Please sign in or create an account to book this trip.</p>
-        </div>
-      </div>
-      <a
-        routerLink="/login"
-        [queryParams]="{ returnUrl: '/reservation/' + trip.id }"
-        class="btn-auth-redirect"
-      >
-        Sign In / Register
-      </a>
-    </div>
-  }
-
-  <div class="traveler-form glass" [class.disabled-form]="!isLoggedIn">
-    <div class="form-header">
-      <span class="section-label">PASSENGER DETAILS</span>
-      <h2>Traveler information</h2>
-      <p>
-        @if (isLoggedIn) {
-          Pre-filled from your BusBook profile
-        } @else {
-          Please sign in to verify your information
-        }
-      </p>
-    </div>
-
-    <form #travelerForm="ngForm">
-      <div class="form-group">
-        <label for="fullName">Full name *</label>
-        <input
-          id="fullName"
-          type="text"
-          name="fullName"
-          [(ngModel)]="fullName"
-          placeholder="Enter your full name"
-          required
-          [disabled]="!isLoggedIn"
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="phoneNumber">Phone number</label>
+    <div class="contact-under-seat">
+      <div class="passenger-field">
         <input
           id="phoneNumber"
           type="tel"
           name="phoneNumber"
           [(ngModel)]="phoneNumber"
-          placeholder="Enter your phone number"
+          placeholder="+212 612-345678"
           [disabled]="!isLoggedIn"
+          class="clean-input"
         />
+        <label for="phoneNumber" class="field-sublabel">Passenger's Contact Number</label>
       </div>
 
-      <div class="form-group">
-        <label for="email">Email address *</label>
-        <input
-          id="email"
-          type="email"
-          name="email"
-          [(ngModel)]="email"
-          placeholder="Enter your email address"
-          required
-          email
-          [disabled]="!isLoggedIn"
-        />
-      </div>
-    </form>
+      <!-- Hidden / compact email & name required for booking API -->
+      @if (isLoggedIn) {
+        <input type="hidden" name="fullName" [(ngModel)]="fullName" required />
+        <input type="hidden" name="email" [(ngModel)]="email" required />
+      } @else {
+        <div class="name-email-mini">
+          <input
+            type="text"
+            name="fullName"
+            [(ngModel)]="fullName"
+            placeholder="Your full name"
+            required
+            class="clean-mini-input"
+          />
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="your.email@busbook.ma"
+            required
+            email
+            class="clean-mini-input"
+          />
+        </div>
+      }
+    </div>
   </div>
 
-  <app-booking-summary
-    [from]="trip.villeDepart"
-    [to]="trip.villeArrivee"
-    [date]="trip.dateDepart"
-    [seatNumber]="seatNumber"
-    [price]="trip.prix"
-  />
-
-  <button
-    class="continue-button"
-    [class.btn-login-action]="!isLoggedIn"
-    [disabled]="seatNumber === null || (isLoggedIn && !travelerForm.valid) || isSubmitting"
-    (click)="onContinueBooking()"
-  >
-    @if (isSubmitting) {
-      <span>Holding seat (10 min)...</span>
-    } @else if (!isLoggedIn) {
-      <span>Sign In to Book Seat</span>
-      <span>→</span>
-    } @else {
-      <span>Continue booking</span>
-      <span>→</span>
+  <!-- Column 2: Vertical Summary list + Buy Now button -->
+  <div class="col-fare-summary">
+    @if (!isLoggedIn) {
+      <div class="auth-notice-pill glass">
+        <span class="auth-lock">🔒</span>
+        <div class="auth-text">
+          <strong>Sign in required</strong>
+          <small>Login to hold your seat</small>
+        </div>
+        <a
+          routerLink="/login"
+          [queryParams]="{ returnUrl: '/reservation/' + trip.id }"
+          class="auth-link-btn"
+        >
+          Sign In
+        </a>
+      </div>
     }
-  </button>
 
-</aside>
+    <!-- Vertical summary list -->
+    <app-booking-summary
+      [from]="trip.villeDepart"
+      [to]="trip.villeArrivee"
+      [date]="trip.dateDepart"
+      [seatNumber]="seatNumber"
+      [price]="trip.prix"
+    />
+
+    <!-- Action button with circular arrow matching reference -->
+    <button
+      type="button"
+      class="btn-buy-now"
+      [class.btn-auth-mode]="!isLoggedIn"
+      [disabled]="seatNumber === null || isSubmitting"
+      (click)="onContinueBooking()"
+    >
+      <span class="btn-arrow-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </span>
+      <span class="btn-caption">
+        @if (isSubmitting) {
+          Holding...
+        } @else if (!isLoggedIn) {
+          Sign In to Book
+        } @else {
+          Buy Now
+        }
+      </span>
+    </button>
+  </div>
+</div>

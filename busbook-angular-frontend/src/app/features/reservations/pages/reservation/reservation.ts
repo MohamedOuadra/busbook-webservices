@@ -13,6 +13,7 @@ import { PaymentMethod } from '../../../../core/models/payment.model';
 
 import { BusIllustration } from '../../components/bus-illustration/bus-illustration';
 import { SeatMap } from '../../components/seat-map/seat-map';
+import { SeatLegend } from '../../components/seat-legend/seat-legend';
 import { BookingPanel } from '../../components/booking-panel/booking-panel';
 import { PaymentSectionComponent } from '../../components/payment-section/payment-section.component';
 import { TicketViewComponent } from '../../components/ticket-view/ticket-view.component';
@@ -25,6 +26,7 @@ export type BookingStep = 'SELECTION' | 'PAYMENT' | 'TICKET';
     CommonModule,
     BusIllustration,
     SeatMap,
+    SeatLegend,
     BookingPanel,
     PaymentSectionComponent,
     TicketViewComponent,

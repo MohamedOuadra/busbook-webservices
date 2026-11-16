@@ -3,52 +3,63 @@
   width: 100%;
 }
 
-.seat-legend {
+.seat-legend-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.legend-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.pill-icon-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 24px;
-  padding: 16px 20px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-muted);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.legend-color {
+.pill-icon-box svg {
   width: 13px;
   height: 13px;
-  border-radius: 4px;
 }
 
-.legend-color.available {
-  background: #57c352;
+/* Sold (Coral) */
+.pill-sold {
+  background: #E88F76;
+  color: #FFFFFF;
 }
 
-.legend-color.occupied {
-  background: #d5d0c5;
+/* Blocked (Grey) */
+.pill-blocked {
+  background: #A8A199;
+  color: #FFFFFF;
 }
 
-.legend-color.selected {
-  background: #f99271;
+/* Selected (Green) */
+.pill-selected {
+  background: #57C352;
+  color: #FFFFFF;
 }
 
-@media (max-width: 480px) {
-  .seat-legend {
-    gap: 14px;
-    padding: 14px;
-  }
+/* Available (White) */
+.pill-available {
+  background: #FFFFFF;
+  color: #4B5563;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
 
-  .legend-item {
-    font-size: 10px;
+@media (max-width: 500px) {
+  .seat-legend-bar {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
