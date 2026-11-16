@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -7,7 +7,6 @@ import { TicketApiService } from '../../../../core/services/ticket.service';
 import { TripService } from '../../../../core/services/trip';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ReservationResponse } from '../../../../core/models/reservation.model';
-import { AuthResponse } from '../../../../core/models/auth.model';
 import { Trip } from '../../../trips/models/trip';
 
 export interface ReservationWithTrip {
@@ -24,72 +23,65 @@ export interface ReservationWithTrip {
   styleUrl: './my-reservations.css',
 })
 export class MyReservationsPage implements OnInit {
-  reservations: ReservationWithTrip[] = [];
-  isLoading = false;
-  errorMessage: string | null = null;
-  currentUser: AuthResponse | null = null;
+  // Signals for reactive state (zoneless compatible)
+  readonly reservations = signal<ReservationWithTrip[]>([]);
+  readonly isLoading = signal(false);
+  readonly errorMessage = signal<string | null>(null);
+
+  // Expose auth signal directly so the template reacts to login/logout
+  readonly currentUser = computed(() => this.authService.currentUser());
 
   constructor(
     private reservationApi: ReservationApiService,
     private ticketApi: TicketApiService,
     private tripService: TripService,
     private authService: AuthService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser) {
+    if (this.currentUser()) {
       this.loadReservations();
-    } else {
-      this.isLoading = false;
-      this.cdr.markForCheck();
     }
   }
 
   loadReservations(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (!this.currentUser) {
-      this.reservations = [];
-      this.isLoading = false;
-      this.cdr.markForCheck();
+    const user = this.currentUser();
+    if (!user) {
+      this.reservations.set([]);
+      this.isLoading.set(false);
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = null;
-    this.cdr.markForCheck();
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
 
-    this.reservationApi.getReservationsByTravelerId(this.currentUser.id).subscribe({
+    this.reservationApi.getReservationsByTravelerId(user.id).subscribe({
       next: (list: ReservationResponse[]) => {
         const now = new Date();
-        this.reservations = (list || []).map((res: ReservationResponse) => {
+        const items: ReservationWithTrip[] = (list || []).map((res: ReservationResponse) => {
           const expires = res.expiresAt ? new Date(res.expiresAt) : null;
           const isExpired =
             res.status === 'EXPIREE' ||
             (res.status === 'EN_ATTENTE' && expires !== null && expires <= now);
 
-          const item: ReservationWithTrip = {
-            reservation: res,
-            isExpired,
-          };
+          const item: ReservationWithTrip = { reservation: res, isExpired };
 
           this.tripService.getTripById(res.tripId).subscribe((trip) => {
             item.trip = trip;
-            this.cdr.markForCheck();
+            // Trigger signal update so the template re-renders with trip data
+            this.reservations.update(r => [...r]);
           });
 
           return item;
         });
 
-        this.isLoading = false;
-        this.cdr.markForCheck();
+        this.reservations.set(items);
+        this.isLoading.set(false);
       },
       error: () => {
-        this.isLoading = false;
-        this.errorMessage = 'Unable to load reservations for your account.';
-        this.cdr.markForCheck();
+        this.isLoading.set(false);
+        this.errorMessage.set('Unable to load reservations for your account.');
       },
     });
   }

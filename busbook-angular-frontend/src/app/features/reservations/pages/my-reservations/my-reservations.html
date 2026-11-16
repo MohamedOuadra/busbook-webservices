@@ -2,25 +2,25 @@
   <div class="page-header glass">
     <div>
       <span class="section-label">CUSTOMER DASHBOARD</span>
-      <h2>My Bookings & Tickets</h2>
+      <h2>My Bookings &amp; Tickets</h2>
       <p>
-        @if (currentUser) {
-          Bookings registered for <strong>{{ currentUser.fullName }}</strong> ({{ currentUser.email }}).
+        @if (currentUser()) {
+          Bookings registered for <strong>{{ currentUser()!.fullName }}</strong> ({{ currentUser()!.email }}).
         } @else {
           View your upcoming trips, confirm pending holds, or access your e-tickets.
         }
       </p>
     </div>
 
-    @if (currentUser) {
-      <button class="btn-refresh glass" (click)="loadReservations()" [disabled]="isLoading" aria-label="Refresh bookings">
+    @if (currentUser()) {
+      <button class="btn-refresh glass" (click)="loadReservations()" [disabled]="isLoading()" aria-label="Refresh bookings">
         <svg
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
           class="refresh-icon"
-          [class.spinning]="isLoading"
+          [class.spinning]="isLoading()"
         >
           <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
         </svg>
@@ -29,7 +29,7 @@
     }
   </div>
 
-  @if (!currentUser) {
+  @if (!currentUser()) {
     <!-- State when user is not logged in -->
     <div class="state-card glass auth-prompt">
       <div class="auth-icon-badge">
@@ -49,12 +49,12 @@
         </a>
       </div>
     </div>
-  } @else if (isLoading) {
+  } @else if (isLoading()) {
     <div class="state-card glass">
       <div class="spinner"></div>
       <p>Loading your reservations...</p>
     </div>
-  } @else if (errorMessage) {
+  } @else if (errorMessage()) {
     <div class="state-card glass error">
       <span class="error-emoji">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="state-svg">
@@ -63,10 +63,10 @@
           <line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
       </span>
-      <p>{{ errorMessage }}</p>
+      <p>{{ errorMessage() }}</p>
       <button class="btn-retry" (click)="loadReservations()">Retry</button>
     </div>
-  } @else if (reservations.length === 0) {
+  } @else if (reservations().length === 0) {
     <div class="state-card glass">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="state-svg">
@@ -80,7 +80,7 @@
     </div>
   } @else {
     <div class="reservations-grid">
-      @for (item of reservations; track item.reservation.id) {
+      @for (item of reservations(); track item.reservation.id) {
         <div class="reservation-card glass">
           <div class="card-header">
             <div class="route">
