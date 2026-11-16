@@ -1,49 +1,138 @@
 <article class="trip-card glass">
+  <div class="card-main">
 
-  <div class="trip-card-header">
-    <span class="bus-type">{{ trip.bus.type }}</span>
-    <span class="trip-price">{{ trip.prix }} MAD</span>
-  </div>
+    <!-- Top info row -->
+    <div class="card-top-row">
+      <div class="bus-meta">
+        <span
+          class="bus-tier-badge"
+          [class.tier-vip]="trip.bus.type === 'VIP'"
+          [class.tier-confort]="trip.bus.type === 'Confort'"
+          [class.tier-standard]="trip.bus.type === 'Standard'"
+        >
+          @if (trip.bus.type === 'VIP') {
+            ★ VIP FIRST CLASS
+          } @else if (trip.bus.type === 'Confort') {
+            ✔ CONFORT CLASS
+          } @else {
+            STANDARD CLASS
+          }
+        </span>
+        <span class="bus-reg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bus-icon">
+            <rect x="3" y="4" width="18" height="15" rx="2" ry="2"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+            <circle cx="7" cy="15" r="1.5"/>
+            <circle cx="17" cy="15" r="1.5"/>
+          </svg>
+          Coach #{{ trip.bus.immatriculation }}
+        </span>
+      </div>
 
-  <div class="trip-route">
-
-    <div class="route-point">
-      <span class="route-time">
-        {{ trip.dateDepart | date:'HH:mm' }}
-      </span>
-      <strong>{{ trip.villeDepart }}</strong>
-      <span class="route-date">
-        {{ trip.dateDepart | date:'dd/MM/yyyy' }}
-      </span>
+      <div class="capacity-pill">
+        <span class="cap-dot"></span>
+        {{ trip.bus.capacite }} seats available
+      </div>
     </div>
 
-    <div class="route-connector">
-      <span class="route-line"></span>
-      <span class="route-icon">🚌</span>
-      <span class="route-line"></span>
+    <!-- Route & timeline row -->
+    <div class="timeline-row">
+      <!-- Departure Point -->
+      <div class="stop departure">
+        <div class="time-box">
+          <span class="time">{{ trip.dateDepart | date:'HH:mm' }}</span>
+          <span class="date">{{ trip.dateDepart | date:'EEE, dd MMM' }}</span>
+        </div>
+        <div class="city-name">{{ trip.villeDepart }}</div>
+        <span class="station-tag">Main Station</span>
+      </div>
+
+      <!-- Connector & Duration -->
+      <div class="travel-connector">
+        <div class="duration-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="clock-icon">
+            <circle cx="12" cy="12" r="9"/>
+            <polyline points="12 7 12 12 15 15"/>
+          </svg>
+          <span>{{ duration }}</span>
+        </div>
+
+        <div class="connector-track">
+          <span class="track-node start"></span>
+          <div class="track-line">
+            <span class="track-coach">🚌</span>
+          </div>
+          <span class="track-node end"></span>
+        </div>
+
+        <span class="route-type-label">Direct Express</span>
+      </div>
+
+      <!-- Arrival Point -->
+      <div class="stop arrival">
+        <div class="time-box">
+          <span class="time">{{ trip.dateArrivee | date:'HH:mm' }}</span>
+          <span class="date">{{ trip.dateArrivee | date:'EEE, dd MMM' }}</span>
+        </div>
+        <div class="city-name">{{ trip.villeArrivee }}</div>
+        <span class="station-tag">Central Terminus</span>
+      </div>
     </div>
 
-    <div class="route-point destination">
-      <span class="route-time">
-        {{ trip.dateArrivee | date:'HH:mm' }}
-      </span>
-      <strong>{{ trip.villeArrivee }}</strong>
-      <span class="route-date">
-        {{ trip.dateArrivee | date:'dd/MM/yyyy' }}
-      </span>
+    <!-- Amenities bar -->
+    <div class="amenities-row">
+      <div class="amenity-item" title="Air conditioning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/>
+        </svg>
+        <span>AC</span>
+      </div>
+      <div class="amenity-item" title="Free high-speed WiFi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
+        </svg>
+        <span>Free WiFi</span>
+      </div>
+      <div class="amenity-item" title="Power outlets & USB charging">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        <span>Power Outlets</span>
+      </div>
+      <div class="amenity-item" title="Comfort reclining seating">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 9h-6a2 2 0 0 0-2 2v7h8a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2zM5 18v2M19 18v2M7 11V5a2 2 0 0 1 2-2h4"/>
+        </svg>
+        <span>Reclining Seats</span>
+      </div>
     </div>
 
   </div>
 
-  <div class="trip-card-footer">
-    <span>{{ trip.bus.immatriculation }}</span>
-    <span>{{ trip.bus.capacite }} seats</span>
-  </div>
+  <!-- Ticket Side / Price & CTA -->
+  <div class="card-side">
+    <div class="perforation">
+      <div class="cutout-top"></div>
+      <div class="perforation-line"></div>
+      <div class="cutout-bottom"></div>
+    </div>
 
-  <div class="trip-card-action">
-    <button type="button" class="select-trip-button" (click)="selectTrip()">
-      Select this trip
-      <span>→</span>
-    </button>
+    <div class="side-content">
+      <div class="price-display">
+        <span class="price-from">FROM</span>
+        <div class="price-amount">
+          <span class="num">{{ trip.prix }}</span>
+          <span class="currency">MAD</span>
+        </div>
+        <span class="price-unit">per passenger</span>
+      </div>
+
+      <button type="button" class="btn-select-trip" (click)="selectTrip()">
+        <span>Select Seats</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="arrow-icon">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
   </div>
 </article>
