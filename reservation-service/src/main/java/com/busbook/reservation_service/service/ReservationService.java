@@ -9,10 +9,12 @@ import com.busbook.reservation_service.exception.ResourceNotFoundException;
 import com.busbook.reservation_service.repository.ReservationRepository;
 import com.busbook.reservation_service.repository.SeatRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,13 +27,28 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final SeatRepository seatRepository;
+    private Clock clock;
 
+    @Autowired
     public ReservationService(
             ReservationRepository reservationRepository,
             SeatRepository seatRepository) {
+        this(reservationRepository, seatRepository, Clock.systemDefaultZone());
+    }
+
+    public ReservationService(
+            ReservationRepository reservationRepository,
+            SeatRepository seatRepository,
+            Clock clock) {
 
         this.reservationRepository = reservationRepository;
         this.seatRepository = seatRepository;
+        this.clock = clock != null ? clock : Clock.systemDefaultZone();
+    }
+
+    @Autowired(required = false)
+    public void setClock(Clock clock) {
+        this.clock = clock != null ? clock : Clock.systemDefaultZone();
     }
 
     /**
@@ -46,15 +63,11 @@ public class ReservationService {
             );
         }
 
-        List<ReservationStatus> activeStatuses = List.of(
-                ReservationStatus.EN_ATTENTE,
-                ReservationStatus.CONFIRMEE
-        );
+        LocalDateTime now = LocalDateTime.now(clock);
 
-        return !reservationRepository
-                .existsByTripIdAndSeat_IdAndStatusIn(
-                        tripId, seatId, activeStatuses
-                );
+        return !reservationRepository.existsActiveReservation(
+                tripId, seatId, now
+        );
     }
 
     /**
@@ -83,6 +96,16 @@ public class ReservationService {
                         "Le siège demandé est introuvable."
                 ));
 
+        LocalDateTime now = LocalDateTime.now(clock);
+
+        // Libérer immédiatement l'index partiel PostgreSQL si une réservation précédente
+        // sur ce siège est arrivée à expiration, sans attendre le passage du scheduler
+        reservationRepository.expirePendingReservationsForSeat(
+                request.getTripId(),
+                request.getSeatId(),
+                now
+        );
+
         if (!isSeatAvailable(request.getTripId(), request.getSeatId())) {
             throw new IllegalStateException(
                     "Ce siège est déjà réservé pour ce trajet."
@@ -96,7 +119,7 @@ public class ReservationService {
         reservation.setSeat(seat);
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
         reservation.setExpiresAt(
-                LocalDateTime.now().plusMinutes(RESERVATION_EXPIRATION_MINUTES)
+                now.plusMinutes(RESERVATION_EXPIRATION_MINUTES)
         );
 
         try {
@@ -131,9 +154,11 @@ public class ReservationService {
                         "Réservation introuvable."
                 ));
 
+        LocalDateTime now = LocalDateTime.now(clock);
+
         if (reservation.getStatus() == ReservationStatus.EN_ATTENTE
                 && reservation.getExpiresAt() != null
-                && !reservation.getExpiresAt().isAfter(LocalDateTime.now())) {
+                && !reservation.getExpiresAt().isAfter(now)) {
 
             throw new IllegalStateException(
                     "Le délai de confirmation de cette réservation est expiré."
@@ -147,7 +172,7 @@ public class ReservationService {
         }
 
         reservation.setStatus(ReservationStatus.CONFIRMEE);
-        reservation.setConfirmedAt(LocalDateTime.now());
+        reservation.setConfirmedAt(now);
 
         return reservationRepository.save(reservation);
     }
@@ -198,7 +223,7 @@ public class ReservationService {
     @Transactional
     public int expirePendingReservations() {
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(clock);
 
         List<Reservation> expiredReservations =
                 reservationRepository.findByStatusAndExpiresAtLessThanEqual(
@@ -275,7 +300,7 @@ public class ReservationService {
 
             String message = cause.getMessage();
 
-            if (message != null && message.contains(SEAT_CONSTRAINT)) {
+            if (message != null && message.toLowerCase().contains(SEAT_CONSTRAINT.toLowerCase())) {
                 return true;
             }
 
