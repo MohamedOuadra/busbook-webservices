@@ -56,13 +56,24 @@
     </div>
   } @else if (errorMessage) {
     <div class="state-card glass error">
-      <span class="error-emoji">⚠️</span>
+      <span class="error-emoji">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="state-svg">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </span>
       <p>{{ errorMessage }}</p>
       <button class="btn-retry" (click)="loadReservations()">Retry</button>
     </div>
   } @else if (reservations.length === 0) {
     <div class="state-card glass">
-      <span class="icon">🎟️</span>
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="state-svg">
+          <rect x="2" y="6" width="20" height="12" rx="2"/>
+          <path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/>
+        </svg>
+      </span>
       <h3>No Reservations Found</h3>
       <p>You haven't made any reservations with this account yet.</p>
       <button class="btn-new" routerLink="/">Find a Trip</button>
@@ -129,14 +140,21 @@
           <div class="card-actions">
             @if (item.reservation.status === 'EN_ATTENTE' && !item.isExpired) {
               <button class="btn-action btn-pay" [routerLink]="['/payment', item.reservation.id]">
-                <span>💳</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
+                  <rect x="2" y="5" width="20" height="14" rx="2"/>
+                  <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
                 Complete Payment
               </button>
             }
 
             @if (item.reservation.status === 'CONFIRMEE') {
               <button class="btn-action btn-ticket" (click)="viewTicket(item.reservation.id)">
-                <span>🎟️</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
+                  <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
+                  <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+                  <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
+                </svg>
                 View E-Ticket
               </button>
             }

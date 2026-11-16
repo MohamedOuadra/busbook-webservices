@@ -179,6 +179,18 @@
   transition: all 0.2s;
 }
 
+.action-btn-svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+}
+
+.state-svg {
+  width: 32px;
+  height: 32px;
+  stroke: currentColor;
+}
+
 .btn-pay { background: var(--color-leaf); color: white; }
 .btn-ticket { background: var(--color-ink); color: white; }
 .btn-cancel { background: rgba(239, 68, 68, 0.1); color: #dc2626; }

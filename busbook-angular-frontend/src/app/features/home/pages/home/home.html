@@ -1,42 +1,12 @@
 <div class="home-page">
   <section class="home-main">
 
-    <!-- Hero Title & Trust Highlights -->
-    <div class="hero-intro">
-      <div class="hero-headline">
-        <span class="hero-badge">
-          <span class="star-icon">✦</span>
-          OFFICIAL INTERCITY BOOKING NETWORK
-        </span>
-        <h1>Travel Across Morocco in Total Comfort</h1>
-        <p class="hero-sub">
-          Instant e-ticket booking, real-time seat availability, and modern air-conditioned coaches between Agadir, Casablanca, Marrakech and beyond.
-        </p>
-      </div>
-
-      <div class="trust-grid">
-        <div class="trust-item glass">
-          <span class="trust-icon">🛡️</span>
-          <div>
-            <strong>Verified Carriers</strong>
-            <small>Licensed & inspected coach fleet</small>
-          </div>
-        </div>
-        <div class="trust-item glass">
-          <span class="trust-icon">⚡</span>
-          <div>
-            <strong>Instant E-Ticket</strong>
-            <small>Digital pass with secure QR Code</small>
-          </div>
-        </div>
-        <div class="trust-item glass">
-          <span class="trust-icon">💺</span>
-          <div>
-            <strong>Interactive Seat Map</strong>
-            <small>Choose your preferred seat</small>
-          </div>
-        </div>
-      </div>
+    <!-- Hero Title -->
+    <div class="hero-headline">
+      <h1>Travel Across Morocco in Total Comfort</h1>
+      <p class="hero-sub">
+        Instant e-ticket booking, real-time seat availability, and modern air-conditioned coaches between Agadir, Casablanca, Marrakech and beyond.
+      </p>
     </div>
 
     <!-- Main Trip Search Panel -->
@@ -72,13 +42,18 @@
       } @else {
         <div class="empty-results glass">
           <div class="empty-icon-box">
-            <span>🔍</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-svg">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
           </div>
           <h3>No direct journeys found</h3>
           <p>We couldn't find any bus scheduled matching your exact departure, destination or date.</p>
           <div class="empty-actions">
             <button type="button" class="btn-reset-search" (click)="resetFilters()">
-              <span>↺</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon-svg">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
               View All Available Trips
             </button>
           </div>

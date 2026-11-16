@@ -25,6 +25,19 @@
   font-weight: 600;
 }
 
+.error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.error-svg {
+  width: 18px;
+  height: 18px;
+  color: #DC2626;
+}
+
 /* Loading State */
 .loading-state {
   padding: 48px;

@@ -12,7 +12,13 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
         <!-- Ticket Top Banner -->
         <div class="ticket-banner">
           <div class="brand">
-            <span class="brand-logo">🚌</span>
+            <span class="brand-logo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ticket-brand-svg">
+                <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
+                <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+                <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
+              </svg>
+            </span>
             <span class="brand-name">BusBook</span>
             <span class="ticket-badge">E-TICKET OFFICIAL</span>
           </div>
@@ -35,7 +41,11 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
 
               <div class="journey-arrow">
                 <div class="arrow-line"></div>
-                <span class="bus-icon">➔</span>
+                <span class="bus-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="arrow-svg">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
                 <span class="bus-info">{{ trip.bus.type }} • {{ trip.bus.immatriculation }}</span>
               </div>
 
@@ -133,7 +143,15 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
     }
 
     .brand-logo {
-      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ticket-brand-svg {
+      width: 22px;
+      height: 22px;
+      color: var(--color-ink);
     }
 
     .brand-name {

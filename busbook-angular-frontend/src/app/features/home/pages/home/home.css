@@ -16,42 +16,17 @@
   min-width: 0;
 }
 
-/* Hero Intro Section */
-.hero-intro {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
+/* Hero Headline Section */
 .hero-headline {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  width: fit-content;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  color: var(--color-ink);
-}
-
-.star-icon {
-  color: var(--color-coral);
-  font-size: 12px;
+  padding: 4px 0;
 }
 
 .hero-headline h1 {
   margin: 0;
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 800;
   color: var(--color-ink);
   letter-spacing: -0.8px;
@@ -64,41 +39,6 @@
   font-size: 14.5px;
   line-height: 1.5;
   color: #4b5563;
-  font-weight: 500;
-}
-
-/* Trust Bar */
-.trust-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-
-.trust-icon {
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.trust-item strong {
-  display: block;
-  font-size: 12.5px;
-  font-weight: 800;
-  color: var(--color-ink);
-}
-
-.trust-item small {
-  display: block;
-  font-size: 11px;
-  color: var(--color-muted);
   font-weight: 500;
 }
 
@@ -210,8 +150,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.empty-svg {
+  width: 26px;
+  height: 26px;
+  color: var(--color-muted);
 }
 
 .empty-results h3 {
@@ -250,6 +195,12 @@
   transition: all 0.2s ease;
 }
 
+.btn-icon-svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
 .btn-reset-search:hover {
   background: #44b13f;
   transform: translateY(-2px);
@@ -258,9 +209,6 @@
 
 /* Responsive */
 @media (max-width: 850px) {
-  .trust-grid {
-    grid-template-columns: 1fr;
-  }
   .hero-headline h1 {
     font-size: 26px;
   }

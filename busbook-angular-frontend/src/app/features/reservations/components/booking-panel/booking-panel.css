@@ -96,7 +96,15 @@
 }
 
 .auth-lock {
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock-svg {
+  width: 14px;
+  height: 14px;
+  color: #C04321;
 }
 
 .auth-text {

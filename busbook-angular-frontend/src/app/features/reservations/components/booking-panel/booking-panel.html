@@ -49,7 +49,12 @@
   <div class="col-fare-summary">
     @if (!isLoggedIn) {
       <div class="auth-notice-pill glass">
-        <span class="auth-lock">🔒</span>
+        <span class="auth-lock">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lock-svg">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
         <div class="auth-text">
           <strong>Sign in required</strong>
           <small>Login to hold your seat</small>

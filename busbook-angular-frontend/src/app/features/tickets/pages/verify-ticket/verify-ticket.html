@@ -74,7 +74,10 @@
 
         <div class="result-footer">
           <button class="btn-view" [routerLink]="['/ticket', ticket.ticketNumber]">
-            View Full Boarding Pass ➔
+            <span>View Full Boarding Pass</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="arrow-svg">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -82,7 +85,10 @@
       <div class="ticket-result glass invalid-border">
         <div class="result-header">
           <div class="badge-invalid">
-            <span>✕</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="badge-svg">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
             INVALID / NOT FOUND
           </div>
         </div>
