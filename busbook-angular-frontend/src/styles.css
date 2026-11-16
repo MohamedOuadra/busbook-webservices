@@ -1,3 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
-
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import 'tailwindcss';
+
+:root {
+  /* Typography */
+  --font-primary: 'Plus Jakarta Sans', sans-serif;
+
+  /* Main palette extracted from the reference */
+  --color-coral: #F99271;
+  --color-leaf: #57C352;
+  --color-ink: #1D1D1B;
+  --color-muted: #77766F;
+
+  /* Background palette */
+  --color-sage: #B7D8A5;
+  --color-sand: #D3DCB2;
+  --color-peach: #E8C9B0;
+  --color-rose: #E9B4A0;
+
+  /* Surfaces */
+  --color-glass: rgba(255, 255, 255, 0.38);
+  --color-glass-border: rgba(255, 255, 255, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--color-ink);
+  background: linear-gradient(
+    135deg,
+    var(--color-sage) 0%,
+    var(--color-sand) 35%,
+    var(--color-peach) 70%,
+    var(--color-rose) 100%
+  );
+  background-attachment: fixed;
+}
+
+/* Reusable glass effect */
+.glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--color-glass-border);
+}
+
+/* Reusable design utilities */
+.text-ink {
+  color: var(--color-ink);
+}
+
+.text-mute {
+  color: var(--color-muted);
+}
+
+.bg-coral {
+  background-color: var(--color-coral);
+}
+
+.bg-leaf {
+  background-color: var(--color-leaf);
+}

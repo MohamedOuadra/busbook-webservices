@@ -1,0 +1,12 @@
+<button
+  class="seat"
+  [class.available]="status === 'available'"
+  [class.occupied]="status === 'occupied'"
+  [class.selected]="status === 'selected'"
+  [disabled]="status === 'occupied'"
+  [attr.aria-label]="'Seat ' + number + ' - ' + status"
+  [attr.aria-pressed]="status === 'selected'"
+  (click)="selectSeat()"
+>
+  {{ number }}
+</button>

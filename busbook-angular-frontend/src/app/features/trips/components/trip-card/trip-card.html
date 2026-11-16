@@ -1,0 +1,49 @@
+<article class="trip-card glass">
+
+  <div class="trip-card-header">
+    <span class="bus-type">{{ trip.bus.type }}</span>
+    <span class="trip-price">{{ trip.prix }} MAD</span>
+  </div>
+
+  <div class="trip-route">
+
+    <div class="route-point">
+      <span class="route-time">
+        {{ trip.dateDepart | date:'HH:mm' }}
+      </span>
+      <strong>{{ trip.villeDepart }}</strong>
+      <span class="route-date">
+        {{ trip.dateDepart | date:'dd/MM/yyyy' }}
+      </span>
+    </div>
+
+    <div class="route-connector">
+      <span class="route-line"></span>
+      <span class="route-icon">🚌</span>
+      <span class="route-line"></span>
+    </div>
+
+    <div class="route-point destination">
+      <span class="route-time">
+        {{ trip.dateArrivee | date:'HH:mm' }}
+      </span>
+      <strong>{{ trip.villeArrivee }}</strong>
+      <span class="route-date">
+        {{ trip.dateArrivee | date:'dd/MM/yyyy' }}
+      </span>
+    </div>
+
+  </div>
+
+  <div class="trip-card-footer">
+    <span>{{ trip.bus.immatriculation }}</span>
+    <span>{{ trip.bus.capacite }} seats</span>
+  </div>
+
+  <div class="trip-card-action">
+    <button type="button" class="select-trip-button" (click)="selectTrip()">
+      Select this trip
+      <span>→</span>
+    </button>
+  </div>
+</article>

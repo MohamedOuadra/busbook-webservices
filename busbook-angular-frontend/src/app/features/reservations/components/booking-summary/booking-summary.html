@@ -1,0 +1,68 @@
+<div class="booking-summary glass">
+    <div class="summary-header">
+        <div>
+            <span class="section-label">BOOKING SUMMARY</span>
+            <h2>Your booking</h2>
+        </div>
+
+        <span class="summary-icon">✦</span>
+    </div>
+
+    <div class="route-summary">
+        <div class="route-point">
+            <span class="route-dot"></span>
+            <div>
+                <small>FROM</small>
+                <strong>{{ from }}</strong>
+            </div>
+        </div>
+
+        <div class="route-line"></div>
+
+        <div class="route-point">
+            <span class="route-dot destination"></span>
+            <div>
+                <small>TO</small>
+                <strong>{{ to }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="summary-details">
+        <div class="detail-row">
+            <span>Travel date</span>
+            <strong>{{ date }}</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Selected seat</span>
+            <strong>
+                @if (seatNumber !== null) {
+                {{ seatNumber }}
+                } @else {
+                Not selected
+                }
+            </strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Passengers</span>
+            <strong>{{ seatNumber !== null ? 1 : 0 }}</strong>
+        </div>
+    </div>
+
+    <div class="price-section">
+        <span>Ticket price</span>
+        <strong>{{ price }} Tk</strong>
+    </div>
+
+    <div class="total-section">
+        <span>Total amount</span>
+        <strong>{{ seatNumber !== null ? price : 0 }} Tk</strong>
+    </div>
+
+
+    <p class="summary-note">
+        Your seat will be confirmed after completing your booking.
+    </p>
+</div>

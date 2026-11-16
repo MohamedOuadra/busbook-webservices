@@ -1,0 +1,162 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.journey-card {
+  width: 100%;
+  padding: 24px 28px;
+  border-radius: 24px;
+}
+
+/* Header */
+.journey-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.journey-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.journey-header h2 {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.journey-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+}
+
+.journey-more svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Route */
+.journey-route {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.route-point {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.route-label,
+.info-label {
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.route-point strong {
+  color: var(--color-ink);
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.route-detail {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.route-middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.route-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(29, 29, 27, 0.25);
+}
+
+.route-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-coral);
+}
+
+.route-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Footer */
+.journey-footer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(29, 29, 27, 0.12);
+}
+
+.journey-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.journey-info strong {
+  color: var(--color-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .journey-card {
+    padding: 20px;
+  }
+
+  .journey-route {
+    grid-template-columns: 1fr 55px 1fr;
+    gap: 6px;
+  }
+
+  .route-point strong {
+    font-size: 19px;
+  }
+
+  .journey-footer {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}

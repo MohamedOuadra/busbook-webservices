@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.seat-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.legend-color {
+  width: 13px;
+  height: 13px;
+  border-radius: 4px;
+}
+
+.legend-color.available {
+  background: #57c352;
+}
+
+.legend-color.occupied {
+  background: #d5d0c5;
+}
+
+.legend-color.selected {
+  background: #f99271;
+}
+
+@media (max-width: 480px) {
+  .seat-legend {
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .legend-item {
+    font-size: 10px;
+  }
+}

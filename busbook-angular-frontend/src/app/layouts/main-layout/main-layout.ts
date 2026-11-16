@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Navbar } from '../../shared/components/navbar/navbar';
+import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
 @Component({
-  imports: [],
   selector: 'app-main-layout',
-  styleUrl: './main-layout.css',
+  imports: [Navbar, Sidebar, RouterOutlet],
   templateUrl: './main-layout.html',
+  styleUrl: './main-layout.css',
 })
 export class MainLayout {}
