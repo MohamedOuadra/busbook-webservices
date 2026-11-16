@@ -1,79 +1,144 @@
 <div class="verify-page">
-  <div class="verify-header glass">
-    <span class="section-label">BOARDING & CONTROLS</span>
-    <h2>Verify Bus Ticket</h2>
-    <p>Enter the ticket number (found on the e-ticket or under the QR code) to check its authenticity.</p>
 
+  <!-- Header Card -->
+  <div class="verify-header glass">
+    <div class="header-titles">
+      <div class="badge-row">
+        <span class="section-label">BOARDING &amp; INSPECTION</span>
+        <span class="security-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shield-mini-svg">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Official QR &amp; Ticket Verifier
+        </span>
+      </div>
+      <h2>Verify Bus Ticket</h2>
+      <p>Enter the 21-character ticket reference (printed on the e-ticket or under the QR code) to verify booking authenticity and seat validity.</p>
+    </div>
+
+    <!-- Search Bar -->
     <div class="search-form">
-      <input
-        type="text"
-        [(ngModel)]="ticketNumber"
-        placeholder="Enter ticket number (e.g. TCK-20261116-...)"
-        (keyup.enter)="onVerify()"
-        [disabled]="isLoading"
-      />
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="ticketNumber"
+          placeholder="e.g. TCK-20261116-E81EB8F2"
+          (keyup.enter)="onVerify()"
+          [disabled]="isLoading"
+        />
+        @if (ticketNumber) {
+          <button type="button" class="btn-clear" (click)="ticketNumber = ''" title="Clear">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        }
+      </div>
+
       <button class="btn-verify" [disabled]="isLoading || !ticketNumber.trim()" (click)="onVerify()">
         @if (isLoading) {
-          <span>Verifying...</span>
+          <span class="spinner-mini"></span>
+          <span>Checking...</span>
         } @else {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
           <span>Verify Ticket</span>
         }
       </button>
     </div>
+
+    <!-- Quick Sample Helpers -->
+    <div class="sample-row">
+      <span class="sample-label">Try sample:</span>
+      <button type="button" class="sample-chip" (click)="fillSample('TCK-20261116-E81EB8F2')">
+        TCK-20261116-E81EB8F2
+      </button>
+    </div>
   </div>
 
+  <!-- Loading State -->
   @if (isLoading) {
     <div class="state-card glass">
       <div class="spinner"></div>
       <p>Verifying ticket authenticity with ticket-service...</p>
     </div>
   } @else if (hasSearched) {
+
+    <!-- Valid Ticket Result -->
     @if (ticket) {
       <div class="ticket-result glass valid-border">
         <div class="result-header">
           <div class="badge-valid">
-            <span>✓</span>
-            VALID TICKET
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="badge-svg">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>VALID &amp; CONFIRMED TICKET</span>
           </div>
-          <span class="ticket-code">{{ ticket.ticketNumber }}</span>
+          <span class="ticket-code mono">{{ ticket.ticketNumber }}</span>
         </div>
 
         <div class="result-body">
           <div class="info-grid">
             <div class="info-item">
-              <span>Passenger</span>
-              <strong>{{ ticket.travelerName }}</strong>
+              <span class="item-label">PASSENGER NAME</span>
+              <div class="passenger-row">
+                <span class="passenger-avatar">{{ ticket.travelerName.charAt(0).toUpperCase() }}</span>
+                <strong>{{ ticket.travelerName }}</strong>
+              </div>
             </div>
+
             <div class="info-item">
-              <span>Email</span>
-              <strong>{{ ticket.travelerEmail }}</strong>
+              <span class="item-label">SEAT ASSIGNED</span>
+              <strong class="seat-badge">Seat #{{ ticket.seatNumber }}</strong>
             </div>
+
             <div class="info-item">
-              <span>Assigned Seat</span>
-              <strong class="seat-num">Seat #{{ ticket.seatNumber }}</strong>
+              <span class="item-label">RESERVATION REF</span>
+              <strong class="mono">#{{ ticket.reservationId }}</strong>
             </div>
+
             <div class="info-item">
-              <span>Reservation ID</span>
-              <strong>#{{ ticket.reservationId }}</strong>
+              <span class="item-label">TRIP NUMBER</span>
+              <strong class="mono">Trip #{{ ticket.tripId }}</strong>
             </div>
+
             <div class="info-item">
-              <span>Trip ID</span>
-              <strong>#{{ ticket.tripId }}</strong>
+              <span class="item-label">CONTACT EMAIL</span>
+              <span class="email-text">{{ ticket.travelerEmail }}</span>
             </div>
+
             <div class="info-item">
-              <span>Issued On</span>
-              <strong>{{ ticket.issuedAt }}</strong>
+              <span class="item-label">ISSUED DATE</span>
+              <span>{{ formatDate(ticket.issuedAt) }}</span>
             </div>
           </div>
 
-          <div class="qr-box">
-            <app-qr-code [value]="ticket.qrCode" [size]="140" />
-            <small>Cryptographic Signature Verified</small>
+          <div class="qr-col">
+            <div class="qr-box">
+              <app-qr-code [value]="ticket.qrCode" [size]="140" />
+            </div>
+            <div class="security-seal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shield-green">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Cryptographic Signature Validated</span>
+            </div>
           </div>
         </div>
 
         <div class="result-footer">
           <button class="btn-view" [routerLink]="['/ticket', ticket.ticketNumber]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-svg">
+              <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
+              <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+              <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
+            </svg>
             <span>View Full Boarding Pass</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="arrow-svg">
               <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -82,6 +147,7 @@
         </div>
       </div>
     } @else if (errorMessage) {
+      <!-- Invalid Ticket Result -->
       <div class="ticket-result glass invalid-border">
         <div class="result-header">
           <div class="badge-invalid">
@@ -89,11 +155,30 @@
               <line x1="18" y1="6" x2="6" y2="18"/>
               <line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
-            INVALID / NOT FOUND
+            <span>INVALID TICKET REFERENCE</span>
           </div>
         </div>
-        <p class="error-desc">{{ errorMessage }}</p>
+        <div class="invalid-body">
+          <p class="error-desc">{{ errorMessage }}</p>
+          <small class="error-tip">Make sure you entered the complete ticket reference, including the "TCK-" prefix and the exact casing.</small>
+        </div>
       </div>
     }
+
+  } @else {
+    <!-- Guide Card when first landing on page -->
+    <div class="guide-card glass">
+      <div class="guide-icon-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="guide-svg">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+        </svg>
+      </div>
+      <h3>Where to Find Your Ticket Number</h3>
+      <p>Your ticket reference code is located at the top of your PDF e-ticket or below the printed QR Code (format: <strong>TCK-YYYYMMDD-XXXXXXXX</strong>).</p>
+    </div>
   }
+
 </div>

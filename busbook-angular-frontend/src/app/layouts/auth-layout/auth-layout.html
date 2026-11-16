@@ -2,21 +2,19 @@
   <!-- Minimalist Brand Header -->
   <header class="auth-topbar">
     <a routerLink="/" class="auth-brand" aria-label="BusBook Home">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="brand-icon"
-      >
-        <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
-        <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
-        <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
-        <path d="M7 20v2M17 20v2"/>
-      </svg>
-      <span class="brand-text">BusBook</span>
+      <div class="brand-badge">
+        <svg viewBox="0 0 28 28" fill="none" class="brand-svg">
+          <rect width="28" height="28" rx="8" fill="#20201E"/>
+          <!-- Ticket voucher shape with side notches -->
+          <path d="M6 9C6 7.89 6.89 7 8 7H20C21.11 7 22 7.89 22 9V12.5C21.17 12.5 20.5 13.17 20.5 14C20.5 14.83 21.17 15.5 22 15.5V19C22 20.11 21.11 21 20 21H8C6.89 21 6 20.11 6 19V15.5C6.83 15.5 7.5 14.83 7.5 14C7.5 13.17 6.83 12.5 6 12.5V9Z" fill="#FDFBF7"/>
+          <!-- Sleek bus cabin silhouette -->
+          <path d="M10 10.5H18V13.5H10V10.5Z" fill="#20201E"/>
+          <circle cx="11" cy="17" r="1.1" fill="#F99271"/>
+          <circle cx="17" cy="17" r="1.1" fill="#F99271"/>
+          <rect x="13" y="16.5" width="2" height="1" rx="0.5" fill="#20201E"/>
+        </svg>
+      </div>
+      <span class="brand-text">Bus<span class="brand-highlight">Book</span></span>
     </a>
 
     <a routerLink="/" class="back-home-btn glass">
