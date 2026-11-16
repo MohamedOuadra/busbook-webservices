@@ -13,15 +13,21 @@ import { RegisterPage } from './features/auth/pages/register/register';
 export const routes: Routes = [
   // Auth Layout dedicated to login & register
   {
-    path: '',
+    path: 'login',
     component: AuthLayout,
     children: [
       {
-        path: 'login',
+        path: '',
         component: LoginPage,
       },
+    ],
+  },
+  {
+    path: 'register',
+    component: AuthLayout,
+    children: [
       {
-        path: 'register',
+        path: '',
         component: RegisterPage,
       },
     ],
