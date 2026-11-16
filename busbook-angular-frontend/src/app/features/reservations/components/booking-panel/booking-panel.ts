@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BookingSummary } from '../booking-summary/booking-summary';
 import { Trip } from '../../../trips/models/trip';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-booking-panel',
@@ -9,7 +10,7 @@ import { Trip } from '../../../trips/models/trip';
   templateUrl: './booking-panel.html',
   styleUrl: './booking-panel.css',
 })
-export class BookingPanel {
+export class BookingPanel implements OnInit {
   @Input({ required: true }) trip!: Trip;
   @Input() seatNumber: number | null = null;
   @Input() isSubmitting: boolean = false;
@@ -24,6 +25,16 @@ export class BookingPanel {
   fullName = '';
   phoneNumber = '';
   email = '';
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.fullName = user.fullName || '';
+      this.email = user.email || '';
+    }
+  }
 
   onContinueBooking(): void {
     if (this.seatNumber === null || !this.fullName || !this.email) {

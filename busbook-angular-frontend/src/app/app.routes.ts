@@ -7,6 +7,8 @@ import { TicketPage } from './features/tickets/pages/ticket/ticket';
 import { MyReservationsPage } from './features/reservations/pages/my-reservations/my-reservations';
 import { VerifyTicketPage } from './features/tickets/pages/verify-ticket/verify-ticket';
 import { TripsCatalogPage } from './features/trips/pages/trips-catalog/trips-catalog';
+import { LoginPage } from './features/auth/pages/login/login';
+import { RegisterPage } from './features/auth/pages/register/register';
 
 export const routes: Routes = [
   {
@@ -20,6 +22,14 @@ export const routes: Routes = [
       {
         path: 'trips',
         component: TripsCatalogPage,
+      },
+      {
+        path: 'login',
+        component: LoginPage,
+      },
+      {
+        path: 'register',
+        component: RegisterPage,
       },
       {
         path: 'reservation/:tripId',

@@ -1,3 +1,32 @@
 spring:
   application:
     name: auth-service
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/busbook
+    username: postgres
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8085
+
+jwt:
+  secret: ${JWT_SECRET:busbook-secret-key-must-be-at-least-32-characters-long}
+  expiration-ms: 86400000  # 24 heures
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
