@@ -1,19 +1,19 @@
 :host {
   display: block;
-  flex: 0 0 76px;
+  flex: 0 0 60px;
 }
 
 .sidebar {
-  width: 76px;
+  width: 60px;
   height: 100%;
-  min-height: 650px;
+  min-height: 580px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 
-  padding: 24px 0;
+  padding: 12px 0;
 }
 
 .sidebar-top {
@@ -29,7 +29,7 @@
   align-items: center;
   gap: 14px;
 
-  margin-top: 88px;
+  margin-top: 24px;
 }
 
 .sidebar-button {
@@ -44,6 +44,8 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
 
   color: #4a4a47;
   transition: all 0.2s ease;

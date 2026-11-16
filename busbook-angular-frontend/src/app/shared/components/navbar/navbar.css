@@ -8,15 +8,24 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 12px 16px 0;
-  min-height: 65px;
+  padding: 8px 12px 0 4px;
+  min-height: 60px;
 }
 
 /* Brand */
 .brand {
   display: flex;
   align-items: center;
+  gap: 8px;
   flex-shrink: 0;
+  text-decoration: none;
+}
+
+.brand-text {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-ink);
+  letter-spacing: -0.5px;
 }
 
 .brand-icon {

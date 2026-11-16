@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/reservations")
 public class ReservationController {
@@ -43,7 +44,7 @@ public class ReservationController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ReservationResponse> getReservationById(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
 
         ReservationResponse response =
                 reservationService.getReservationById(id);
@@ -57,7 +58,7 @@ public class ReservationController {
      */
     @GetMapping("/trip/{tripId}")
     public ResponseEntity<List<ReservationResponse>> getReservationsByTripId(
-            @PathVariable Long tripId) {
+            @PathVariable("tripId") Long tripId) {
 
         List<ReservationResponse> reservations =
                 reservationService.getReservationsByTripId(tripId);
@@ -71,7 +72,7 @@ public class ReservationController {
      */
     @GetMapping("/traveler/{travelerId}")
     public ResponseEntity<List<ReservationResponse>> getReservationsByTravelerId(
-            @PathVariable Long travelerId) {
+            @PathVariable("travelerId") Long travelerId) {
 
         List<ReservationResponse> reservations =
                 reservationService.getReservationsByTravelerId(travelerId);
@@ -85,8 +86,8 @@ public class ReservationController {
      */
     @GetMapping("/availability")
     public ResponseEntity<Boolean> checkSeatAvailability(
-            @RequestParam Long tripId,
-            @RequestParam Long seatId) {
+            @RequestParam("tripId") Long tripId,
+            @RequestParam("seatId") Long seatId) {
 
         boolean available =
                 reservationService.isSeatAvailable(tripId, seatId);
@@ -100,7 +101,7 @@ public class ReservationController {
      */
     @PatchMapping("/{id}/confirm")
     public ResponseEntity<ReservationResponse> confirmReservation(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
 
         Reservation reservation =
                 reservationService.confirmReservation(id);
@@ -116,7 +117,7 @@ public class ReservationController {
      */
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<ReservationResponse> cancelReservation(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
 
         Reservation reservation =
                 reservationService.cancelReservation(id);

@@ -1,7 +1,5 @@
-
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { BookingSummary } from '../booking-summary/booking-summary';
 import { Trip } from '../../../trips/models/trip';
 
@@ -12,9 +10,15 @@ import { Trip } from '../../../trips/models/trip';
   styleUrl: './booking-panel.css',
 })
 export class BookingPanel {
-
   @Input({ required: true }) trip!: Trip;
   @Input() seatNumber: number | null = null;
+  @Input() isSubmitting: boolean = false;
+
+  @Output() startBooking = new EventEmitter<{
+    fullName: string;
+    phoneNumber: string;
+    email: string;
+  }>();
 
   // Informations du voyageur
   fullName = '';
@@ -22,11 +26,14 @@ export class BookingPanel {
   email = '';
 
   onContinueBooking(): void {
-    if (this.seatNumber === null) {
+    if (this.seatNumber === null || !this.fullName || !this.email) {
       return;
     }
 
-    console.log('Selected trip:', this.trip);
-    console.log('Selected seat:', this.seatNumber);
+    this.startBooking.emit({
+      fullName: this.fullName,
+      phoneNumber: this.phoneNumber,
+      email: this.email,
+    });
   }
 }

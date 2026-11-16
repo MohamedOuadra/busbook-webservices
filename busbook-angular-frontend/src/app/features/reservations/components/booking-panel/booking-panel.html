@@ -57,11 +57,15 @@
 
   <button
     class="continue-button"
-    [disabled]="seatNumber === null || !travelerForm.valid"
+    [disabled]="seatNumber === null || !travelerForm.valid || isSubmitting"
     (click)="onContinueBooking()"
   >
-    Continue booking
-    <span>→</span>
+    @if (isSubmitting) {
+      <span>Holding seat (10 min)...</span>
+    } @else {
+      <span>Continue booking</span>
+      <span>→</span>
+    }
   </button>
 
 </aside>

@@ -5,24 +5,24 @@
 
 .main-layout {
   width: 100%;
-  max-width: 1280px;
   min-height: 100vh;
-  margin: 0 auto;
-  padding: 20px 4%;
+  margin: 0;
+  padding: 12px 24px 24px 16px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .content-layout {
   display: flex;
   flex: 1;
-  min-height: calc(100vh - 100px);
-  gap: 12px;
-  padding-right: 12px;
+  min-height: calc(100vh - 85px);
+  gap: 18px;
+  width: 100%;
 }
 
 .page-content {
   flex: 1;
   min-width: 0;
-  padding-top: 24px;
+  padding-top: 14px;
 }

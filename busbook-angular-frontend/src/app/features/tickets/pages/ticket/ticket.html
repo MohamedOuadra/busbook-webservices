@@ -1,0 +1,28 @@
+<div class="ticket-page">
+  @if (isLoading) {
+    <div class="state-card glass">
+      <div class="spinner"></div>
+      <p>Loading e-ticket details...</p>
+    </div>
+  } @else if (ticket && trip) {
+    <app-ticket-view
+      [ticket]="ticket"
+      [trip]="trip"
+      (onNewBooking)="onNewBooking()"
+    />
+  } @else {
+    <div class="state-card glass">
+      <span class="icon">🔍</span>
+      <h3>Ticket Not Found</h3>
+      <p>{{ errorMessage || 'Could not find a valid ticket with this reference.' }}</p>
+      <div class="actions">
+        <button class="btn-primary" routerLink="/verify-ticket">
+          Search Another Ticket
+        </button>
+        <button class="btn-secondary" routerLink="/">
+          Back to Home
+        </button>
+      </div>
+    </div>
+  }
+</div>

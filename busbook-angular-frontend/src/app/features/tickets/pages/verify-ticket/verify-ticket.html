@@ -1,0 +1,87 @@
+<div class="verify-page">
+  <div class="verify-header glass">
+    <span class="section-label">BOARDING & CONTROLS</span>
+    <h2>Verify Bus Ticket</h2>
+    <p>Enter the ticket number (found on the e-ticket or under the QR code) to check its authenticity.</p>
+
+    <div class="search-form">
+      <input
+        type="text"
+        [(ngModel)]="ticketNumber"
+        placeholder="Enter ticket number (e.g. TKT-20261116-...)"
+        (keyup.enter)="onVerify()"
+      />
+      <button class="btn-verify" [disabled]="isLoading || !ticketNumber.trim()" (click)="onVerify()">
+        @if (isLoading) {
+          <span>Verifying...</span>
+        } @else {
+          <span>Verify Ticket</span>
+        }
+      </button>
+    </div>
+  </div>
+
+  @if (hasSearched) {
+    @if (ticket) {
+      <div class="ticket-result glass valid-border">
+        <div class="result-header">
+          <div class="badge-valid">
+            <span>✓</span>
+            VALID TICKET
+          </div>
+          <span class="ticket-code">{{ ticket.ticketNumber }}</span>
+        </div>
+
+        <div class="result-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <span>Passenger</span>
+              <strong>{{ ticket.travelerName }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Email</span>
+              <strong>{{ ticket.travelerEmail }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Assigned Seat</span>
+              <strong class="seat-num">Seat #{{ ticket.seatNumber }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Reservation ID</span>
+              <strong>#{{ ticket.reservationId }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Trip ID</span>
+              <strong>#{{ ticket.tripId }}</strong>
+            </div>
+            <div class="info-item">
+              <span>Issued On</span>
+              <strong>{{ ticket.issuedAt }}</strong>
+            </div>
+          </div>
+
+          <div class="qr-box">
+            <app-qr-code [value]="ticket.qrCode" [size]="140" />
+            <small>Cryptographic Signature Verified</small>
+          </div>
+        </div>
+
+        <div class="result-footer">
+          <button class="btn-view" [routerLink]="['/ticket', ticket.ticketNumber]">
+            View Full Boarding Pass ➔
+          </button>
+        </div>
+      </div>
+    } @else if (errorMessage) {
+      <div class="ticket-result glass invalid-border">
+        <div class="result-header">
+          <div class="badge-invalid">
+            <span>✕</span>
+            INVALID / NOT FOUND
+          </div>
+        </div>
+        <p class="error-desc">{{ errorMessage }}</p>
+      </div>
+    }
+  }
+</div>

@@ -1,48 +1,98 @@
 <div class="reservation-page">
 
-    @if (trip) {
+  @if (trip) {
+    <!-- Information du trajet sélectionné -->
     <section class="trip-details glass">
+      <div class="trip-header-row">
+        <div>
+          <span class="section-label">SELECTED JOURNEY</span>
+          <h2>{{ trip.villeDepart }} → {{ trip.villeArrivee }}</h2>
+        </div>
+        <div class="step-indicator">
+          <span class="step-dot" [class.active]="currentStep === 'SELECTION'">1. Seats</span>
+          <span class="step-sep">→</span>
+          <span class="step-dot" [class.active]="currentStep === 'PAYMENT'">2. Payment</span>
+          <span class="step-sep">→</span>
+          <span class="step-dot" [class.active]="currentStep === 'TICKET'">3. Ticket</span>
+        </div>
+      </div>
 
-        <span class="section-label">YOUR SELECTED TRIP</span>
-
-        <h2>
-            {{ trip.villeDepart }}
-            →
-            {{ trip.villeArrivee }}
-        </h2>
-
-        <div class="trip-information">
-            <div>
-                <span>Departure</span>
-                <strong>{{ trip.dateDepart }}</strong>
-            </div>
-
-            <div>
-                <span>Arrival</span>
-                <strong>{{ trip.dateArrivee }}</strong>
-            </div>
-
-            <div>
-                <span>Bus type</span>
-                <strong>{{ trip.bus.type }}</strong>
-            </div>
-
-            <div>
-                <span>Price</span>
-                <strong>{{ trip.prix }} MAD</strong>
-            </div>
+      <div class="trip-information">
+        <div>
+          <span>Departure</span>
+          <strong>{{ trip.dateDepart }}</strong>
         </div>
 
+        <div>
+          <span>Arrival</span>
+          <strong>{{ trip.dateArrivee }}</strong>
+        </div>
+
+        <div>
+          <span>Bus type</span>
+          <strong>{{ trip.bus.type }} ({{ trip.bus.immatriculation }})</strong>
+        </div>
+
+        <div>
+          <span>Price</span>
+          <strong>{{ trip.prix }} MAD</strong>
+        </div>
+      </div>
     </section>
 
-    <app-bus-illustration />
+    <!-- Étape 1 : Sélection du siège et coordonnées -->
+    @if (currentStep === 'SELECTION') {
+      @if (errorMessage) {
+        <div class="error-banner">
+          <span class="error-icon">⚠️</span>
+          <span class="error-text">{{ errorMessage }}</span>
+        </div>
+      }
 
-    <app-seat-map (seatSelected)="onSeatSelected($event)" />
+      <app-bus-illustration />
 
-    <app-booking-panel [trip]="trip" [seatNumber]="selectedSeat" />
+      <app-seat-map
+        [tripId]="trip.id"
+        [capacity]="trip.bus.capacite"
+        (seatSelected)="onSeatSelected($event)"
+      />
 
-    } @else {
-    <p>Loading trip information...</p>
+      <app-booking-panel
+        [trip]="trip"
+        [seatNumber]="selectedSeat"
+        [isSubmitting]="isCreatingReservation"
+        (startBooking)="onStartBooking($event)"
+      />
     }
+
+    <!-- Étape 2 : Paiement et Compte à rebours 10 min -->
+    @if (currentStep === 'PAYMENT' && currentReservation && selectedSeat !== null) {
+      <app-payment-section
+        [trip]="trip"
+        [seatNumber]="selectedSeat"
+        [reservation]="currentReservation"
+        [remainingSeconds]="remainingSeconds"
+        [isExpired]="isExpired"
+        [isProcessing]="isProcessingPayment"
+        [errorMessage]="paymentErrorMessage"
+        (pay)="onPay($event)"
+        (cancel)="onCancelBooking()"
+      />
+    }
+
+    <!-- Étape 3 : Billet électronique et QR code -->
+    @if (currentStep === 'TICKET' && currentTicket) {
+      <app-ticket-view
+        [ticket]="currentTicket"
+        [trip]="trip"
+        (onNewBooking)="onResetAll()"
+      />
+    }
+
+  } @else {
+    <div class="loading-state glass">
+      <p>Loading journey details...</p>
+    </div>
+  }
 
 </div>

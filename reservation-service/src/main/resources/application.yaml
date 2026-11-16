@@ -1,13 +1,16 @@
 spring:
   application:
     name: reservation-service
-    jpa:
-      open-in-view: false
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  jpa:
+    open-in-view: false
 
   datasource:
     url: jdbc:postgresql://localhost:5432/busbook
     username: postgres
-    password: ${DB_PASSWORD}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
