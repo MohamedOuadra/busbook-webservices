@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { TripSearch } from '../../../trips/components/trip-search/trip-search';
@@ -22,22 +22,21 @@ export class Home implements OnInit {
 
   trips: Trip[] = [];
 
-  constructor(
-    private tripService: TripService,
-    private router: Router
-  ) {}
+  private tripService = inject(TripService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.tripService.getTrips().subscribe((trips) => {
       this.trips = trips;
-      console.log('Trajets récupérés :', this.trips);
+      this.cdr.markForCheck();
     });
   }
 
   onTripSearch(criteria: TripSearchCriteria): void {
     this.tripService.searchTrips(criteria).subscribe((trips) => {
       this.trips = trips;
-      console.log('Résultats de recherche :', this.trips);
+      this.cdr.markForCheck();
     });
   }
 

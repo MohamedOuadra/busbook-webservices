@@ -98,6 +98,66 @@
   flex-shrink: 0;
 }
 
+.login-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: var(--color-ink);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.login-link:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+.login-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--color-ink);
+}
+
+.user-name strong {
+  color: var(--color-coral);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  color: var(--color-muted);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.logout-btn:hover {
+  color: #DC2626;
+  transform: scale(1.1);
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+}
+
 .settings-button {
   display: flex;
   align-items: center;

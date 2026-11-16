@@ -98,7 +98,7 @@ public class TicketService {
             throw new IllegalArgumentException("Le numéro de billet est obligatoire.");
         }
 
-        Ticket ticket = ticketRepository.findByTicketNumber(ticketNumber)
+        Ticket ticket = ticketRepository.findByTicketNumberIgnoreCase(ticketNumber.trim())
                 .orElseThrow(() -> new ResourceNotFoundException("Billet introuvable avec ce numéro."));
 
         return TicketResponse.fromEntity(ticket);

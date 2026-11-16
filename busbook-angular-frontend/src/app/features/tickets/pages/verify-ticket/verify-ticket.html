@@ -8,8 +8,9 @@
       <input
         type="text"
         [(ngModel)]="ticketNumber"
-        placeholder="Enter ticket number (e.g. TKT-20261116-...)"
+        placeholder="Enter ticket number (e.g. TCK-20261116-...)"
         (keyup.enter)="onVerify()"
+        [disabled]="isLoading"
       />
       <button class="btn-verify" [disabled]="isLoading || !ticketNumber.trim()" (click)="onVerify()">
         @if (isLoading) {
@@ -21,7 +22,12 @@
     </div>
   </div>
 
-  @if (hasSearched) {
+  @if (isLoading) {
+    <div class="state-card glass">
+      <div class="spinner"></div>
+      <p>Verifying ticket authenticity with ticket-service...</p>
+    </div>
+  } @else if (hasSearched) {
     @if (ticket) {
       <div class="ticket-result glass valid-border">
         <div class="result-header">

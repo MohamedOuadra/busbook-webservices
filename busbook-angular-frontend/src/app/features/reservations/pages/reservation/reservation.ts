@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Trip } from '../../../trips/models/trip';
 import { TripService } from '../../../../core/services/trip';
 import { BookingService, TravelerInfo } from '../../../../core/services/booking';
+import { AuthService } from '../../../../core/services/auth.service';
 import { ReservationResponse } from '../../../../core/models/reservation.model';
 import { TicketResponse } from '../../../../core/models/ticket.model';
 import { PaymentMethod } from '../../../../core/models/payment.model';
@@ -55,6 +56,7 @@ export class Reservation implements OnInit, OnDestroy {
     private router: Router,
     private tripService: TripService,
     private bookingService: BookingService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -112,12 +114,22 @@ export class Reservation implements OnInit, OnDestroy {
       return;
     }
 
+    // Obliger l'authentification avant de créer une réservation
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: `/reservation/${this.trip.id}` }
+      });
+      return;
+    }
+
     this.isCreatingReservation = true;
     this.errorMessage = null;
     this.bookingService.setTravelerInfo(traveler);
     this.cdr.markForCheck();
 
-    this.bookingService.startReservation(this.trip.id, this.selectedSeat, 1).subscribe({
+    const travelerId = this.authService.getCurrentUser()?.id || 1;
+
+    this.bookingService.startReservation(this.trip.id, this.selectedSeat, travelerId).subscribe({
       next: (reservation) => {
         this.isCreatingReservation = false;
         this.currentReservation = reservation;

@@ -4,4 +4,5 @@ export const environment = {
   reservationApiUrl: 'http://localhost:8082/api',
   paymentApiUrl: 'http://localhost:8083/api',
   ticketApiUrl: 'http://localhost:8084/api',
+  authApiUrl: 'http://localhost:8085/api',
 };

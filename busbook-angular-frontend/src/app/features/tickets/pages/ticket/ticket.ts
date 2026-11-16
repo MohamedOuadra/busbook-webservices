@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -22,51 +22,77 @@ export class TicketPage implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private ticketApi: TicketApiService,
-    private tripService: TripService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private ticketApi = inject(TicketApiService);
+  private tripService = inject(TripService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.ticketNumber = this.route.snapshot.paramMap.get('ticketNumber') || '';
+    this.route.paramMap.subscribe((params) => {
+      const num = params.get('ticketNumber');
+      this.ticketNumber = num ? num.trim() : '';
 
-    if (!this.ticketNumber) {
-      this.isLoading = false;
-      this.errorMessage = 'No ticket number provided.';
-      return;
-    }
+      if (!this.ticketNumber) {
+        this.isLoading = false;
+        this.errorMessage = 'No ticket number provided.';
+        this.cdr.markForCheck();
+        return;
+      }
 
-    this.loadTicket();
+      this.loadTicket();
+    });
   }
 
   loadTicket(): void {
     this.isLoading = true;
     this.errorMessage = null;
+    this.ticket = undefined;
+    this.trip = undefined;
+    this.cdr.markForCheck();
 
     this.ticketApi.verifyTicket(this.ticketNumber).subscribe({
       next: (tkt) => {
         this.ticket = tkt;
-        this.isLoading = false;
 
-        this.tripService.getTripById(tkt.tripId).subscribe((trip) => {
-          this.trip = trip || {
-            id: tkt.tripId,
-            villeDepart: 'Agadir',
-            villeArrivee: 'Casablanca',
-            dateDepart: '2026-11-20T08:00:00',
-            dateArrivee: '2026-11-20T14:00:00',
-            prix: 120,
-            bus: { id: 1, immatriculation: '12345-A-6', capacite: 40, type: 'Confort' }
-          };
+        this.tripService.getTripById(tkt.tripId).subscribe({
+          next: (trip) => {
+            this.trip = trip || this.buildFallbackTrip(tkt.tripId);
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.trip = this.buildFallbackTrip(tkt.tripId);
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          },
         });
       },
-      error: () => {
+      error: (err) => {
         this.isLoading = false;
-        this.errorMessage = `Ticket "${this.ticketNumber}" could not be verified or was not found.`;
-      }
+        this.errorMessage =
+          err.error?.message ||
+          `Ticket "${this.ticketNumber}" could not be verified or was not found.`;
+        this.cdr.markForCheck();
+      },
     });
+  }
+
+  private buildFallbackTrip(tripId: number): Trip {
+    return {
+      id: tripId,
+      villeDepart: 'Agadir',
+      villeArrivee: 'Casablanca',
+      dateDepart: '2026-11-20T08:00:00',
+      dateArrivee: '2026-11-20T14:00:00',
+      prix: 120,
+      bus: {
+        id: 1,
+        immatriculation: '12345-A-6',
+        capacite: 40,
+        type: 'Confort',
+      },
+    };
   }
 
   onNewBooking(): void {

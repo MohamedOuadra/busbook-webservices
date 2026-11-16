@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,8 +11,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export class Navbar {
   readonly navItems = [
     { label: 'Book Tickets', route: '/', exact: true },
-    { label: 'Schedules', route: '/trips', exact: false },
     { label: 'My Bookings', route: '/my-reservations', exact: false },
     { label: 'Verify Ticket', route: '/verify-ticket', exact: false },
   ];
+
+  private authService = inject(AuthService);
+  currentUser = this.authService.currentUser;
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

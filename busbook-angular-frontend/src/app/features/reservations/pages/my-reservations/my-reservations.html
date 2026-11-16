@@ -3,32 +3,68 @@
     <div>
       <span class="section-label">CUSTOMER DASHBOARD</span>
       <h2>My Bookings & Tickets</h2>
-      <p>View your upcoming trips, confirm pending holds, or access your e-tickets.</p>
+      <p>
+        @if (currentUser) {
+          Bookings registered for <strong>{{ currentUser.fullName }}</strong> ({{ currentUser.email }}).
+        } @else {
+          View your upcoming trips, confirm pending holds, or access your e-tickets.
+        }
+      </p>
     </div>
 
-    <div class="traveler-selector">
-      <label>Traveler ID:</label>
-      <input type="number" [(ngModel)]="travelerId" (change)="loadReservations()" min="1" />
-      <button class="btn-refresh" (click)="loadReservations()">Refresh</button>
-    </div>
+    @if (currentUser) {
+      <button class="btn-refresh glass" (click)="loadReservations()" [disabled]="isLoading" aria-label="Refresh bookings">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          class="refresh-icon"
+          [class.spinning]="isLoading"
+        >
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        <span>Refresh</span>
+      </button>
+    }
   </div>
 
-  @if (isLoading) {
+  @if (!currentUser) {
+    <!-- State when user is not logged in -->
+    <div class="state-card glass auth-prompt">
+      <div class="auth-icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-lg">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <h3>Sign in to View Your Bookings</h3>
+      <p>Please log in to your BusBook account to view and manage your bus ticket reservations.</p>
+      <div class="auth-prompt-actions">
+        <a routerLink="/login" [queryParams]="{ returnUrl: '/my-reservations' }" class="btn-primary">
+          Sign In
+        </a>
+        <a routerLink="/register" class="btn-secondary">
+          Create Account
+        </a>
+      </div>
+    </div>
+  } @else if (isLoading) {
     <div class="state-card glass">
       <div class="spinner"></div>
       <p>Loading your reservations...</p>
     </div>
   } @else if (errorMessage) {
     <div class="state-card glass error">
-      <span>⚠️</span>
+      <span class="error-emoji">⚠️</span>
       <p>{{ errorMessage }}</p>
-      <button class="btn-refresh" (click)="loadReservations()">Retry</button>
+      <button class="btn-retry" (click)="loadReservations()">Retry</button>
     </div>
   } @else if (reservations.length === 0) {
     <div class="state-card glass">
       <span class="icon">🎟️</span>
       <h3>No Reservations Found</h3>
-      <p>You haven't made any reservations yet.</p>
+      <p>You haven't made any reservations with this account yet.</p>
       <button class="btn-new" routerLink="/">Find a Trip</button>
     </div>
   } @else {
@@ -100,7 +136,7 @@
 
             @if (item.reservation.status === 'CONFIRMEE') {
               <button class="btn-action btn-ticket" (click)="viewTicket(item.reservation.id)">
-                <span>🎫</span>
+                <span>🎟️</span>
                 View E-Ticket
               </button>
             }
@@ -108,12 +144,6 @@
             @if (item.reservation.status === 'EN_ATTENTE' && !item.isExpired) {
               <button class="btn-action btn-cancel" (click)="cancelReservation(item.reservation.id)">
                 Cancel
-              </button>
-            }
-
-            @if (item.isExpired || item.reservation.status === 'ANNULEE') {
-              <button class="btn-action btn-rebook" [routerLink]="['/reservation', item.reservation.tripId]">
-                Book Again
               </button>
             }
           </div>

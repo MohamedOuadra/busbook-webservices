@@ -79,6 +79,10 @@ class TicketRepositoryTest {
         Optional<Ticket> found = ticketRepository.findByTicketNumber("TCK-20261116-003");
         assertTrue(found.isPresent());
         assertEquals(300L, found.get().getReservationId());
+
+        Optional<Ticket> foundIgnoreCase = ticketRepository.findByTicketNumberIgnoreCase("tck-20261116-003");
+        assertTrue(foundIgnoreCase.isPresent());
+        assertEquals(300L, foundIgnoreCase.get().getReservationId());
     }
 
     @Test
