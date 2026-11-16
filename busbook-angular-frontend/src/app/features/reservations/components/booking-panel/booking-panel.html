@@ -1,0 +1,67 @@
+<aside class="booking-panel">
+
+  <div class="traveler-form glass">
+    <div class="form-header">
+      <span class="section-label">PASSENGER DETAILS</span>
+      <h2>Traveler information</h2>
+      <p>Please enter your contact information</p>
+    </div>
+
+    <form #travelerForm="ngForm">
+      <div class="form-group">
+        <label for="fullName">Full name</label>
+        <input
+          id="fullName"
+          type="text"
+          name="fullName"
+          [(ngModel)]="fullName"
+          placeholder="Enter your full name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone number</label>
+        <input
+          id="phoneNumber"
+          type="tel"
+          name="phoneNumber"
+          [(ngModel)]="phoneNumber"
+          placeholder="Enter your phone number"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email address"
+          required
+          email
+        />
+      </div>
+    </form>
+  </div>
+
+  <app-booking-summary
+  [from]="trip.villeDepart"
+  [to]="trip.villeArrivee"
+  [date]="trip.dateDepart"
+  [seatNumber]="seatNumber"
+  [price]="trip.prix"
+/>
+
+  <button
+    class="continue-button"
+    [disabled]="seatNumber === null || !travelerForm.valid"
+    (click)="onContinueBooking()"
+  >
+    Continue booking
+    <span>→</span>
+  </button>
+
+</aside>

@@ -1,0 +1,107 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.trip-card {
+  padding: 20px;
+  border-radius: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trip-card:hover {
+  transform: translateY(-3px);
+}
+
+.trip-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.bus-type {
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: rgba(87, 195, 82, 0.15);
+  color: #318b2d;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.trip-price {
+  color: var(--color-coral);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.trip-route {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.route-point {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.route-point.destination {
+  text-align: right;
+}
+
+.route-time {
+  color: var(--color-ink);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.route-point strong {
+  color: var(--color-ink);
+  font-size: 13px;
+}
+
+.route-date {
+  color: var(--color-muted);
+  font-size: 10px;
+}
+
+.route-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.route-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(29, 29, 27, 0.2);
+}
+
+.route-icon {
+  font-size: 17px;
+}
+
+.trip-card-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+@media (max-width: 500px) {
+  .trip-card {
+    padding: 15px;
+  }
+
+  .route-time {
+    font-size: 16px;
+  }
+}

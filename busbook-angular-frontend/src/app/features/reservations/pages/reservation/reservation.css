@@ -1,0 +1,92 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.reservation-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Selected trip information */
+.trip-details {
+  width: 100%;
+  padding: 24px;
+  border-radius: 20px;
+}
+
+.section-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.trip-details h2 {
+  margin: 0 0 24px;
+  color: var(--color-ink);
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.trip-information {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.trip-information > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.trip-information span {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.trip-information strong {
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .trip-information {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .reservation-page {
+    gap: 18px;
+  }
+
+  .trip-details {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .trip-details h2 {
+    font-size: 21px;
+    margin-bottom: 20px;
+  }
+
+  .trip-information {
+    gap: 18px 12px;
+  }
+
+  .trip-information strong {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,48 @@
+<div class="reservation-page">
+
+    @if (trip) {
+    <section class="trip-details glass">
+
+        <span class="section-label">YOUR SELECTED TRIP</span>
+
+        <h2>
+            {{ trip.villeDepart }}
+            →
+            {{ trip.villeArrivee }}
+        </h2>
+
+        <div class="trip-information">
+            <div>
+                <span>Departure</span>
+                <strong>{{ trip.dateDepart }}</strong>
+            </div>
+
+            <div>
+                <span>Arrival</span>
+                <strong>{{ trip.dateArrivee }}</strong>
+            </div>
+
+            <div>
+                <span>Bus type</span>
+                <strong>{{ trip.bus.type }}</strong>
+            </div>
+
+            <div>
+                <span>Price</span>
+                <strong>{{ trip.prix }} MAD</strong>
+            </div>
+        </div>
+
+    </section>
+
+    <app-bus-illustration />
+
+    <app-seat-map (seatSelected)="onSeatSelected($event)" />
+
+    <app-booking-panel [trip]="trip" [seatNumber]="selectedSeat" />
+
+    } @else {
+    <p>Loading trip information...</p>
+    }
+
+</div>

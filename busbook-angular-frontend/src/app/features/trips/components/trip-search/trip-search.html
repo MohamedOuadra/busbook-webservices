@@ -1,0 +1,59 @@
+<div class="trip-search glass">
+  <div class="search-header">
+    <span class="section-label">FIND YOUR TRIP</span>
+    <h2>Where would you like to go?</h2>
+    <p>Search for your next journey</p>
+  </div>
+
+  <form #searchForm="ngForm" (ngSubmit)="onSearch()">
+
+    <div class="search-fields">
+
+      <div class="form-group">
+        <label for="departure">Departure</label>
+        <input
+          id="departure"
+          type="text"
+          name="departure"
+          [(ngModel)]="departure"
+          placeholder="e.g. Agadir"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="destination">Destination</label>
+        <input
+          id="destination"
+          type="text"
+          name="destination"
+          [(ngModel)]="destination"
+          placeholder="e.g. Casablanca"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="date">Travel date</label>
+        <input
+          id="date"
+          type="date"
+          name="date"
+          [(ngModel)]="date"
+          required
+        />
+      </div>
+
+    </div>
+
+    <button
+      type="submit"
+      class="search-button"
+      [disabled]="searchForm.invalid"
+    >
+      Search trips
+      <span>→</span>
+    </button>
+
+  </form>
+</div>
