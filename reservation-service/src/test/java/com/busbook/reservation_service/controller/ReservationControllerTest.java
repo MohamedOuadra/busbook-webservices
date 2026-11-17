@@ -4,6 +4,7 @@ import com.busbook.reservation_service.dto.ReservationRequest;
 import com.busbook.reservation_service.dto.ReservationResponse;
 import com.busbook.reservation_service.entity.Reservation;
 import com.busbook.reservation_service.enums.ReservationStatus;
+import com.busbook.reservation_service.exception.GlobalExceptionHandler;
 import com.busbook.reservation_service.service.ReservationService;
 
 import tools.jackson.databind.ObjectMapper;
@@ -55,6 +56,7 @@ class ReservationControllerTest {
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(reservationController)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -197,5 +199,38 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.status").value("ANNULEE"));
 
         verify(reservationService).cancelReservation(1L);
+    }
+
+    // 8. Tester le conflit (409) lors de la création d'une réservation déjà prise
+    @Test
+    void createReservation_WhenConflict_ShouldReturn409() throws Exception {
+
+        ReservationRequest request = new ReservationRequest();
+        request.setTripId(10L);
+        request.setTravelerId(20L);
+        request.setSeatId(5L);
+
+        when(reservationService.createReservation(any(ReservationRequest.class)))
+                .thenThrow(new IllegalStateException("Ce siège est déjà réservé pour ce trajet."));
+
+        mockMvc.perform(post("/api/reservations")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.message").value("Ce siège est déjà réservé pour ce trajet."));
+    }
+
+    // 9. Tester le conflit (409) lors de la confirmation d'une réservation expirée
+    @Test
+    void confirmReservation_WhenExpired_ShouldReturn409() throws Exception {
+
+        when(reservationService.confirmReservation(1L))
+                .thenThrow(new IllegalStateException("Le délai de confirmation de cette réservation est expiré."));
+
+        mockMvc.perform(patch("/api/reservations/1/confirm"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.message").value("Le délai de confirmation de cette réservation est expiré."));
     }
 }
