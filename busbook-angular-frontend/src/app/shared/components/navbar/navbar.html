@@ -2,24 +2,22 @@
 
   <!-- Logo -->
   <a routerLink="/" class="brand" aria-label="BusBook Home">
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="brand-icon"
-    >
-      <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
-      <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
-      <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
-      <path d="M7 20v2M17 20v2"/>
-    </svg>
-    <span class="brand-text">BusBook</span>
+    <div class="brand-badge">
+      <svg viewBox="0 0 28 28" fill="none" class="brand-svg">
+        <rect width="28" height="28" rx="8" fill="#20201E"/>
+        <!-- Ticket voucher shape with side notches -->
+        <path d="M6 9C6 7.89 6.89 7 8 7H20C21.11 7 22 7.89 22 9V12.5C21.17 12.5 20.5 13.17 20.5 14C20.5 14.83 21.17 15.5 22 15.5V19C22 20.11 21.11 21 20 21H8C6.89 21 6 20.11 6 19V15.5C6.83 15.5 7.5 14.83 7.5 14C7.5 13.17 6.83 12.5 6 12.5V9Z" fill="#FDFBF7"/>
+        <!-- Sleek bus cabin silhouette -->
+        <path d="M10 10.5H18V13.5H10V10.5Z" fill="#20201E"/>
+        <circle cx="11" cy="17" r="1.1" fill="#F99271"/>
+        <circle cx="17" cy="17" r="1.1" fill="#F99271"/>
+        <rect x="13" y="16.5" width="2" height="1" rx="0.5" fill="#20201E"/>
+      </svg>
+    </div>
+    <span class="brand-text">Bus<span class="brand-highlight">Book</span></span>
   </a>
 
-  <!-- Navigation -->
+  <!-- Navigation Pills -->
   <nav class="nav-tabs">
     @for (item of navItems; track item.route) {
       <a
@@ -33,7 +31,7 @@
     }
   </nav>
 
-  <!-- Location and settings -->
+  <!-- Location and actions -->
   <div class="nav-actions">
     <div class="location-badge glass">
       <svg
@@ -52,7 +50,8 @@
 
     @if (currentUser(); as user) {
       <div class="user-pill glass">
-        <span class="user-name">Hi, <strong>{{ user.fullName.split(' ')[0] }}</strong></span>
+        <span class="user-avatar-mini">{{ user.fullName.charAt(0).toUpperCase() }}</span>
+        <span class="user-name"><strong>{{ user.fullName.split(' ')[0] }}</strong></span>
         <button class="logout-btn" (click)="logout()" title="Sign Out" aria-label="Sign Out">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="logout-icon">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -71,7 +70,8 @@
       </a>
     }
 
-    <button class="settings-button glass" routerLink="/my-reservations" aria-label="My Bookings">
+    <!-- Settings Gear Icon pointing to /settings -->
+    <a class="settings-button glass" routerLink="/settings" routerLinkActive="active" aria-label="Settings & Profile" title="Settings & Profile">
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -80,9 +80,9 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <path d="M9 11l3 3L22 4" />
-        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
-    </button>
+    </a>
   </div>
 </header>

@@ -1,34 +1,71 @@
 <div class="home-page">
-    <section class="home-main">
+  <section class="home-main">
 
-        <app-trip-search (search)="onTripSearch($event)" />
+    <!-- Hero Title -->
+    <div class="hero-headline">
+      <div class="hero-tag-pill glass">
+        <span class="hero-tag-dot"></span>
+        <span class="hero-tag-text">INTERCITY PASSENGER NETWORK · MOROCCO</span>
+      </div>
+      <h1 class="hero-title">
+        Travel Across <span class="highlight-morocco">Morocco</span> in Total Comfort
+      </h1>
+      <p class="hero-sub">
+        Instant e-ticket booking, real-time seat availability, and modern air-conditioned coaches between Agadir, Casablanca, Marrakech and beyond.
+      </p>
+    </div>
 
-        <section class="trip-results">
-            <div class="results-header">
-                <div>
-                    <span class="section-label">AVAILABLE TRIPS</span>
-                    <h2>Choose your journey</h2>
-                </div>
+    <!-- Main Trip Search Panel -->
+    <app-trip-search (search)="onTripSearch($event)" />
 
-                <span class="results-count">
-                    {{ trips.length }} trips found
-                </span>
-            </div>
+    <!-- Available Trips Section -->
+    <section class="trip-results">
+      <div class="results-header glass">
+        <div class="results-title-group">
+          <span class="section-label">SCHEDULED DEPARTURES</span>
+          <h2>Available Trips</h2>
+        </div>
 
-            @if (trips.length > 0) {
-            <div class="trip-results-list">
-                @for (trip of trips; track trip.id) {
-                <app-trip-card [trip]="trip" (tripSelected)="onTripSelected($event)" />
-                }
-            </div>
-            } @else {
-            <div class="empty-results glass">
-                <h3>No trips found</h3>
-                <p>Try changing your departure, destination or travel date.</p>
-            </div>
-            }
-        </section>
+        <div class="results-actions">
+          <span class="results-count-pill">
+            <span class="active-dot"></span>
+            {{ trips.length }} trips available
+          </span>
+          @if (trips.length < 3) {
+            <button type="button" class="btn-show-all" (click)="resetFilters()">
+              Show all trips
+            </button>
+          }
+        </div>
+      </div>
 
+      @if (trips.length > 0) {
+        <div class="trip-results-list">
+          @for (trip of trips; track trip.id) {
+            <app-trip-card [trip]="trip" (tripSelected)="onTripSelected($event)" />
+          }
+        </div>
+      } @else {
+        <div class="empty-results glass">
+          <div class="empty-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-svg">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+          </div>
+          <h3>No direct journeys found</h3>
+          <p>We couldn't find any bus scheduled matching your exact departure, destination or date.</p>
+          <div class="empty-actions">
+            <button type="button" class="btn-reset-search" (click)="resetFilters()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon-svg">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+              View All Available Trips
+            </button>
+          </div>
+        </div>
+      }
     </section>
 
+  </section>
 </div>

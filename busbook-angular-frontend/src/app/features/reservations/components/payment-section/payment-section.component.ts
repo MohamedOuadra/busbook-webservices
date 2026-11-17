@@ -26,7 +26,13 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
       <!-- Message d'erreur s'il y a lieu -->
       @if (errorMessage) {
         <div class="error-banner">
-          <span class="error-icon">❌</span>
+          <span class="error-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="error-svg">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </span>
           <span class="error-text">{{ errorMessage }}</span>
         </div>
       }
@@ -47,7 +53,12 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
                 [(ngModel)]="selectedMethod"
               />
               <div class="method-content">
-                <span class="method-icon">💳</span>
+                <span class="method-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pay-svg">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                  </svg>
+                </span>
                 <div class="method-info">
                   <strong>Credit Card</strong>
                   <small>Visa, Mastercard, CMI</small>
@@ -66,7 +77,12 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
                 [(ngModel)]="selectedMethod"
               />
               <div class="method-content">
-                <span class="method-icon">📱</span>
+                <span class="method-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pay-svg">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                  </svg>
+                </span>
                 <div class="method-info">
                   <strong>Mobile Wallet</strong>
                   <small>Orange Money, inwi money, etc.</small>
@@ -85,7 +101,13 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
                 [(ngModel)]="selectedMethod"
               />
               <div class="method-content">
-                <span class="method-icon">💵</span>
+                <span class="method-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pay-svg">
+                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M6 12h.01M18 12h.01"/>
+                  </svg>
+                </span>
                 <div class="method-info">
                   <strong>Cash at Counter</strong>
                   <small>Pay directly at the bus station</small>
@@ -115,7 +137,10 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
               Processing payment...
             } @else {
               <span>Confirm & Pay {{ trip.prix }} MAD</span>
-              <span>🔒</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-lock-svg">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
             }
           </button>
 
@@ -131,7 +156,9 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
         <!-- Vue si expirée -->
         <div class="expired-actions">
           <button class="btn-restart" (click)="cancel.emit()">
-            <span>🔄</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-lock-svg">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
             Seat Released - Choose Another Seat
           </button>
         </div>
@@ -228,7 +255,21 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
     }
 
     .method-icon {
-      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pay-svg {
+      width: 24px;
+      height: 24px;
+      color: var(--color-ink);
+    }
+
+    .btn-lock-svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
     }
 
     .method-info {

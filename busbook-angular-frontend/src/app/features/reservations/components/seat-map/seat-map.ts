@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Seat } from '../seat/seat';
-import { SeatLegend } from '../seat-legend/seat-legend';
 import { ReservationApiService } from '../../../../core/services/reservation.service';
 
 export interface SeatData {
@@ -10,7 +9,7 @@ export interface SeatData {
 
 @Component({
   selector: 'app-seat-map',
-  imports: [Seat, SeatLegend],
+  imports: [Seat],
   templateUrl: './seat-map.html',
   styleUrl: './seat-map.css',
 })
@@ -95,6 +94,19 @@ export class SeatMap implements OnInit, OnChanges {
   get rightSeats(): SeatData[] {
     const half = Math.ceil(this.seats.length / 2);
     return this.seats.slice(half);
+  }
+
+  get seatRows(): { seat1?: SeatData; seat2?: SeatData; seat3?: SeatData; seat4?: SeatData }[] {
+    const rows = [];
+    for (let i = 0; i < this.seats.length; i += 4) {
+      rows.push({
+        seat1: this.seats[i],
+        seat2: this.seats[i + 1],
+        seat3: this.seats[i + 2],
+        seat4: this.seats[i + 3],
+      });
+    }
+    return rows;
   }
 
   getSeatStatus(seat: SeatData): 'available' | 'occupied' | 'selected' {

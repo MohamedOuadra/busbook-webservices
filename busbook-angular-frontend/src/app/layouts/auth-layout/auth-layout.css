@@ -18,22 +18,44 @@
 .auth-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-brand:hover {
+  transform: translateY(-1px);
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
+  transition: transform 0.2s ease;
+}
+
+.auth-brand:hover .brand-badge {
+  transform: scale(1.05);
+}
+
+.brand-svg {
+  width: 32px;
+  height: 32px;
+  display: block;
 }
 
 .brand-text {
   font-size: 22px;
   font-weight: 800;
   color: var(--color-ink);
-  letter-spacing: -0.5px;
+  letter-spacing: -0.6px;
+  display: inline-flex;
+  align-items: center;
 }
 
-.brand-icon {
-  width: 40px;
-  height: 40px;
-  transform: rotate(-12deg);
-  color: var(--color-ink);
+.brand-highlight {
+  color: var(--color-coral);
 }
 
 .back-home-btn {

@@ -97,6 +97,10 @@ public class Reservation {
         return createdAt;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public LocalDateTime getExpiresAt() {
         return expiresAt;
     }

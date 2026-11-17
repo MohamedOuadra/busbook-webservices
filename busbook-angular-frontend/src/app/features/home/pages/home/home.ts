@@ -43,4 +43,11 @@ export class Home implements OnInit {
   onTripSelected(trip: Trip): void {
     this.router.navigate(['/reservation', trip.id]);
   }
+
+  resetFilters(): void {
+    this.tripService.getTrips().subscribe((trips) => {
+      this.trips = trips;
+      this.cdr.markForCheck();
+    });
+  }
 }

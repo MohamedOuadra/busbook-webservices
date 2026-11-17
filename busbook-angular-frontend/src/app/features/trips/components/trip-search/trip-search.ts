@@ -26,4 +26,22 @@ export class TripSearch {
 
     this.search.emit(criteria);
   }
+
+  onSwap(): void {
+    const temp = this.departure;
+    this.departure = this.destination;
+    this.destination = temp;
+    if (this.departure && this.destination && this.date) {
+      this.onSearch();
+    }
+  }
+
+  selectRoute(dep: string, dest: string): void {
+    this.departure = dep;
+    this.destination = dest;
+    if (!this.date) {
+      this.date = '2026-11-20';
+    }
+    this.onSearch();
+  }
 }

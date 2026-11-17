@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -10,23 +10,51 @@ import { TicketViewComponent } from '../../../reservations/components/ticket-vie
 
 @Component({
   selector: 'app-ticket-page',
+  standalone: true,
   imports: [CommonModule, RouterLink, TicketViewComponent],
   templateUrl: './ticket.html',
   styleUrl: './ticket.css',
 })
 export class TicketPage implements OnInit {
   ticketNumber = '';
-  ticket?: TicketResponse;
-  trip?: Trip;
 
-  isLoading = true;
-  errorMessage: string | null = null;
+  private readonly _ticket = signal<TicketResponse | undefined>(undefined);
+  private readonly _trip = signal<Trip | undefined>(undefined);
+  private readonly _isLoading = signal(true);
+  private readonly _errorMessage = signal<string | null>(null);
+
+  get ticket(): TicketResponse | undefined {
+    return this._ticket();
+  }
+  set ticket(val: TicketResponse | undefined) {
+    this._ticket.set(val);
+  }
+
+  get trip(): Trip | undefined {
+    return this._trip();
+  }
+  set trip(val: Trip | undefined) {
+    this._trip.set(val);
+  }
+
+  get isLoading(): boolean {
+    return this._isLoading();
+  }
+  set isLoading(val: boolean) {
+    this._isLoading.set(val);
+  }
+
+  get errorMessage(): string | null {
+    return this._errorMessage();
+  }
+  set errorMessage(val: string | null) {
+    this._errorMessage.set(val);
+  }
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private ticketApi = inject(TicketApiService);
   private tripService = inject(TripService);
-  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -36,7 +64,6 @@ export class TicketPage implements OnInit {
       if (!this.ticketNumber) {
         this.isLoading = false;
         this.errorMessage = 'No ticket number provided.';
-        this.cdr.markForCheck();
         return;
       }
 
@@ -49,7 +76,6 @@ export class TicketPage implements OnInit {
     this.errorMessage = null;
     this.ticket = undefined;
     this.trip = undefined;
-    this.cdr.markForCheck();
 
     this.ticketApi.verifyTicket(this.ticketNumber).subscribe({
       next: (tkt) => {
@@ -59,12 +85,10 @@ export class TicketPage implements OnInit {
           next: (trip) => {
             this.trip = trip || this.buildFallbackTrip(tkt.tripId);
             this.isLoading = false;
-            this.cdr.markForCheck();
           },
           error: () => {
             this.trip = this.buildFallbackTrip(tkt.tripId);
             this.isLoading = false;
-            this.cdr.markForCheck();
           },
         });
       },
@@ -73,7 +97,6 @@ export class TicketPage implements OnInit {
         this.errorMessage =
           err.error?.message ||
           `Ticket "${this.ticketNumber}" could not be verified or was not found.`;
-        this.cdr.markForCheck();
       },
     });
   }

@@ -1,58 +1,60 @@
-<div class="seat-map glass">
-    <div class="seat-map-header">
-        <div>
-            <span class="section-label">SEAT SELECTION</span>
-            <h2>Choose your seat</h2>
-            <p>Select your preferred seat for your journey</p>
+<div class="seat-map-inner">
+  <!-- Steering Wheel at front-right of the bus interior -->
+  <div class="bus-interior-header">
+    <div class="steering-wheel-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="wheel-icon">
+        <circle cx="12" cy="12" r="9"/>
+        <circle cx="12" cy="12" r="2.5"/>
+        <path d="M12 14.5V21M3.5 9.5l6.5 2M20.5 9.5l-6.5 2"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Rows Grid -->
+  <div class="coach-seats-grid">
+    @for (row of seatRows; track $index) {
+      <div class="coach-seat-row">
+        <!-- Left pair -->
+        <div class="seat-pair left">
+          @if (row.seat1) {
+            <app-seat
+              [number]="row.seat1.number"
+              [status]="getSeatStatus(row.seat1)"
+              (seatSelected)="selectSeat($event)"
+            />
+          }
+          @if (row.seat2) {
+            <app-seat
+              [number]="row.seat2.number"
+              [status]="getSeatStatus(row.seat2)"
+              (seatSelected)="selectSeat($event)"
+            />
+          }
         </div>
 
-        <span class="seat-count">{{ seats.length }} Seats</span>
-    </div>
-
-    <div class="bus-layout">
-        <div class="driver-area">
-            <span>DRIVER</span>
-            <div class="steering-wheel">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
-                    <circle cx="12" cy="12" r="2" fill="currentColor" />
-                    <path d="M12 14V21M4 8L10 11M20 8L14 11" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" />
-                </svg>
-            </div>
+        <!-- Middle Aisle -->
+        <div class="seat-aisle">
+          <span class="aisle-dot"></span>
         </div>
 
-        <div class="seats-container">
-            <div class="seat-column">
-                @for (seat of leftSeats; track seat.number) {
-                <app-seat [number]="seat.number" [status]="getSeatStatus(seat)" (seatSelected)="selectSeat($event)" />
-                }
-            </div>
-
-            <div class="aisle">
-                <span>WALKWAY</span>
-            </div>
-
-            <div class="seat-column">
-                @for (seat of rightSeats; track seat.number) {
-                <app-seat [number]="seat.number" [status]="getSeatStatus(seat)" (seatSelected)="selectSeat($event)" />
-                }
-            </div>
+        <!-- Right pair -->
+        <div class="seat-pair right">
+          @if (row.seat3) {
+            <app-seat
+              [number]="row.seat3.number"
+              [status]="getSeatStatus(row.seat3)"
+              (seatSelected)="selectSeat($event)"
+            />
+          }
+          @if (row.seat4) {
+            <app-seat
+              [number]="row.seat4.number"
+              [status]="getSeatStatus(row.seat4)"
+              (seatSelected)="selectSeat($event)"
+            />
+          }
         </div>
-    </div>
-
-    <!-- Légende des sièges -->
-    <app-seat-legend />
-
-    <div class="seat-map-footer">
-        <span>
-            @if (selectedSeat !== null) {
-            Seat {{ selectedSeat }} selected
-            } @else {
-            Choose your preferred seat
-            }
-        </span>
-
-        <strong>{{ seats.length }} seats displayed</strong>
-    </div>
+      </div>
+    }
+  </div>
 </div>

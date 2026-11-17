@@ -1,59 +1,128 @@
 <div class="trip-search glass">
   <div class="search-header">
-    <span class="section-label">FIND YOUR TRIP</span>
-    <h2>Where would you like to go?</h2>
-    <p>Search for your next journey</p>
+    <div class="badge-tag">
+      <span class="badge-dot"></span>
+      FIND YOUR INTERCITY BUS
+    </div>
+    <h2>Where would you like to travel?</h2>
+    <p>Search modern intercity coaches connecting Morocco's major hubs</p>
   </div>
 
-  <form #searchForm="ngForm" (ngSubmit)="onSearch()">
+  <form #searchForm="ngForm" (ngSubmit)="onSearch()" class="search-form-layout">
+    <div class="search-fields-grid">
 
-    <div class="search-fields">
-
-      <div class="form-group">
-        <label for="departure">Departure</label>
-        <input
-          id="departure"
-          type="text"
-          name="departure"
-          [(ngModel)]="departure"
-          placeholder="e.g. Agadir"
-          required
-        />
+      <!-- Departure input -->
+      <div class="input-block">
+        <label for="departure">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="field-icon">
+            <circle cx="12" cy="12" r="8"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Departure City
+        </label>
+        <div class="input-wrapper">
+          <input
+            id="departure"
+            type="text"
+            name="departure"
+            [(ngModel)]="departure"
+            placeholder="e.g. Agadir"
+            required
+            autocomplete="off"
+          />
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="destination">Destination</label>
-        <input
-          id="destination"
-          type="text"
-          name="destination"
-          [(ngModel)]="destination"
-          placeholder="e.g. Casablanca"
-          required
-        />
+      <!-- Route Swap Button -->
+      <button
+        type="button"
+        class="btn-swap glass"
+        (click)="onSwap()"
+        title="Swap departure and destination"
+        aria-label="Swap departure and destination"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4"/>
+        </svg>
+      </button>
+
+      <!-- Destination input -->
+      <div class="input-block">
+        <label for="destination">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="field-icon destination-icon">
+            <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Destination City
+        </label>
+        <div class="input-wrapper">
+          <input
+            id="destination"
+            type="text"
+            name="destination"
+            [(ngModel)]="destination"
+            placeholder="e.g. Casablanca"
+            required
+            autocomplete="off"
+          />
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="date">Travel date</label>
-        <input
-          id="date"
-          type="date"
-          name="date"
-          [(ngModel)]="date"
-          required
-        />
+      <!-- Date input -->
+      <div class="input-block date-block">
+        <label for="date">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="field-icon">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Travel Date
+        </label>
+        <div class="input-wrapper">
+          <input
+            id="date"
+            type="date"
+            name="date"
+            [(ngModel)]="date"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Search Button -->
+      <div class="action-block">
+        <button
+          type="submit"
+          class="btn-search"
+          [disabled]="searchForm.invalid"
+        >
+          <span class="btn-text">Search Buses</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-arrow">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
       </div>
 
     </div>
 
-    <button
-      type="submit"
-      class="search-button"
-      [disabled]="searchForm.invalid"
-    >
-      Search trips
-      <span>→</span>
-    </button>
-
+    <!-- Quick routes suggestion chips -->
+    <div class="popular-routes">
+      <span class="popular-label">Popular Routes:</span>
+      <button
+        type="button"
+        class="chip-route"
+        (click)="selectRoute('Agadir', 'Casablanca')"
+      >
+        Agadir → Casablanca
+      </button>
+      <button
+        type="button"
+        class="chip-route"
+        (click)="selectRoute('Agadir', 'Marrakech')"
+      >
+        Agadir → Marrakech
+      </button>
+    </div>
   </form>
 </div>
