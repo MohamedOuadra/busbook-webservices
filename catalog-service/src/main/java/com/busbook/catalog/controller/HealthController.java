@@ -1,4 +1,3 @@
-
 package com.busbook.catalog.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,5 +1,5 @@
 
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { TripSearch } from '../../../trips/components/trip-search/trip-search';
@@ -20,23 +20,47 @@ import { TripSearch as TripSearchCriteria } from '../../../trips/models/trip-sea
 })
 export class Home implements OnInit {
 
-  trips: Trip[] = [];
+  private readonly _trips = signal<Trip[]>([]);
+  readonly isLoading = signal(false);
+
+  get trips(): Trip[] {
+    return this._trips();
+  }
+
+  set trips(value: Trip[]) {
+    this._trips.set(value);
+  }
 
   private tripService = inject(TripService);
   private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.tripService.getTrips().subscribe((trips) => {
-      this.trips = trips;
-      this.cdr.markForCheck();
+    this.loadTrips();
+  }
+
+  loadTrips(): void {
+    this.isLoading.set(true);
+    this.tripService.getTrips().subscribe({
+      next: (trips) => {
+        this.trips = trips;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      }
     });
   }
 
   onTripSearch(criteria: TripSearchCriteria): void {
-    this.tripService.searchTrips(criteria).subscribe((trips) => {
-      this.trips = trips;
-      this.cdr.markForCheck();
+    this.isLoading.set(true);
+    this.tripService.searchTrips(criteria).subscribe({
+      next: (trips) => {
+        this.trips = trips;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      }
     });
   }
 
@@ -45,9 +69,6 @@ export class Home implements OnInit {
   }
 
   resetFilters(): void {
-    this.tripService.getTrips().subscribe((trips) => {
-      this.trips = trips;
-      this.cdr.markForCheck();
-    });
+    this.loadTrips();
   }
 }

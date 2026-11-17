@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,16 @@ import { TripCard } from '../../components/trip-card/trip-card';
   styleUrl: './trips-catalog.css',
 })
 export class TripsCatalogPage implements OnInit {
-  trips: Trip[] = [];
+  private readonly _trips = signal<Trip[]>([]);
+  readonly isLoading = signal(false);
+
+  get trips(): Trip[] {
+    return this._trips();
+  }
+
+  set trips(value: Trip[]) {
+    this._trips.set(value);
+  }
 
   constructor(
     private tripService: TripService,
@@ -23,14 +32,32 @@ export class TripsCatalogPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.tripService.getTrips().subscribe((trips) => {
-      this.trips = trips;
+    this.loadTrips();
+  }
+
+  loadTrips(): void {
+    this.isLoading.set(true);
+    this.tripService.getTrips().subscribe({
+      next: (trips) => {
+        this.trips = trips;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      }
     });
   }
 
   onSearch(criteria: TripSearchCriteria): void {
-    this.tripService.searchTrips(criteria).subscribe((results) => {
-      this.trips = results;
+    this.isLoading.set(true);
+    this.tripService.searchTrips(criteria).subscribe({
+      next: (results) => {
+        this.trips = results;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      }
     });
   }
 
