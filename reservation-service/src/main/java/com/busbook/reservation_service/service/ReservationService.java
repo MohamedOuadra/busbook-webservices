@@ -232,6 +232,7 @@ public class ReservationService {
     /**
      * Récupère une réservation par son identifiant.
      */
+    @Transactional(readOnly = true)
     public ReservationResponse getReservationById(Long reservationId) {
 
         validateReservationId(reservationId);
@@ -247,6 +248,7 @@ public class ReservationService {
     /**
      * Récupère toutes les réservations d'un trajet.
      */
+    @Transactional(readOnly = true)
     public List<ReservationResponse> getReservationsByTripId(Long tripId) {
 
         if (tripId == null || tripId <= 0) {
@@ -264,6 +266,7 @@ public class ReservationService {
     /**
      * Récupère toutes les réservations d'un voyageur.
      */
+    @Transactional(readOnly = true)
     public List<ReservationResponse> getReservationsByTravelerId(Long travelerId) {
 
         if (travelerId == null || travelerId <= 0) {
