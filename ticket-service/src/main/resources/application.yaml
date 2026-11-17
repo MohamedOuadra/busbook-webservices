@@ -5,7 +5,7 @@ spring:
   application:
     name: ticket-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/busbook
+    url: jdbc:postgresql://localhost:5433/busbook
     username: postgres
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
