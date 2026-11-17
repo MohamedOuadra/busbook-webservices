@@ -39,7 +39,12 @@
         </div>
       </div>
 
-      @if (trips.length > 0) {
+      @if (isLoading()) {
+        <div class="loading-state glass">
+          <div class="spinner"></div>
+          <p>Connecting to catalog database...</p>
+        </div>
+      } @else if (trips.length > 0) {
         <div class="trip-results-list">
           @for (trip of trips; track trip.id) {
             <app-trip-card [trip]="trip" (tripSelected)="onTripSelected($event)" />

@@ -14,8 +14,18 @@ export class TripService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.catalogApiUrl}/trips`;
 
+  private get alternateApiUrl(): string {
+    if (this.apiUrl.includes(':8080')) {
+      return this.apiUrl.replace(':8080', ':8081');
+    } else if (this.apiUrl.includes(':8081')) {
+      return this.apiUrl.replace(':8081', ':8080');
+    }
+    return this.apiUrl;
+  }
+
   getTrips(): Observable<Trip[]> {
     return this.http.get<Trip[]>(this.apiUrl).pipe(
+      catchError(() => this.http.get<Trip[]>(this.alternateApiUrl)),
       catchError(() => of(MOCK_TRIPS))
     );
   }
@@ -27,6 +37,7 @@ export class TripService {
     if (criteria.date) params = params.set('dateDepart', criteria.date);
 
     return this.http.get<Trip[]>(`${this.apiUrl}/search`, { params }).pipe(
+      catchError(() => this.http.get<Trip[]>(`${this.alternateApiUrl}/search`, { params })),
       catchError(() => {
         const results = MOCK_TRIPS.filter((trip) => {
           const matchesDeparture =
@@ -45,6 +56,7 @@ export class TripService {
 
   getTripById(id: number): Observable<Trip | undefined> {
     return this.http.get<Trip>(`${this.apiUrl}/${id}`).pipe(
+      catchError(() => this.http.get<Trip>(`${this.alternateApiUrl}/${id}`)),
       catchError(() => {
         const trip = MOCK_TRIPS.find((t) => t.id === id);
         return of(trip);
