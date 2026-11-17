@@ -1,0 +1,104 @@
+<aside class="sidebar">
+
+  <div class="sidebar-top">
+
+    <!-- Conditional Back Button (hidden on Home page, displayed on inner pages) -->
+    @if (showBackButton()) {
+      <button
+        type="button"
+        class="sidebar-button glass btn-back"
+        (click)="goBack()"
+        aria-label="Previous Page"
+        title="Go back"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
+    }
+
+    <!-- Navigation icons -->
+    <div class="sidebar-menu">
+
+      <!-- Home / Search Trips -->
+      <a
+        routerLink="/"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="active"
+        class="sidebar-button glass"
+        aria-label="Search Trips"
+        title="Search Trips"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+      </a>
+
+      <!-- Schedules / Catalog -->
+      <a
+        routerLink="/"
+        fragment="schedules"
+        class="sidebar-button glass"
+        aria-label="Trip Schedules"
+        title="Trip Schedules"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </a>
+
+      <!-- My Bookings -->
+      <a
+        routerLink="/my-reservations"
+        routerLinkActive="active"
+        class="sidebar-button glass"
+        aria-label="My Bookings"
+        title="My Bookings"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4" />
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+        </svg>
+      </a>
+
+      <!-- Verify Ticket -->
+      <a
+        routerLink="/verify-ticket"
+        routerLinkActive="active"
+        class="sidebar-button glass"
+        aria-label="Verify Ticket"
+        title="Verify Ticket"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+        </svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Bottom actions -->
+  <div class="sidebar-bottom">
+
+    <a routerLink="/settings" routerLinkActive="active" class="sidebar-button glass" aria-label="Settings & Profile" title="Settings & Profile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="7" r="4"/>
+        <path d="M5.5 21a8.5 8.5 0 0 1 13 0"/>
+      </svg>
+    </a>
+
+    <!-- Traveler Avatar Badge with rim ring -->
+    <a routerLink="/settings" class="sidebar-avatar-wrap" title="User Profile">
+      <div class="sidebar-avatar"></div>
+    </a>
+
+  </div>
+
+</aside>

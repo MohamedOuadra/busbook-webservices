@@ -1,0 +1,75 @@
+<div class="auth-page">
+  <div class="auth-card glass">
+    <div class="auth-header">
+      <span class="section-label">ACCOUNT ACCESS</span>
+      <h2>Welcome Back to BusBook</h2>
+      <p class="auth-subtitle">Sign in to manage your tickets, book faster, and view your travel history.</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="error-icon">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="auth-form" #loginForm="ngForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="credentials.email"
+            placeholder="e.g. voyageur@busbook.ma"
+            required
+            autocomplete="email"
+            class="auth-input glass"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input
+            id="password"
+            type="password"
+            name="password"
+            [(ngModel)]="credentials.password"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+            class="auth-input glass"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="auth-button-submit"
+        [disabled]="isLoading || !loginForm.form.valid"
+      >
+        @if (isLoading) {
+          <span>Connecting...</span>
+        } @else {
+          <span>Sign In</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-arrow">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Don't have an account yet?</span>
+      <a routerLink="/register" [queryParams]="{ returnUrl: returnUrl }" class="auth-link">Create Account</a>
+    </div>
+  </div>
+</div>

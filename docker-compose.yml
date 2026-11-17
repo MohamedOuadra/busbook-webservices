@@ -1,0 +1,130 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: busbook-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: busbook
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d busbook"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  catalog-service:
+    build:
+      context: ./catalog-service
+      dockerfile: Dockerfile
+    image: busbook-catalog-service:latest
+    container_name: busbook-catalog-service
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/busbook
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      DB_PASSWORD: root
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    image: busbook-auth-service:latest
+    container_name: busbook-auth-service
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/busbook
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      DB_PASSWORD: root
+      JWT_SECRET: busbook-secret-key-must-be-at-least-32-characters-long
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  reservation-service:
+    build:
+      context: ./reservation-service
+      dockerfile: Dockerfile
+    image: busbook-reservation-service:latest
+    container_name: busbook-reservation-service
+    restart: on-failure
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/busbook
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      DB_PASSWORD: root
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  payment-service:
+    build:
+      context: ./payment-service
+      dockerfile: Dockerfile
+    image: busbook-payment-service:latest
+    container_name: busbook-payment-service
+    restart: on-failure
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/busbook
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      DB_PASSWORD: root
+      RESERVATION_SERVICE_URL: http://reservation-service:8082
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ticket-service:
+    build:
+      context: ./ticket-service
+      dockerfile: Dockerfile
+    image: busbook-ticket-service:latest
+    container_name: busbook-ticket-service
+    restart: on-failure
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/busbook
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      DB_PASSWORD: root
+      RESERVATION_SERVICE_URL: http://reservation-service:8082
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./busbook-angular-frontend
+      dockerfile: Dockerfile
+    image: busbook-frontend:latest
+    container_name: busbook-frontend
+    restart: on-failure
+    ports:
+      - "4200:80"
+    depends_on:
+      - catalog-service
+      - auth-service
+      - reservation-service
+      - payment-service
+      - ticket-service
+
+volumes:
+  postgres_data:

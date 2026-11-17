@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.seat-btn {
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 28px;
+  max-width: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.seat-chair-svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+/* Available */
+.seat-btn.available {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #71717A;
+}
+
+.seat-btn.available:hover {
+  border-color: var(--color-leaf);
+  color: var(--color-leaf);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 10px rgba(87, 195, 82, 0.25);
+}
+
+/* Occupied / Sold */
+.seat-btn.occupied {
+  background: #E88F76;
+  border-color: #DE7E64;
+  color: #FFFFFF;
+  cursor: not-allowed;
+  opacity: 0.95;
+}
+
+/* Selected */
+.seat-btn.selected {
+  background: #57C352;
+  border-color: #49B544;
+  color: #FFFFFF;
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(87, 195, 82, 0.45);
+}
+
+.seat-btn.selected .seat-chair-svg {
+  transform: scale(1.1);
+}

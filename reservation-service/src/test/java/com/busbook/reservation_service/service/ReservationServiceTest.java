@@ -210,6 +210,7 @@ class ReservationServiceTest {
         request.setSeatId(12L);
 
         Seat seat = mock(Seat.class);
+        when(seat.getId()).thenReturn(12L);
 
         when(seatRepository.findById(12L))
                 .thenReturn(Optional.of(seat));
@@ -232,6 +233,7 @@ class ReservationServiceTest {
         request.setSeatId(12L);
 
         Seat seat = mock(Seat.class);
+        when(seat.getId()).thenReturn(12L);
         when(seatRepository.findById(12L)).thenReturn(Optional.of(seat));
 
         when(reservationRepository.existsActiveReservation(
@@ -260,6 +262,7 @@ class ReservationServiceTest {
         request.setSeatId(12L);
 
         Seat seat = mock(Seat.class);
+        when(seat.getId()).thenReturn(12L);
         when(seatRepository.findById(12L)).thenReturn(Optional.of(seat));
 
         when(reservationRepository.existsActiveReservation(

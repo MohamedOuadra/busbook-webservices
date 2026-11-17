@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.main-layout {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 12px 24px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.content-layout {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 85px);
+  gap: 18px;
+  width: 100%;
+}
+
+.page-content {
+  flex: 1;
+  min-width: 0;
+  padding-top: 14px;
+}

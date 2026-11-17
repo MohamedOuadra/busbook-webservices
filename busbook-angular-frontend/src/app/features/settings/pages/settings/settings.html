@@ -1,0 +1,311 @@
+<div class="settings-page">
+
+  <!-- Header -->
+  <div class="settings-header glass">
+    <div class="header-content">
+      <span class="section-label">ACCOUNT CONFIGURATION</span>
+      <h2>Account & Preferences</h2>
+      <p>Manage your passenger profile, travel habits, notifications and security settings.</p>
+    </div>
+
+    @if (currentUser(); as user) {
+      <div class="user-badge-header">
+        <div class="header-avatar">
+          {{ user.fullName.charAt(0).toUpperCase() }}
+        </div>
+        <div class="header-user-meta">
+          <strong>{{ user.fullName }}</strong>
+          <span>Customer ID: #{{ user.id }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Success/Error Feedback -->
+  @if (saveSuccessMessage()) {
+    <div class="alert-box success glass">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="alert-icon">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+      <span>{{ saveSuccessMessage() }}</span>
+    </div>
+  }
+
+  @if (saveErrorMessage()) {
+    <div class="alert-box error glass">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="alert-icon">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ saveErrorMessage() }}</span>
+    </div>
+  }
+
+  <div class="settings-grid">
+
+    <!-- Left Column: Profile & Travel Preferences -->
+    <div class="settings-col">
+
+      <!-- Profile Information Card -->
+      <section class="settings-card glass">
+        <div class="card-title-row">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Personal Information</h3>
+            <p>Your identity as printed on e-tickets and boarding passes</p>
+          </div>
+        </div>
+
+        <form (ngSubmit)="saveProfile()" class="settings-form">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="input-svg">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input
+                id="fullName"
+                type="text"
+                name="fullName"
+                [(ngModel)]="fullName"
+                placeholder="e.g. Anass Mansouri"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="input-svg">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                [(ngModel)]="email"
+                placeholder="anass@example.com"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber">Mobile Phone Number</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="input-svg">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                <line x1="12" y1="18" x2="12.01" y2="18"/>
+              </svg>
+              <input
+                id="phoneNumber"
+                type="tel"
+                name="phoneNumber"
+                [(ngModel)]="phoneNumber"
+                placeholder="+212 600-000000"
+              />
+            </div>
+            <span class="field-hint">Used for instant SMS updates regarding bus departure delay.</span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save" [disabled]="isSaving()">
+              @if (isSaving()) {
+                <span class="mini-spinner"></span>
+                Saving...
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-svg">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                  <polyline points="17 21 17 13 7 13 7 21"/>
+                  <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                Save Profile
+              }
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Travel Preferences -->
+      <section class="settings-card glass">
+        <div class="card-title-row">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="m4.93 4.93 4.24 4.24"/>
+              <path d="m14.83 9.17 4.24-4.24"/>
+              <path d="m14.83 14.83 4.24 4.24"/>
+              <path d="m9.17 14.83-4.24 4.24"/>
+              <circle cx="12" cy="12" r="4"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Travel Preferences</h3>
+            <p>Customize your seat selection and default journey parameters</p>
+          </div>
+        </div>
+
+        <div class="pref-group">
+          <label class="pref-label">Preferred Seat Position</label>
+          <div class="pref-options-row">
+            <label class="pref-choice" [class.selected]="preferredSeat === 'window'">
+              <input type="radio" name="seat" value="window" [(ngModel)]="preferredSeat"/>
+              <span class="choice-title">Window Seat</span>
+            </label>
+            <label class="pref-choice" [class.selected]="preferredSeat === 'aisle'">
+              <input type="radio" name="seat" value="aisle" [(ngModel)]="preferredSeat"/>
+              <span class="choice-title">Aisle Seat</span>
+            </label>
+            <label class="pref-choice" [class.selected]="preferredSeat === 'any'">
+              <input type="radio" name="seat" value="any" [(ngModel)]="preferredSeat"/>
+              <span class="choice-title">No Preference</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pref-group">
+          <label class="pref-label">Default Departure City</label>
+          <select [(ngModel)]="defaultCity" class="select-input">
+            <option value="Casablanca">Casablanca</option>
+            <option value="Marrakech">Marrakech</option>
+            <option value="Agadir">Agadir</option>
+            <option value="Rabat">Rabat</option>
+            <option value="Tanger">Tanger</option>
+            <option value="Fes">Fes</option>
+          </select>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right Column: Notifications, Localization & Security -->
+    <div class="settings-col">
+
+      <!-- Notifications -->
+      <section class="settings-card glass">
+        <div class="card-title-row">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Notifications & Alerts</h3>
+            <p>Choose how BusBook informs you about journeys</p>
+          </div>
+        </div>
+
+        <div class="toggle-list">
+          <label class="toggle-item">
+            <div class="toggle-text">
+              <strong>SMS Departure Reminders</strong>
+              <small>Receive boarding platform updates 1 hour before departure.</small>
+            </div>
+            <input type="checkbox" [(ngModel)]="smsNotifications" class="switch"/>
+          </label>
+
+          <label class="toggle-item">
+            <div class="toggle-text">
+              <strong>E-Ticket Delivery by Email</strong>
+              <small>Automatically receive a printable PDF right after booking.</small>
+            </div>
+            <input type="checkbox" [(ngModel)]="emailNotifications" class="switch"/>
+          </label>
+
+          <label class="toggle-item">
+            <div class="toggle-text">
+              <strong>Promotions & Special Fares</strong>
+              <small>Occasional discounts on Moroccan intercity lines.</small>
+            </div>
+            <input type="checkbox" [(ngModel)]="promoAlerts" class="switch"/>
+          </label>
+        </div>
+      </section>
+
+      <!-- Localization -->
+      <section class="settings-card glass">
+        <div class="card-title-row">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Regional & Language</h3>
+            <p>Currency and display language</p>
+          </div>
+        </div>
+
+        <div class="two-fields-row">
+          <div class="form-group">
+            <label>Currency</label>
+            <select [(ngModel)]="currency" class="select-input">
+              <option value="MAD">MAD (Moroccan Dirham)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="USD">USD ($)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Language</label>
+            <select [(ngModel)]="language" class="select-input">
+              <option value="fr">Français (FR)</option>
+              <option value="en">English (US)</option>
+              <option value="ar">العربية (AR)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security & Session Card -->
+      <section class="settings-card glass">
+        <div class="card-title-row">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Security & Session</h3>
+            <p>Update credentials or sign out from this device</p>
+          </div>
+        </div>
+
+        <div class="security-actions">
+          <div class="session-info">
+            <span class="session-dot"></span>
+            <div>
+              <strong>Current Active Session</strong>
+              <small>Connected via JWT Token • Moroccan Network</small>
+            </div>
+          </div>
+
+          <button type="button" class="btn-logout-danger" (click)="logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-svg">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Sign Out of Account
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+</div>

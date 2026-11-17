@@ -27,7 +27,7 @@ public class Reservation {
     private Long travelerId;
 
     @NotNull(message = "Le siège est obligatoire")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
@@ -95,6 +95,10 @@ public class Reservation {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getExpiresAt() {

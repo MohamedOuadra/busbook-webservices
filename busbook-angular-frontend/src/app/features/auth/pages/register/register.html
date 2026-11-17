@@ -1,0 +1,125 @@
+<div class="auth-page">
+  <div class="auth-card glass">
+    <div class="auth-header">
+      <span class="section-label">NEW ACCOUNT</span>
+      <h2>Join BusBook Today</h2>
+      <p class="auth-subtitle">Create an account to easily book trips, track reservations, and access tickets anytime.</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="error-icon">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="auth-form" #regForm="ngForm">
+      <div class="form-group">
+        <label for="fullName">Full Name *</label>
+        <div class="input-wrapper">
+          <input
+            id="fullName"
+            type="text"
+            name="fullName"
+            [(ngModel)]="form.fullName"
+            placeholder="e.g. Karim Alami"
+            required
+            autocomplete="name"
+            class="auth-input glass"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address *</label>
+        <div class="input-wrapper">
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="form.email"
+            placeholder="e.g. karim@busbook.ma"
+            required
+            autocomplete="email"
+            class="auth-input glass"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number (optional)</label>
+        <div class="input-wrapper">
+          <input
+            id="phoneNumber"
+            type="tel"
+            name="phoneNumber"
+            [(ngModel)]="form.phoneNumber"
+            placeholder="e.g. +212 6 12 34 56 78"
+            autocomplete="tel"
+            class="auth-input glass"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <div class="input-wrapper">
+            <input
+              id="password"
+              type="password"
+              name="password"
+              [(ngModel)]="form.password"
+              placeholder="Min 6 characters"
+              required
+              minlength="6"
+              autocomplete="new-password"
+              class="auth-input glass"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <div class="input-wrapper">
+            <input
+              id="confirmPassword"
+              type="password"
+              name="confirmPassword"
+              [(ngModel)]="confirmPassword"
+              placeholder="Repeat password"
+              required
+              autocomplete="new-password"
+              class="auth-input glass"
+            />
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="auth-button-submit"
+        [disabled]="isLoading || !regForm.form.valid"
+      >
+        @if (isLoading) {
+          <span>Creating account...</span>
+        } @else {
+          <span>Register Now</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-arrow">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Already have an account?</span>
+      <a routerLink="/login" [queryParams]="{ returnUrl: returnUrl }" class="auth-link">Sign In</a>
+    </div>
+  </div>
+</div>

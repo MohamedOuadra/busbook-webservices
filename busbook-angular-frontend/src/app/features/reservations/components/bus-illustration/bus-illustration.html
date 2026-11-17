@@ -1,0 +1,268 @@
+<div class="bus-illustration-wrap">
+  <svg
+    viewBox="0 0 820 250"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="coach-svg"
+  >
+    <defs>
+      <!-- Shadow gradient -->
+      <radialGradient id="busShadowGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#1D1D1B" stop-opacity="0.25"/>
+        <stop offset="80%" stop-color="#1D1D1B" stop-opacity="0.08"/>
+        <stop offset="100%" stop-color="#1D1D1B" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- Body paint gradient -->
+      <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF"/>
+        <stop offset="70%" stop-color="#F3EFEA"/>
+        <stop offset="100%" stop-color="#E2DDD5"/>
+      </linearGradient>
+
+      <!-- Roof AC gradient -->
+      <linearGradient id="roofAcGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#3A3836"/>
+        <stop offset="100%" stop-color="#242322"/>
+      </linearGradient>
+
+      <!-- Tinted windows gradient -->
+      <linearGradient id="windowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#2E2C2B"/>
+        <stop offset="45%" stop-color="#3D3A38"/>
+        <stop offset="100%" stop-color="#252423"/>
+      </linearGradient>
+
+      <!-- Front dark bumper segment -->
+      <linearGradient id="frontBumperGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#2B2A29"/>
+        <stop offset="100%" stop-color="#1A1918"/>
+      </linearGradient>
+
+      <!-- Side swoosh livery gradients matching the reference image -->
+      <linearGradient id="swooshBrown" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#B28A77"/>
+        <stop offset="100%" stop-color="#8F6B5A"/>
+      </linearGradient>
+      <linearGradient id="swooshGold" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#E5CAAE"/>
+        <stop offset="100%" stop-color="#CBB093"/>
+      </linearGradient>
+      <linearGradient id="swooshDark" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#554E48"/>
+        <stop offset="100%" stop-color="#3F3934"/>
+      </linearGradient>
+
+      <!-- Wheel rim gradient -->
+      <radialGradient id="rimGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E5E7EB"/>
+        <stop offset="50%" stop-color="#9CA3AF"/>
+        <stop offset="85%" stop-color="#D1D5DB"/>
+        <stop offset="100%" stop-color="#4B5563"/>
+      </radialGradient>
+      <radialGradient id="tireGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="70%" stop-color="#232323"/>
+        <stop offset="90%" stop-color="#181818"/>
+        <stop offset="100%" stop-color="#0A0A0A"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Ground Contact Shadow -->
+    <ellipse cx="430" cy="224" rx="350" ry="12" fill="url(#busShadowGrad)"/>
+
+    <!-- Roof Mounted Climate/AC Unit -->
+    <path d="M340 38 L480 38 L470 30 L350 30 Z" fill="url(#roofAcGrad)"/>
+    <rect x="360" y="32" width="100" height="4" rx="2" fill="#1C1B1A"/>
+
+    <!-- Main Bus Body Silhouette -->
+    <!-- Front aerodynamic curve down to bumper, bottom floor, rear curve up, top roofline -->
+    <path
+      d="M 190 44
+         C 160 46, 142 62, 138 90
+         L 134 140
+         C 133 160, 135 178, 140 188
+         L 142 196
+         L 200 196
+         C 202 182, 215 170, 235 170
+         C 255 170, 268 182, 270 196
+         L 640 196
+         C 642 182, 655 170, 675 170
+         C 695 170, 708 182, 710 196
+         L 734 196
+         C 738 185, 740 160, 740 130
+         L 740 60
+         C 740 46, 730 44, 715 44
+         Z"
+      fill="url(#bodyGrad)"
+      stroke="#D3CDC3"
+      stroke-width="1.5"
+    />
+
+    <!-- Rear upper panel contrast (warm brown) -->
+    <path
+      d="M 330 44
+         L 720 44
+         C 732 44, 738 52, 738 62
+         L 738 96
+         L 330 96
+         Z"
+      fill="#8C6E5E"
+    />
+
+    <!-- Panoramic Tinted Windows Band -->
+    <g class="windows-group">
+      <!-- Continuous window frame -->
+      <path
+        d="M 172 56
+           C 152 64, 145 74, 143 92
+           L 143 124
+           L 730 124
+           L 730 56
+           Z"
+        fill="url(#windowGrad)"
+      />
+
+      <!-- Window Glass Panes & Dividers -->
+      <!-- Windshield reflection highlight -->
+      <path d="M 148 90 L 158 64 L 180 60 L 170 86 Z" fill="rgba(255,255,255,0.18)"/>
+
+      <!-- Vertical Window Pillars -->
+      <line x1="220" y1="56" x2="220" y2="124" stroke="#1D1D1B" stroke-width="3.5"/>
+      <line x1="300" y1="56" x2="300" y2="124" stroke="#1D1D1B" stroke-width="3.5"/>
+      <line x1="385" y1="56" x2="385" y2="124" stroke="#1D1D1B" stroke-width="3.5"/>
+      <line x1="470" y1="56" x2="470" y2="124" stroke="#1D1D1B" stroke-width="3.5"/>
+      <line x1="555" y1="56" x2="555" y2="124" stroke="#1D1D1B" stroke-width="3.5"/>
+      <line x1="640" y1="56" x2="640" y2="124" stroke="#1D1D1B" stroke-width="3.5"/>
+
+      <!-- Window Bottom Belt Rail -->
+      <rect x="141" y="121" width="591" height="3" fill="#1C1B1A"/>
+    </g>
+
+    <!-- Front Black Mask / Wheel Arch Panel (Dark aerodynamic zone matching reference) -->
+    <path
+      d="M 143 124
+         L 186 124
+         C 194 135, 196 150, 196 170
+         L 174 194
+         L 142 194
+         C 137 185, 136 170, 137 145
+         Z"
+      fill="url(#frontBumperGrad)"
+    />
+
+    <!-- Side View Mirror -->
+    <!-- Curved aerodynamic stalk and mirror housing -->
+    <path
+      d="M 152 74
+         C 140 68, 126 72, 120 86
+         C 116 96, 116 112, 118 126
+         C 120 134, 128 132, 128 124
+         C 126 112, 126 98, 130 90
+         C 133 82, 142 80, 150 82
+         Z"
+      fill="#282726"
+    />
+    <rect x="114" y="86" width="12" height="42" rx="4" fill="#3D3B39" stroke="#1B1A19" stroke-width="1.5"/>
+    <rect x="116" y="88" width="8" height="38" rx="2" fill="rgba(255,255,255,0.25)"/>
+
+    <!-- Front Headlight Assembly -->
+    <rect x="135" y="156" width="12" height="24" rx="4" fill="#DCE5ED" stroke="#B0BAC3" stroke-width="1"/>
+    <rect x="137" y="160" width="8" height="16" rx="2" fill="#FFFFFF"/>
+    <!-- Amber indicator -->
+    <rect x="195" y="172" width="6" height="4" rx="1.5" fill="#F59E0B"/>
+
+    <!-- Dynamic Decorative Swooshes (Moroccan gold / warm brown / coral waves) -->
+    <!-- Large lower brown swoosh sweeping from middle to rear wheel -->
+    <path
+      d="M 230 196
+         C 280 180, 320 150, 420 145
+         C 520 140, 600 130, 738 126
+         L 738 194
+         L 708 194
+         C 706 182, 694 172, 675 172
+         C 656 172, 644 182, 642 194
+         L 272 194
+         C 270 182, 258 172, 235 172
+         Z"
+      fill="url(#swooshBrown)"
+      opacity="0.85"
+    />
+
+    <!-- Middle Golden Cream Swoosh -->
+    <path
+      d="M 186 172
+         C 250 162, 330 132, 450 128
+         C 550 125, 620 120, 738 120
+         L 738 138
+         C 630 142, 540 150, 430 160
+         C 320 170, 240 186, 174 194
+         Z"
+      fill="url(#swooshGold)"
+      opacity="0.9"
+    />
+
+    <!-- Slender Warm Coral Accent Ribbon -->
+    <path
+      d="M 194 165
+         C 260 150, 340 128, 440 126
+         L 440 130
+         C 340 132, 260 154, 190 170
+         Z"
+      fill="#F99271"
+      opacity="0.75"
+    />
+
+    <!-- Front Bumper Lower Skirt & Trim -->
+    <path d="M 140 188 L 196 188 L 196 195 L 142 195 Z" fill="#99948D"/>
+    <!-- Rear Bumper Lower Skirt -->
+    <path d="M 710 188 L 736 188 L 734 195 L 710 195 Z" fill="#99948D"/>
+
+    <!-- Luggage Compartment Seam Lines -->
+    <line x1="320" y1="165" x2="320" y2="194" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+    <line x1="420" y1="165" x2="420" y2="194" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+    <line x1="520" y1="165" x2="520" y2="194" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+    <line x1="620" y1="165" x2="620" y2="194" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+
+    <!-- Door Seam Lines -->
+    <line x1="198" y1="60" x2="198" y2="194" stroke="rgba(0,0,0,0.14)" stroke-width="1.5"/>
+
+    <!-- ================= WHEELS ================= -->
+    <!-- Front Wheel Assembly -->
+    <g class="front-wheel" transform="translate(235, 196)">
+      <!-- Outer Rubber Tire -->
+      <circle cx="0" cy="0" r="28" fill="url(#tireGrad)"/>
+      <circle cx="0" cy="0" r="23" fill="#1C1C1C"/>
+      <!-- Silver Rim -->
+      <circle cx="0" cy="0" r="18" fill="url(#rimGrad)" stroke="#6B7280" stroke-width="1"/>
+      <circle cx="0" cy="0" r="14" fill="#374151"/>
+      <!-- Hub & Lug nuts -->
+      <circle cx="0" cy="0" r="7" fill="#E5E7EB"/>
+      <circle cx="0" cy="0" r="3" fill="#1F2937"/>
+      <!-- Lug nuts -->
+      <circle cx="0" cy="-10" r="1.5" fill="#F3F4F6"/>
+      <circle cx="9.5" cy="-3.1" r="1.5" fill="#F3F4F6"/>
+      <circle cx="5.9" cy="8.1" r="1.5" fill="#F3F4F6"/>
+      <circle cx="-5.9" cy="8.1" r="1.5" fill="#F3F4F6"/>
+      <circle cx="-9.5" cy="-3.1" r="1.5" fill="#F3F4F6"/>
+    </g>
+
+    <!-- Rear Wheel Assembly -->
+    <g class="rear-wheel" transform="translate(675, 196)">
+      <!-- Outer Rubber Tire -->
+      <circle cx="0" cy="0" r="28" fill="url(#tireGrad)"/>
+      <circle cx="0" cy="0" r="23" fill="#1C1C1C"/>
+      <!-- Silver Rim (Deep dish rear wheel) -->
+      <circle cx="0" cy="0" r="18" fill="url(#rimGrad)" stroke="#6B7280" stroke-width="1"/>
+      <circle cx="0" cy="0" r="13" fill="#1F2937"/>
+      <!-- Center Hub -->
+      <circle cx="0" cy="0" r="6" fill="#D1D5DB"/>
+      <circle cx="0" cy="0" r="2.5" fill="#111827"/>
+      <!-- Lug nuts -->
+      <circle cx="0" cy="-9" r="1.5" fill="#F3F4F6"/>
+      <circle cx="8.5" cy="-2.8" r="1.5" fill="#F3F4F6"/>
+      <circle cx="5.3" cy="7.3" r="1.5" fill="#F3F4F6"/>
+      <circle cx="-5.3" cy="7.3" r="1.5" fill="#F3F4F6"/>
+      <circle cx="-8.5" cy="-2.8" r="1.5" fill="#F3F4F6"/>
+    </g>
+  </svg>
+</div>

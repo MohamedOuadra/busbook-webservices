@@ -1,0 +1,301 @@
+<div class="payment-page">
+  @if (isLoading) {
+    <div class="loading-state glass">
+      <div class="spinner"></div>
+      <p>Loading reservation details...</p>
+    </div>
+  } @else if (reservation) {
+
+    <!-- Screen Header -->
+    <div class="payment-header-row">
+      <div class="payment-header-titles">
+        <h2>Secure Checkout</h2>
+        <p>Complete your booking hold before the 10-minute reservation expires</p>
+      </div>
+    </div>
+
+    <!-- Error Banner -->
+    @if (errorMessage) {
+      <div class="error-banner glass">
+        <span class="error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="error-svg">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </span>
+        <span class="error-text">{{ errorMessage }}</span>
+      </div>
+    }
+
+    <!-- 2-Column Checkout Layout -->
+    <div class="payment-layout-grid">
+
+      <!-- LEFT COLUMN: Journey Recap & Timer -->
+      <div class="payment-left-col">
+
+        <!-- Journey Summary Card -->
+        <div class="journey-card glass">
+          <div class="card-badge-row">
+            <span class="journey-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tag-svg">
+                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                <path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/>
+              </svg>
+              Reservation #{{ reservation.id }}
+            </span>
+            <span class="status-pill-pending">HELD (10m)</span>
+          </div>
+
+          <h3 class="journey-route">
+            @if (trip) {
+              {{ trip.villeDepart }} → {{ trip.villeArrivee }}
+            } @else {
+              Trip #{{ reservation.tripId }}
+            }
+          </h3>
+
+          <p class="journey-sub">
+            @if (trip) {
+              {{ trip.bus.type }} Class • Coach #{{ trip.bus.immatriculation }} (AC)
+            } @else {
+              Express Intercity Coach
+            }
+          </p>
+
+          <div class="card-divider"></div>
+
+          <!-- Route Info Stats -->
+          <div class="journey-stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">Your Seat</span>
+              <span class="seat-badge-pill">Seat #{{ reservation.seatNumber || reservation.seatId }}</span>
+            </div>
+
+            <div class="stat-item">
+              <span class="stat-label">Fare Amount</span>
+              <strong class="stat-price">{{ trip ? trip.prix : 120 }}.00 <small>MAD</small></strong>
+            </div>
+
+            @if (trip) {
+              <div class="stat-item">
+                <span class="stat-label">Departure</span>
+                <strong class="stat-val">{{ trip.dateDepart | date:'HH:mm • dd MMM' }}</strong>
+              </div>
+
+              <div class="stat-item">
+                <span class="stat-label">Arrival</span>
+                <strong class="stat-val">{{ trip.dateArrivee | date:'HH:mm • dd MMM' }}</strong>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- 10-Min Countdown Timer -->
+        <app-countdown-timer
+          [seconds]="remainingSeconds"
+          [isExpired]="isExpired"
+        />
+
+      </div>
+
+      <!-- RIGHT COLUMN: Payment Details & Methods -->
+      <div class="payment-right-col">
+        <div class="payment-form-card glass">
+
+          @if (!isExpired) {
+            <!-- 1. Passenger Details Recap -->
+            <div class="section-block">
+              <span class="section-title">Passenger Information</span>
+              <div class="passenger-inputs">
+                <div class="input-with-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="input-icon">
+                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M5.5 21a8.5 8.5 0 0 1 13 0"/>
+                  </svg>
+                  <input
+                    type="text"
+                    [(ngModel)]="travelerName"
+                    placeholder="Full name"
+                    class="clean-field"
+                  />
+                </div>
+
+                <div class="input-with-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="input-icon">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                  </svg>
+                  <input
+                    type="email"
+                    [(ngModel)]="travelerEmail"
+                    placeholder="Email address"
+                    class="clean-field"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Select Payment Method -->
+            <div class="section-block">
+              <span class="section-title">Select Payment Method</span>
+              <div class="methods-stack">
+
+                <!-- Credit Card -->
+                <label class="method-option-card" [class.selected]="selectedMethod === 'CARTE_BANCAIRE'">
+                  <input
+                    type="radio"
+                    name="method"
+                    value="CARTE_BANCAIRE"
+                    [(ngModel)]="selectedMethod"
+                  />
+                  <div class="method-left">
+                    <div class="method-icon-circle">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="method-svg">
+                        <rect x="2" y="5" width="20" height="14" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
+                      </svg>
+                    </div>
+                    <div class="method-texts">
+                      <strong>Credit Card</strong>
+                      <small>Instant e-ticket via Visa, Mastercard, CMI</small>
+                    </div>
+                  </div>
+                  <div class="radio-indicator"></div>
+                </label>
+
+                <!-- Mobile Wallet -->
+                <label class="method-option-card" [class.selected]="selectedMethod === 'PORTEFEUILLE_MOBILE'">
+                  <input
+                    type="radio"
+                    name="method"
+                    value="PORTEFEUILLE_MOBILE"
+                    [(ngModel)]="selectedMethod"
+                  />
+                  <div class="method-left">
+                    <div class="method-icon-circle">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="method-svg">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                      </svg>
+                    </div>
+                    <div class="method-texts">
+                      <strong>Mobile Wallet</strong>
+                      <small>Orange Money, inwi money, MT Cash</small>
+                    </div>
+                  </div>
+                  <div class="radio-indicator"></div>
+                </label>
+
+                <!-- Cash at Counter -->
+                <label class="method-option-card" [class.selected]="selectedMethod === 'ESPECES'">
+                  <input
+                    type="radio"
+                    name="method"
+                    value="ESPECES"
+                    [(ngModel)]="selectedMethod"
+                  />
+                  <div class="method-left">
+                    <div class="method-icon-circle">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="method-svg">
+                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M6 12h.01M18 12h.01"/>
+                      </svg>
+                    </div>
+                    <div class="method-texts">
+                      <strong>Cash at Counter</strong>
+                      <small>Pay at station counter before coach departure</small>
+                    </div>
+                  </div>
+                  <div class="radio-indicator"></div>
+                </label>
+
+              </div>
+            </div>
+
+            <!-- 3. QA Testing Failure Simulation Toggle -->
+            <div class="simulation-row">
+              <label class="simulation-label">
+                <input type="checkbox" [(ngModel)]="simulateFailure" />
+                <span>Simulate payment failure (QA testing)</span>
+              </label>
+            </div>
+
+            <!-- 4. Action Buttons -->
+            <div class="checkout-actions">
+              <button
+                type="button"
+                class="btn-pay-now"
+                [disabled]="isProcessing"
+                (click)="onPay()"
+              >
+                <span class="btn-arrow-circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
+                <span class="btn-text">
+                  @if (isProcessing) {
+                    Processing Payment...
+                  } @else {
+                    Confirm & Pay {{ trip ? trip.prix : 120 }}.00 MAD
+                  }
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="btn-cancel-glass"
+                [disabled]="isProcessing"
+                (click)="onCancel()"
+              >
+                Cancel Reservation
+              </button>
+            </div>
+
+          } @else {
+            <!-- Expired State -->
+            <div class="expired-card-content">
+              <div class="expired-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="expired-svg">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <h3>10-Minute Hold Expired</h3>
+              <p>The temporary hold on this seat has timed out and the seat has been returned to the available inventory.</p>
+              <button
+                type="button"
+                class="btn-pay-now"
+                [routerLink]="['/reservation', reservation.tripId]"
+              >
+                <span class="btn-arrow-circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
+                <span>Choose Another Seat</span>
+              </button>
+            </div>
+          }
+
+        </div>
+      </div>
+
+    </div>
+
+  } @else {
+    <div class="error-state glass">
+      <div class="error-icon-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="state-svg">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+      </div>
+      <h3>Reservation Not Found</h3>
+      <p>{{ errorMessage || 'Unable to load reservation details.' }}</p>
+      <button class="btn-cancel-glass" routerLink="/">Back to Home</button>
+    </div>
+  }
+</div>

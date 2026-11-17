@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -65,10 +66,27 @@ public class ReservationService {
 
         LocalDateTime now = LocalDateTime.now(clock);
 
-        return !reservationRepository.existsActiveReservation(
-                tripId, seatId, now
-        );
+        // Vérifier si seatId correspond à l'identifiant réel du siège
+        if (reservationRepository.existsActiveReservation(
+                tripId, seatId, now)) {
+            return false;
+        }
+
+        // Vérifier également si seatId correspond au numéro du siège
+        Optional<Seat> seatByNumber =
+                seatRepository.findByBusIdAndSeatNumber(
+                        tripId, String.valueOf(seatId)
+                );
+
+        if (seatByNumber.isPresent()) {
+            return !reservationRepository.existsActiveReservation(
+                    tripId, seatByNumber.get().getId(), now
+            );
+        }
+
+        return true;
     }
+
 
     /**
      * Crée une nouvelle réservation.
@@ -92,21 +110,35 @@ public class ReservationService {
         }
 
         Seat seat = seatRepository.findById(request.getSeatId())
+                .or(() -> seatRepository.findByBusIdAndSeatNumber(
+                        request.getTripId(),
+                        String.valueOf(request.getSeatId())
+                ))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Le siège demandé est introuvable."
+                        "Siège introuvable."
                 ));
+
+        if (seat.getId() == null || seat.getId() <= 0) {
+            throw new ResourceNotFoundException(
+                    "Identifiant du siège invalide."
+            );
+        }
 
         LocalDateTime now = LocalDateTime.now(clock);
 
-        // Libérer immédiatement l'index partiel PostgreSQL si une réservation précédente
-        // sur ce siège est arrivée à expiration, sans attendre le passage du scheduler
+        // Expirer immédiatement les réservations dépassées pour ce siège
         reservationRepository.expirePendingReservationsForSeat(
                 request.getTripId(),
-                request.getSeatId(),
+                seat.getId(),
                 now
         );
 
-        if (!isSeatAvailable(request.getTripId(), request.getSeatId())) {
+        // Vérifier la disponibilité du siège
+        if (reservationRepository.existsActiveReservation(
+                request.getTripId(),
+                seat.getId(),
+                now
+        )) {
             throw new IllegalStateException(
                     "Ce siège est déjà réservé pour ce trajet."
             );
@@ -117,6 +149,7 @@ public class ReservationService {
         reservation.setTripId(request.getTripId());
         reservation.setTravelerId(request.getTravelerId());
         reservation.setSeat(seat);
+        reservation.setCreatedAt(LocalDateTime.now());
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
         reservation.setExpiresAt(
                 now.plusMinutes(RESERVATION_EXPIRATION_MINUTES)
@@ -242,6 +275,7 @@ public class ReservationService {
     /**
      * Récupère une réservation par son identifiant.
      */
+    @Transactional(readOnly = true)
     public ReservationResponse getReservationById(Long reservationId) {
 
         validateReservationId(reservationId);
@@ -257,6 +291,7 @@ public class ReservationService {
     /**
      * Récupère toutes les réservations d'un trajet.
      */
+    @Transactional(readOnly = true)
     public List<ReservationResponse> getReservationsByTripId(Long tripId) {
 
         if (tripId == null || tripId <= 0) {
@@ -274,6 +309,7 @@ public class ReservationService {
     /**
      * Récupère toutes les réservations d'un voyageur.
      */
+    @Transactional(readOnly = true)
     public List<ReservationResponse> getReservationsByTravelerId(Long travelerId) {
 
         if (travelerId == null || travelerId <= 0) {

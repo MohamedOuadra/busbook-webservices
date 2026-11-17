@@ -1,0 +1,47 @@
+<div class="summary-vertical-list">
+  <div class="summary-metric">
+    <strong class="metric-val highlight">
+      @if (seatNumber !== null) {
+        Seat #{{ seatNumber }}
+      } @else {
+        --
+      }
+    </strong>
+    <span class="metric-label">Your Seats</span>
+  </div>
+
+  <div class="summary-metric">
+    <strong class="metric-val">Confort Class</strong>
+    <span class="metric-label">Seat Class</span>
+  </div>
+
+  <div class="summary-metric">
+    <strong class="metric-val">10.00</strong>
+    <span class="metric-label">Service Charge (MAD)</span>
+  </div>
+
+  <div class="summary-metric">
+    <strong class="metric-val">12.00</strong>
+    <span class="metric-label">PGW Charge (MAD)</span>
+  </div>
+
+  <div class="summary-metric">
+    <strong class="metric-val">00.00</strong>
+    <span class="metric-label">Total Discount (MAD)</span>
+  </div>
+
+  <div class="summary-metric">
+    <strong class="metric-val">{{ price }}.00</strong>
+    <span class="metric-label">Per Seat Fare (MAD)</span>
+  </div>
+
+  <div class="summary-metric">
+    <strong class="metric-val">{{ seatNumber !== null ? '01' : '00' }}</strong>
+    <span class="metric-label">Number of Seat</span>
+  </div>
+
+  <div class="summary-metric total-metric">
+    <strong class="metric-val total-val">{{ seatNumber !== null ? price : 0 }}.00</strong>
+    <span class="metric-label">Subtotal (MAD)</span>
+  </div>
+</div>

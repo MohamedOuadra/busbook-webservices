@@ -1,0 +1,205 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.booking-split-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.col-seat-selection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.col-fare-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.contact-under-seat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.passenger-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.clean-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-ink);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.clean-input:focus {
+  background: #FFFFFF;
+  border-color: var(--color-leaf);
+  box-shadow: 0 0 0 3px rgba(87, 195, 82, 0.15);
+}
+
+.field-sublabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-muted);
+  padding-left: 2px;
+}
+
+.name-email-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.clean-mini-input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  font-family: var(--font-primary);
+  outline: none;
+}
+
+.auth-notice-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(254, 243, 239, 0.75);
+  border: 1px solid rgba(249, 146, 113, 0.4);
+}
+
+.auth-lock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock-svg {
+  width: 14px;
+  height: 14px;
+  color: #C04321;
+}
+
+.auth-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+}
+
+.auth-text strong {
+  color: #C04321;
+}
+
+.auth-text small {
+  color: var(--color-muted);
+}
+
+.auth-link-btn {
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: var(--color-coral);
+  color: white;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-buy-now {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: #57C352;
+  color: white;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(87, 195, 82, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: auto;
+}
+
+.btn-buy-now:hover:not(:disabled) {
+  background: #46B441;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(87, 195, 82, 0.45);
+}
+
+.btn-buy-now:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: #8E8D88;
+}
+
+.btn-arrow-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.btn-arrow-circle svg {
+  width: 13px;
+  height: 13px;
+  stroke: white;
+}
+
+.btn-buy-now:hover:not(:disabled) .btn-arrow-circle {
+  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.btn-auth-mode {
+  background: var(--color-coral);
+  box-shadow: 0 6px 16px rgba(249, 146, 113, 0.4);
+}
+
+.btn-auth-mode:hover:not(:disabled) {
+  background: #E25B36;
+}
+
+@media (max-width: 600px) {
+  .booking-split-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

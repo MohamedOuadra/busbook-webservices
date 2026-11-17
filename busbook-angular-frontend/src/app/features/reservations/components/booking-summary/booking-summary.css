@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.summary-vertical-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.summary-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--color-ink);
+  letter-spacing: -0.2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-val.highlight {
+  color: #2563EB;
+  font-size: 17px;
+}
+
+.metric-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.total-metric {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+.total-val {
+  font-size: 19px;
+  color: var(--color-ink);
+}

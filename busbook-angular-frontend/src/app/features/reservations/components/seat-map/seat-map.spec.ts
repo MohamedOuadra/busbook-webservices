@@ -1,0 +1,27 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { SeatMap } from './seat-map';
+
+describe('SeatMap', () => {
+  let component: SeatMap;
+  let fixture: ComponentFixture<SeatMap>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SeatMap],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(SeatMap);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
