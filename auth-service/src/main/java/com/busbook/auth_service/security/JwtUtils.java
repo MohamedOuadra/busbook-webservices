@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * Utilitaire pour la génération et validation des tokens JWT.
- * Utilise l'API JJWT 0.12.x.
+ * Le token contient l'email (subject) et optionnellement le rôle de l'utilisateur (claim "role").
  */
 @Component
 public class JwtUtils {
@@ -35,32 +35,51 @@ public class JwtUtils {
      * @return le token JWT en chaîne de caractères
      */
     public String generateToken(String email) {
+        return generateToken(email, null);
+    }
+
+    /**
+     * Génère un token JWT signé contenant l'email et le rôle.
+     *
+     * @param email l'email de l'utilisateur (subject du token)
+     * @param role  le rôle de l'utilisateur (USER ou ADMIN)
+     * @return le token JWT en chaîne de caractères
+     */
+    public String generateToken(String email, String role) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMs);
 
-        return Jwts.builder()
+        var builder = Jwts.builder()
                 .subject(email)
                 .issuedAt(now)
                 .expiration(expiry)
-                .signWith(getSigningKey())
-                .compact();
+                .signWith(getSigningKey());
+
+        if (role != null) {
+            builder.claim("role", role);
+        }
+
+        return builder.compact();
     }
 
     /**
      * Extrait l'email (subject) depuis un token JWT.
-     *
-     * @param token le token JWT
-     * @return l'email contenu dans le token
      */
     public String extractUsername(String token) {
         return parseClaims(token).getSubject();
     }
 
     /**
-     * Vérifie si le token est valide (signature correcte et non expiré).
+     * Extrait le rôle depuis un token JWT.
      *
-     * @param token le token JWT à valider
-     * @return true si le token est valide
+     * @return le rôle (ex: "ADMIN" ou "USER"), ou null si absent
+     */
+    public String extractRole(String token) {
+        return (String) parseClaims(token).get("role");
+    }
+
+    /**
+     * Vérifie si le token est valide (signature correcte et non expiré).
      */
     public boolean isTokenValid(String token) {
         try {

@@ -309,3 +309,14 @@
   width: 14px;
   height: 14px;
 }
+
+.admin-tag-pill {
+  font-size: 10px;
+  font-weight: 800;
+  background: #f99271;
+  color: #20201e;
+  border-radius: 4px;
+  padding: 1px 6px;
+  letter-spacing: 0.05em;
+  margin-left: 2px;
+}

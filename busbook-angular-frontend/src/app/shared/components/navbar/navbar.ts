@@ -19,7 +19,10 @@ export class Navbar {
   currentUser = this.authService.currentUser;
 
   // Vrai uniquement si l'utilisateur connecté a le rôle ADMIN
-  isAdmin = computed(() => this.currentUser()?.role === 'ADMIN');
+  isAdmin = computed(() => {
+    const role = this.currentUser()?.role?.toString().toUpperCase();
+    return role === 'ADMIN' || role === 'ROLE_ADMIN';
+  });
 
   logout(): void {
     this.authService.logout();

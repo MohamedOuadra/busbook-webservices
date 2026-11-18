@@ -14,11 +14,12 @@ export const adminGuard: CanActivateFn = () => {
   const user = authService.currentUser();
 
   if (!user) {
-    router.navigate(['/login']);
+    router.navigate(['/login'], { queryParams: { returnUrl: '/admin' } });
     return false;
   }
 
-  if (user.role !== 'ADMIN') {
+  const role = user.role?.toString().toUpperCase();
+  if (role !== 'ADMIN' && role !== 'ROLE_ADMIN') {
     router.navigate(['/']);
     return false;
   }

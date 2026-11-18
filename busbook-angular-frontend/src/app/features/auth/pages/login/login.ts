@@ -41,10 +41,16 @@ export class LoginPage {
     this.errorMessage = '';
 
     this.authService.login(this.credentials).subscribe({
-      next: () => {
+      next: (response) => {
         this.isLoading = false;
         this.cdr.markForCheck();
-        this.router.navigateByUrl(this.returnUrl);
+        const role = response?.role?.toString().toUpperCase();
+        if (role === 'ADMIN' || role === 'ROLE_ADMIN') {
+          // Redirection directe vers le tableau de bord admin
+          this.router.navigateByUrl('/admin');
+        } else {
+          this.router.navigateByUrl(this.returnUrl);
+        }
       },
       error: (err) => {
         this.isLoading = false;

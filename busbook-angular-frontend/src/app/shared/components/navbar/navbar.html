@@ -61,6 +61,9 @@
       <div class="user-pill glass">
         <span class="user-avatar-mini">{{ user.fullName.charAt(0).toUpperCase() }}</span>
         <span class="user-name"><strong>{{ user.fullName.split(' ')[0] }}</strong></span>
+        @if (isAdmin()) {
+          <span class="admin-tag-pill">ADMIN</span>
+        }
         <button class="logout-btn" (click)="logout()" title="Sign Out" aria-label="Sign Out">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="logout-icon">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
