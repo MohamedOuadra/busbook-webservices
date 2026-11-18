@@ -33,7 +33,9 @@ export class AdminDashboard implements OnInit {
     this.adminService.getAllReservations().subscribe({
       next: reservations => {
         this.totalReservations.set(reservations.length);
-        this.confirmedReservations.set(reservations.filter(r => r.status === 'CONFIRMED').length);
+        this.confirmedReservations.set(
+          reservations.filter(r => r.status === 'CONFIRMED' || (r.status as string) === 'CONFIRMEE').length
+        );
         this.loading.set(false);
       },
       error: () => {

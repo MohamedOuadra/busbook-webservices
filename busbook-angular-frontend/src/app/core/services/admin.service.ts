@@ -23,12 +23,17 @@ export interface CreateTripRequest {
 
 export interface AdminReservation {
   id: number;
-  userId: number;
+  travelerId?: number;
+  userId?: number;
   tripId: number;
-  seatNumbers: number[];
+  seatId?: number;
+  seatNumber?: string;
+  seatNumbers?: number[];
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';
-  totalPrice: number;
+  totalPrice?: number;
   createdAt: string;
+  expiresAt?: string;
+  confirmedAt?: string;
 }
 
 export interface DashboardStats {
@@ -39,8 +44,7 @@ export interface DashboardStats {
 }
 
 /**
- * Service admin — appelle les APIs catalog-service (8081) et reservation-service (8082)
- * avec le token JWT de l'administrateur dans chaque requête.
+ * Service admin — communique avec catalog-service (8081) et reservation-service (8082).
  */
 @Injectable({ providedIn: 'root' })
 export class AdminService {
@@ -52,7 +56,10 @@ export class AdminService {
 
   private get headers(): HttpHeaders {
     const token = this.authService.getToken();
-    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return new HttpHeaders({
+      Authorization: `Bearer ${token || ''}`,
+      'Content-Type': 'application/json',
+    });
   }
 
   // ─── BUS ───────────────────────────────────────────────────────────────────
@@ -99,11 +106,5 @@ export class AdminService {
 
   cancelReservation(id: number): Observable<void> {
     return this.http.delete<void>(`${this.reservationUrl}/reservations/${id}`, { headers: this.headers });
-  }
-
-  // ─── DASHBOARD ─────────────────────────────────────────────────────────────
-
-  getDashboardStats(): Observable<DashboardStats> {
-    return this.http.get<DashboardStats>(`${this.catalogUrl}/admin/stats`, { headers: this.headers });
   }
 }

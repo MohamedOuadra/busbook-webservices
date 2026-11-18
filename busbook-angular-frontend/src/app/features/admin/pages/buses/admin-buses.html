@@ -1,94 +1,136 @@
-<div class="admin-page">
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Gestion des bus</h1>
-      <p class="page-subtitle">{{ buses().length }} bus enregistré(s)</p>
+<div class="admin-module-page">
+  <!-- En-tête -->
+  <div class="module-header glass">
+    <div class="header-left">
+      <div class="badge-row">
+        <span class="section-label">PARC MATÉRIEL ROULANT</span>
+        <span class="count-pill">{{ buses().length }} autocars enregistrés</span>
+      </div>
+      <h1 class="module-title">Flotte d'Autocars</h1>
+      <p class="module-sub">Gestion des immatriculations, capacités et gammes de confort (VIP, Confort, Executive).</p>
     </div>
-    <button class="btn-primary" (click)="openCreate()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+    <button type="button" class="btn-primary-pill" (click)="openCreate()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-svg">
         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
       </svg>
-      Nouveau bus
+      <span>Nouveau Bus</span>
     </button>
   </div>
 
-  @if (success()) { <div class="alert alert-success">{{ success() }}</div> }
-  @if (error()) { <div class="alert alert-error">{{ error() }}</div> }
+  @if (success()) {
+    <div class="alert-pill alert-success glass">
+      <span class="alert-dot"></span>
+      <span>{{ success() }}</span>
+    </div>
+  }
+  @if (error()) {
+    <div class="alert-pill alert-error glass">
+      <span class="alert-dot"></span>
+      <span>{{ error() }}</span>
+    </div>
+  }
 
   <!-- Formulaire -->
   @if (showForm()) {
-    <div class="form-card">
-      <h2 class="form-title">{{ editingBus() ? 'Modifier le bus' : 'Nouveau bus' }}</h2>
+    <div class="form-panel glass">
+      <div class="form-header">
+        <div class="form-title-wrap">
+          <span class="section-label">{{ editingBus() ? 'ÉDITION MATÉRIEL' : 'NOUVEL ENREGISTREMENT' }}</span>
+          <h2>{{ editingBus() ? 'Modifier les données du bus' : 'Ajouter un autocar à la flotte' }}</h2>
+        </div>
+        <button type="button" class="btn-close-icon" (click)="closeForm()" title="Fermer">✕</button>
+      </div>
+
       <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="form-grid">
-          <div class="field">
-            <label>Immatriculation *</label>
-            <input formControlName="immatriculation" placeholder="Ex: 123456-A-7" [class.invalid]="hasError('immatriculation')"/>
-            @if (hasError('immatriculation')) { <span class="field-error">Minimum 4 caractères</span> }
+          <div class="form-group">
+            <label class="form-label">Numéro d'immatriculation *</label>
+            <input formControlName="immatriculation" placeholder="Ex: 54321-B-26" class="input-glass" [class.invalid]="hasError('immatriculation')"/>
+            @if (hasError('immatriculation')) { <span class="input-error">Format d'immatriculation requis (min 4 car.)</span> }
           </div>
-          <div class="field">
-            <label>Capacité (places) *</label>
-            <input type="number" formControlName="capacite" placeholder="Ex: 44" min="10" max="100" [class.invalid]="hasError('capacite')"/>
-            @if (hasError('capacite')) { <span class="field-error">Entre 10 et 100 places</span> }
+
+          <div class="form-group">
+            <label class="form-label">Capacité (sièges) *</label>
+            <input type="number" formControlName="capacite" placeholder="Ex: 48" min="10" max="100" class="input-glass" [class.invalid]="hasError('capacite')"/>
+            @if (hasError('capacite')) { <span class="input-error">Entre 10 et 100 sièges passagers</span> }
           </div>
-          <div class="field">
-            <label>Type *</label>
-            <select formControlName="type" [class.invalid]="hasError('type')">
-              <option value="">-- Sélectionner --</option>
+
+          <div class="form-group">
+            <label class="form-label">Catégorie de confort *</label>
+            <select formControlName="type" class="input-glass select-glass" [class.invalid]="hasError('type')">
+              <option value="">-- Sélectionner la gamme --</option>
               @for (t of busTypes; track t) {
                 <option [value]="t">{{ t }}</option>
               }
             </select>
-            @if (hasError('type')) { <span class="field-error">Champ requis</span> }
+            @if (hasError('type')) { <span class="input-error">Veuillez sélectionner une catégorie</span> }
           </div>
         </div>
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" (click)="closeForm()">Annuler</button>
-          <button type="submit" class="btn-primary" [disabled]="saving()">
-            {{ saving() ? 'Enregistrement...' : (editingBus() ? 'Modifier' : 'Créer le bus') }}
+
+        <div class="form-actions-row">
+          <button type="button" class="btn-cancel-pill" (click)="closeForm()">Annuler</button>
+          <button type="submit" class="btn-submit-pill" [disabled]="saving()">
+            {{ saving() ? 'Enregistrement en cours...' : (editingBus() ? 'Mettre à jour' : 'Enregistrer le bus') }}
           </button>
         </div>
       </form>
     </div>
   }
 
-  <!-- Table des bus -->
+  <!-- Grille de la flotte d'autocars -->
   @if (loading()) {
-    <div class="loading">Chargement des bus...</div>
+    <div class="state-card glass">
+      <div class="spinner"></div>
+      <p>Chargement des autocars...</p>
+    </div>
   } @else if (buses().length === 0) {
-    <div class="empty-state"><p>Aucun bus enregistré. Créez le premier !</p></div>
+    <div class="state-card glass">
+      <p>Aucun autocar n'est enregistré dans la flotte.</p>
+    </div>
   } @else {
-    <div class="buses-grid">
+    <div class="buses-cards-grid">
       @for (bus of buses(); track bus.id) {
-        <div class="bus-card">
-          <div class="bus-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <rect x="2" y="6" width="20" height="12" rx="2"/>
-              <path d="M6 18v2M18 18v2M2 11h20"/>
-              <circle cx="6" cy="16" r="1" fill="currentColor"/>
-              <circle cx="18" cy="16" r="1" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="bus-info">
-            <div class="bus-immat">{{ bus.immatriculation }}</div>
-            <div class="bus-meta">
-              <span class="type-badge" [class]="'type-' + bus.type.toLowerCase()">{{ bus.type }}</span>
-              <span class="capacity">{{ bus.capacite }} places</span>
+        <div class="bus-tile glass">
+          <div class="tile-header">
+            <div class="tile-bus-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="tile-svg">
+                <rect x="2" y="6" width="20" height="12" rx="2.5"/>
+                <path d="M6 18v2M18 18v2M2 11h20"/>
+                <circle cx="6" cy="15" r="1.2" fill="currentColor"/>
+                <circle cx="18" cy="15" r="1.2" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="tile-actions">
+              <button type="button" class="action-btn edit-btn" (click)="openEdit(bus)" title="Modifier ce bus">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button type="button" class="action-btn delete-btn" (click)="deleteBus(bus)" title="Supprimer ce bus">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  <path d="M10 11v6M14 11v6"/>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="bus-actions">
-            <button class="btn-edit" (click)="openEdit(bus)" title="Modifier">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
-            </button>
-            <button class="btn-delete" (click)="deleteBus(bus)" title="Supprimer">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6M14 11v6"/>
-              </svg>
-            </button>
+
+          <div class="tile-immat">{{ bus.immatriculation }}</div>
+
+          <div class="tile-badges">
+            <span class="category-badge" [class]="'cat-' + bus.type.toLowerCase()">
+              {{ bus.type }}
+            </span>
+            <span class="capacity-pill">
+              {{ bus.capacite }} Sièges
+            </span>
+          </div>
+
+          <div class="tile-foot">
+            <span class="bus-id-tag">Réf #{{ bus.id }}</span>
+            <span class="wifi-amenity">AC · Prise USB · Wi-Fi</span>
           </div>
         </div>
       }

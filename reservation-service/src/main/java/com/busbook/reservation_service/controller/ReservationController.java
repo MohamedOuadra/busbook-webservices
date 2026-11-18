@@ -39,6 +39,26 @@ public class ReservationController {
     }
 
     /**
+     * Récupérer toutes les réservations (pour l'administration).
+     * GET /api/reservations
+     */
+    @GetMapping
+    public ResponseEntity<List<ReservationResponse>> getAllReservations() {
+        List<ReservationResponse> reservations = reservationService.getAllReservations();
+        return ResponseEntity.ok(reservations);
+    }
+
+    /**
+     * Supprimer / annuler une réservation.
+     * DELETE /api/reservations/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
+        reservationService.cancelReservation(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
      * Récupérer une réservation par son identifiant.
      * GET /api/reservations/{id}
      */

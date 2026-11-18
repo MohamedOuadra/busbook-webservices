@@ -1,57 +1,119 @@
 @import '../trips/admin-trips.css';
 
-.buses-grid {
+.buses-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+  gap: 16px;
 }
 
-.bus-card {
-  background: #fff;
-  border: 1px solid #e8e8e3;
-  border-radius: 12px;
-  padding: 16px;
+.bus-tile {
+  padding: 22px;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bus-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+.tile-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  transition: box-shadow 0.2s, transform 0.2s;
+  justify-content: space-between;
 }
 
-.bus-card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-  transform: translateY(-2px);
-}
-
-.bus-icon {
-  width: 48px;
-  height: 48px;
-  background: #f9f9f7;
-  border-radius: 10px;
+.tile-bus-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555;
-  flex-shrink: 0;
+  color: var(--color-ink, #1d1d1b);
 }
-.bus-icon svg { width: 24px; height: 24px; }
 
-.bus-info { flex: 1; min-width: 0; }
-.bus-immat { font-size: 15px; font-weight: 700; color: #20201e; }
-.bus-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+.tile-svg {
+  width: 22px;
+  height: 22px;
+}
 
-.type-badge {
+.tile-immat {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-ink, #1d1d1b);
+  letter-spacing: -0.01em;
+}
+
+.tile-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category-badge {
   font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 20px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 999px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
-.type-standard { background: #f0f0eb; color: #555; }
-.type-confort { background: #eff6ff; color: #3b82f6; }
-.type-vip { background: #fdf4ff; color: #a855f7; }
-.type-executive { background: #fff7ed; color: #f97316; }
 
-.capacity { font-size: 12px; color: #888; }
+.cat-vip {
+  background: rgba(168, 85, 247, 0.18);
+  color: #7e22ce;
+}
 
-.bus-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.cat-confort {
+  background: rgba(59, 130, 246, 0.18);
+  color: #1d4ed8;
+}
+
+.cat-executive {
+  background: rgba(249, 146, 113, 0.22);
+  color: #c2410c;
+}
+
+.cat-standard {
+  background: rgba(255, 255, 255, 0.7);
+  color: #4b5563;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.capacity-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--color-muted, #77766f);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.tile-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 11px;
+}
+
+.bus-id-tag {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--color-muted, #77766f);
+}
+
+.wifi-amenity {
+  color: var(--color-muted, #77766f);
+  font-weight: 600;
+}

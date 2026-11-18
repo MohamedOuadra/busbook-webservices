@@ -1,121 +1,161 @@
-<div class="admin-page">
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Gestion des trajets</h1>
-      <p class="page-subtitle">{{ trips().length }} trajet(s) enregistré(s)</p>
+<div class="admin-module-page">
+  <!-- En-tête -->
+  <div class="module-header glass">
+    <div class="header-left">
+      <div class="badge-row">
+        <span class="section-label">LIGNES INTERURBAINES</span>
+        <span class="count-pill">{{ trips().length }} trajets actifs</span>
+      </div>
+      <h1 class="module-title">Gestion des Trajets</h1>
+      <p class="module-sub">Planification des départs, tarifs en MAD et assignation des autocars.</p>
     </div>
-    <button class="btn-primary" (click)="openCreate()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+    <button type="button" class="btn-primary-pill" (click)="openCreate()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-svg">
         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
       </svg>
-      Nouveau trajet
+      <span>Nouveau Trajet</span>
     </button>
   </div>
 
-  <!-- Messages -->
+  <!-- Messages d'alerte -->
   @if (success()) {
-    <div class="alert alert-success">{{ success() }}</div>
+    <div class="alert-pill alert-success glass">
+      <span class="alert-dot"></span>
+      <span>{{ success() }}</span>
+    </div>
   }
   @if (error()) {
-    <div class="alert alert-error">{{ error() }}</div>
+    <div class="alert-pill alert-error glass">
+      <span class="alert-dot"></span>
+      <span>{{ error() }}</span>
+    </div>
   }
 
-  <!-- Formulaire de création/modification -->
+  <!-- Formulaire de création / édition -->
   @if (showForm()) {
-    <div class="form-card">
-      <h2 class="form-title">{{ editingTrip() ? 'Modifier le trajet' : 'Nouveau trajet' }}</h2>
+    <div class="form-panel glass">
+      <div class="form-header">
+        <div class="form-title-wrap">
+          <span class="section-label">{{ editingTrip() ? 'MODIFICATION' : 'NOUVELLE LIGNE' }}</span>
+          <h2>{{ editingTrip() ? 'Modifier le trajet' : 'Créer un nouveau trajet' }}</h2>
+        </div>
+        <button type="button" class="btn-close-icon" (click)="closeForm()" title="Fermer">✕</button>
+      </div>
+
       <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="form-grid">
-          <div class="field">
-            <label>Ville de départ *</label>
-            <input formControlName="villeDepart" placeholder="Ex: Casablanca" [class.invalid]="hasError('villeDepart')"/>
-            @if (hasError('villeDepart')) { <span class="field-error">Champ requis</span> }
+          <div class="form-group">
+            <label class="form-label">Ville de départ *</label>
+            <input formControlName="villeDepart" placeholder="Ex: Casablanca" class="input-glass" [class.invalid]="hasError('villeDepart')"/>
+            @if (hasError('villeDepart')) { <span class="input-error">La ville de départ est requise</span> }
           </div>
-          <div class="field">
-            <label>Ville d'arrivée *</label>
-            <input formControlName="villeArrivee" placeholder="Ex: Marrakech" [class.invalid]="hasError('villeArrivee')"/>
-            @if (hasError('villeArrivee')) { <span class="field-error">Champ requis</span> }
+
+          <div class="form-group">
+            <label class="form-label">Ville d'arrivée *</label>
+            <input formControlName="villeArrivee" placeholder="Ex: Marrakech" class="input-glass" [class.invalid]="hasError('villeArrivee')"/>
+            @if (hasError('villeArrivee')) { <span class="input-error">La ville d'arrivée est requise</span> }
           </div>
-          <div class="field">
-            <label>Date de départ *</label>
-            <input type="datetime-local" formControlName="dateDepart" [class.invalid]="hasError('dateDepart')"/>
-            @if (hasError('dateDepart')) { <span class="field-error">Champ requis</span> }
+
+          <div class="form-group">
+            <label class="form-label">Date & Heure de départ *</label>
+            <input type="datetime-local" formControlName="dateDepart" class="input-glass" [class.invalid]="hasError('dateDepart')"/>
+            @if (hasError('dateDepart')) { <span class="input-error">Date de départ requise</span> }
           </div>
-          <div class="field">
-            <label>Date d'arrivée *</label>
-            <input type="datetime-local" formControlName="dateArrivee" [class.invalid]="hasError('dateArrivee')"/>
-            @if (hasError('dateArrivee')) { <span class="field-error">Champ requis</span> }
+
+          <div class="form-group">
+            <label class="form-label">Date & Heure d'arrivée *</label>
+            <input type="datetime-local" formControlName="dateArrivee" class="input-glass" [class.invalid]="hasError('dateArrivee')"/>
+            @if (hasError('dateArrivee')) { <span class="input-error">Date d'arrivée requise</span> }
           </div>
-          <div class="field">
-            <label>Prix (MAD) *</label>
-            <input type="number" formControlName="prix" placeholder="Ex: 150" min="1" [class.invalid]="hasError('prix')"/>
-            @if (hasError('prix')) { <span class="field-error">Prix invalide</span> }
+
+          <div class="form-group">
+            <label class="form-label">Prix du billet (MAD) *</label>
+            <input type="number" formControlName="prix" placeholder="Ex: 160" min="1" class="input-glass" [class.invalid]="hasError('prix')"/>
+            @if (hasError('prix')) { <span class="input-error">Prix invalide</span> }
           </div>
-          <div class="field">
-            <label>Bus *</label>
-            <select formControlName="busId" [class.invalid]="hasError('busId')">
-              <option value="">-- Sélectionner un bus --</option>
+
+          <div class="form-group">
+            <label class="form-label">Autocar assigné *</label>
+            <select formControlName="busId" class="input-glass select-glass" [class.invalid]="hasError('busId')">
+              <option value="">-- Choisir un autocar --</option>
               @for (bus of buses(); track bus.id) {
                 <option [value]="bus.id">{{ bus.immatriculation }} — {{ bus.type }} ({{ bus.capacite }} places)</option>
               }
             </select>
-            @if (hasError('busId')) { <span class="field-error">Bus requis</span> }
+            @if (hasError('busId')) { <span class="input-error">Veuillez sélectionner un autocar</span> }
           </div>
         </div>
 
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" (click)="closeForm()">Annuler</button>
-          <button type="submit" class="btn-primary" [disabled]="saving()">
-            {{ saving() ? 'Enregistrement...' : (editingTrip() ? 'Modifier' : 'Créer le trajet') }}
+        <div class="form-actions-row">
+          <button type="button" class="btn-cancel-pill" (click)="closeForm()">Annuler</button>
+          <button type="submit" class="btn-submit-pill" [disabled]="saving()">
+            {{ saving() ? 'Enregistrement en cours...' : (editingTrip() ? 'Mettre à jour' : 'Enregistrer le trajet') }}
           </button>
         </div>
       </form>
     </div>
   }
 
-  <!-- Table des trajets -->
+  <!-- Tableau des trajets -->
   @if (loading()) {
-    <div class="loading">Chargement des trajets...</div>
+    <div class="state-card glass">
+      <div class="spinner"></div>
+      <p>Chargement des lignes en cours...</p>
+    </div>
   } @else if (trips().length === 0) {
-    <div class="empty-state">
-      <p>Aucun trajet enregistré. Créez le premier !</p>
+    <div class="state-card glass">
+      <p>Aucun trajet configuré pour l'instant. Créez votre première ligne !</p>
     </div>
   } @else {
-    <div class="table-card">
-      <table class="data-table">
+    <div class="table-container glass">
+      <table class="busbook-table">
         <thead>
           <tr>
             <th>ID</th>
+            <th>Itinéraire</th>
             <th>Départ</th>
             <th>Arrivée</th>
-            <th>Date départ</th>
-            <th>Date arrivée</th>
-            <th>Prix</th>
-            <th>Bus</th>
-            <th>Actions</th>
+            <th>Tarif</th>
+            <th>Autocar</th>
+            <th class="th-actions">Actions</th>
           </tr>
         </thead>
         <tbody>
           @for (trip of trips(); track trip.id) {
-            <tr>
-              <td class="id-cell">#{{ trip.id }}</td>
-              <td><span class="city">{{ trip.villeDepart }}</span></td>
-              <td><span class="city">{{ trip.villeArrivee }}</span></td>
-              <td class="date-cell">{{ trip.dateDepart | date:'dd/MM/yy HH:mm' }}</td>
-              <td class="date-cell">{{ trip.dateArrivee | date:'dd/MM/yy HH:mm' }}</td>
-              <td><span class="price">{{ trip.prix }} MAD</span></td>
-              <td class="bus-cell">{{ trip.bus?.immatriculation ?? '—' }}</td>
-              <td class="actions-cell">
-                <button class="btn-edit" (click)="openEdit(trip)" title="Modifier">
+            <tr class="table-row">
+              <td class="cell-id">#{{ trip.id }}</td>
+              <td>
+                <div class="route-badge">
+                  <span class="city-from">{{ trip.villeDepart }}</span>
+                  <span class="route-arrow">→</span>
+                  <span class="city-to">{{ trip.villeArrivee }}</span>
+                </div>
+              </td>
+              <td class="cell-datetime">{{ trip.dateDepart | date:'dd MMM yyyy à HH:mm' }}</td>
+              <td class="cell-datetime">{{ trip.dateArrivee | date:'dd MMM yyyy à HH:mm' }}</td>
+              <td>
+                <span class="price-pill">{{ trip.prix }} MAD</span>
+              </td>
+              <td>
+                <div class="bus-meta-tag">
+                  <span class="bus-immat">{{ trip.bus?.immatriculation || '—' }}</span>
+                  @if (trip.bus?.type) {
+                    <span class="bus-category">{{ trip.bus?.type }}</span>
+                  }
+                </div>
+              </td>
+              <td class="cell-actions">
+                <button type="button" class="action-btn edit-btn" (click)="openEdit(trip)" title="Modifier ce trajet">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                   </svg>
                 </button>
-                <button class="btn-delete" (click)="deleteTrip(trip)" title="Supprimer">
+                <button type="button" class="action-btn delete-btn" (click)="deleteTrip(trip)" title="Supprimer ce trajet">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                    <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    <path d="M10 11v6M14 11v6"/>
                   </svg>
                 </button>
               </td>
