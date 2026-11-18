@@ -1,0 +1,153 @@
+/* Shared admin page styles — importés ici et dans buses/reservations */
+.admin-page { max-width: 1100px; }
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.page-title { font-size: 24px; font-weight: 800; color: #20201e; margin: 0 0 4px; }
+.page-subtitle { font-size: 13px; color: #888; margin: 0; }
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #20201e;
+  color: #fdfbf7;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-primary svg { width: 16px; height: 16px; }
+.btn-primary:hover:not(:disabled) { background: #3a3a38; }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-secondary {
+  background: #f5f5f0;
+  color: #20201e;
+  border: 1px solid #e8e8e3;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: #e8e8e3; }
+
+/* Alerts */
+.alert {
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.alert-success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.alert-error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+/* Form card */
+.form-card {
+  background: #fff;
+  border: 1px solid #e8e8e3;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.form-title { font-size: 16px; font-weight: 700; color: #20201e; margin: 0 0 20px; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.04em; }
+.field input, .field select {
+  padding: 9px 12px;
+  border: 1px solid #e8e8e3;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #20201e;
+  background: #fafaf9;
+  transition: border-color 0.15s;
+  outline: none;
+}
+.field input:focus, .field select:focus { border-color: #20201e; background: #fff; }
+.field input.invalid, .field select.invalid { border-color: #ef4444; }
+.field-error { font-size: 11px; color: #ef4444; }
+
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* Table */
+.table-card {
+  background: #fff;
+  border: 1px solid #e8e8e3;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table thead tr { background: #f9f9f7; border-bottom: 1px solid #e8e8e3; }
+.data-table th {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.data-table td { padding: 12px 14px; border-bottom: 1px solid #f0f0eb; vertical-align: middle; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: #fafaf9; }
+
+.id-cell { color: #aaa; font-size: 12px; font-family: monospace; }
+.city { font-weight: 600; color: #20201e; }
+.date-cell { font-size: 12px; color: #666; white-space: nowrap; }
+.price { font-weight: 700; color: #f99271; }
+.bus-cell { font-size: 12px; color: #555; }
+
+.actions-cell { white-space: nowrap; }
+
+.btn-edit, .btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: background 0.15s;
+}
+.btn-edit svg, .btn-delete svg { width: 14px; height: 14px; }
+.btn-edit { background: #eff6ff; color: #3b82f6; }
+.btn-edit:hover { background: #dbeafe; }
+.btn-delete { background: #fef2f2; color: #ef4444; }
+.btn-delete:hover { background: #fecaca; }
+
+/* States */
+.loading { text-align: center; padding: 48px; color: #888; font-size: 14px; }
+.empty-state { text-align: center; padding: 48px; color: #aaa; }

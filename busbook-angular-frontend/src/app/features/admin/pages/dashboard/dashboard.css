@@ -1,0 +1,90 @@
+.dashboard { max-width: 960px; }
+
+.page-header { margin-bottom: 28px; }
+.page-title { font-size: 26px; font-weight: 800; color: #20201e; margin: 0 0 4px; }
+.page-subtitle { font-size: 14px; color: #888; margin: 0; }
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e8e8e3;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.stat-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon svg { width: 22px; height: 22px; }
+.trips-icon { background: #eff6ff; color: #3b82f6; }
+.bus-icon { background: #fdf4ff; color: #a855f7; }
+.reservation-icon { background: #fff7ed; color: #f97316; }
+.confirmed-icon { background: #f0fdf4; color: #22c55e; }
+
+.stat-body { flex: 1; }
+.stat-value { font-size: 32px; font-weight: 800; color: #20201e; line-height: 1; }
+.stat-label { font-size: 13px; color: #888; margin-top: 4px; }
+
+.stat-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f99271;
+  text-decoration: none;
+}
+.stat-link:hover { text-decoration: underline; }
+
+/* Section title */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #20201e;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Actions grid */
+.actions-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #20201e;
+  color: #fdfbf7;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.action-card svg { width: 18px; height: 18px; }
+.action-card:hover { background: #3a3a38; transform: translateY(-1px); }

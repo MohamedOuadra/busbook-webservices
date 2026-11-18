@@ -1,0 +1,97 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Gestion des bus</h1>
+      <p class="page-subtitle">{{ buses().length }} bus enregistré(s)</p>
+    </div>
+    <button class="btn-primary" (click)="openCreate()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+      </svg>
+      Nouveau bus
+    </button>
+  </div>
+
+  @if (success()) { <div class="alert alert-success">{{ success() }}</div> }
+  @if (error()) { <div class="alert alert-error">{{ error() }}</div> }
+
+  <!-- Formulaire -->
+  @if (showForm()) {
+    <div class="form-card">
+      <h2 class="form-title">{{ editingBus() ? 'Modifier le bus' : 'Nouveau bus' }}</h2>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-grid">
+          <div class="field">
+            <label>Immatriculation *</label>
+            <input formControlName="immatriculation" placeholder="Ex: 123456-A-7" [class.invalid]="hasError('immatriculation')"/>
+            @if (hasError('immatriculation')) { <span class="field-error">Minimum 4 caractères</span> }
+          </div>
+          <div class="field">
+            <label>Capacité (places) *</label>
+            <input type="number" formControlName="capacite" placeholder="Ex: 44" min="10" max="100" [class.invalid]="hasError('capacite')"/>
+            @if (hasError('capacite')) { <span class="field-error">Entre 10 et 100 places</span> }
+          </div>
+          <div class="field">
+            <label>Type *</label>
+            <select formControlName="type" [class.invalid]="hasError('type')">
+              <option value="">-- Sélectionner --</option>
+              @for (t of busTypes; track t) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
+            @if (hasError('type')) { <span class="field-error">Champ requis</span> }
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="closeForm()">Annuler</button>
+          <button type="submit" class="btn-primary" [disabled]="saving()">
+            {{ saving() ? 'Enregistrement...' : (editingBus() ? 'Modifier' : 'Créer le bus') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Table des bus -->
+  @if (loading()) {
+    <div class="loading">Chargement des bus...</div>
+  } @else if (buses().length === 0) {
+    <div class="empty-state"><p>Aucun bus enregistré. Créez le premier !</p></div>
+  } @else {
+    <div class="buses-grid">
+      @for (bus of buses(); track bus.id) {
+        <div class="bus-card">
+          <div class="bus-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="6" width="20" height="12" rx="2"/>
+              <path d="M6 18v2M18 18v2M2 11h20"/>
+              <circle cx="6" cy="16" r="1" fill="currentColor"/>
+              <circle cx="18" cy="16" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="bus-info">
+            <div class="bus-immat">{{ bus.immatriculation }}</div>
+            <div class="bus-meta">
+              <span class="type-badge" [class]="'type-' + bus.type.toLowerCase()">{{ bus.type }}</span>
+              <span class="capacity">{{ bus.capacite }} places</span>
+            </div>
+          </div>
+          <div class="bus-actions">
+            <button class="btn-edit" (click)="openEdit(bus)" title="Modifier">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+            <button class="btn-delete" (click)="deleteBus(bus)" title="Supprimer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
