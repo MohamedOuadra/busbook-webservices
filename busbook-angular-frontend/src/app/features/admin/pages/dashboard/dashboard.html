@@ -46,7 +46,12 @@
       <div class="stat-value">{{ totalTrips() }}</div>
       <div class="stat-foot">
         <span class="stat-meta">Lignes actives interurbaines</span>
-        <a routerLink="/admin/trips" class="stat-link">Gérer →</a>
+        <a routerLink="/admin/trips" class="stat-link">
+          <span>Gérer</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="link-svg">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
       </div>
     </div>
 
@@ -65,7 +70,12 @@
       <div class="stat-value">{{ totalBuses() }}</div>
       <div class="stat-foot">
         <span class="stat-meta">Bus opérationnels</span>
-        <a routerLink="/admin/buses" class="stat-link">Voir la flotte →</a>
+        <a routerLink="/admin/buses" class="stat-link">
+          <span>Voir la flotte</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="link-svg">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
       </div>
     </div>
 
@@ -83,7 +93,12 @@
       <div class="stat-value">{{ totalReservations() }}</div>
       <div class="stat-foot">
         <span class="stat-meta">Réservations enregistrées</span>
-        <a routerLink="/admin/reservations" class="stat-link">Consulter →</a>
+        <a routerLink="/admin/reservations" class="stat-link">
+          <span>Consulter</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="link-svg">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
       </div>
     </div>
 
@@ -114,30 +129,53 @@
 
     <div class="quick-grid">
       <a routerLink="/admin/trips" class="quick-card glass">
-        <div class="quick-icon-box">🗺️</div>
+        <div class="quick-icon-box box-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="quick-svg">
+            <path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="17" x2="21" y2="17"/>
+          </svg>
+        </div>
         <div class="quick-info">
           <h4>Catalogue des Trajets</h4>
           <p>Créer, modifier les horaires, tarifs (MAD) et affecter les bus.</p>
         </div>
-        <span class="quick-arrow">→</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="quick-arrow-svg">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
       </a>
 
       <a routerLink="/admin/buses" class="quick-card glass">
-        <div class="quick-icon-box">🚌</div>
+        <div class="quick-icon-box box-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="quick-svg">
+            <rect x="2" y="6" width="20" height="12" rx="2.5"/>
+            <path d="M6 18v2M18 18v2M2 11h20"/>
+            <circle cx="6" cy="15" r="1.2" fill="currentColor"/>
+            <circle cx="18" cy="15" r="1.2" fill="currentColor"/>
+          </svg>
+        </div>
         <div class="quick-info">
           <h4>Flotte d'Autocars</h4>
           <p>Gérer les bus : immatriculations, catégories (VIP, Confort) et capacités.</p>
         </div>
-        <span class="quick-arrow">→</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="quick-arrow-svg">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
       </a>
 
       <a routerLink="/admin/reservations" class="quick-card glass">
-        <div class="quick-icon-box">📋</div>
+        <div class="quick-icon-box box-coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="quick-svg">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+          </svg>
+        </div>
         <div class="quick-info">
           <h4>Gestion des Réservations</h4>
           <p>Superviser les réservations, filtrer par statut et annuler si besoin.</p>
         </div>
-        <span class="quick-arrow">→</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="quick-arrow-svg">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
       </a>
     </div>
   </div>

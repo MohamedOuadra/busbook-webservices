@@ -40,7 +40,11 @@
           <span class="section-label">{{ editingTrip() ? 'MODIFICATION' : 'NOUVELLE LIGNE' }}</span>
           <h2>{{ editingTrip() ? 'Modifier le trajet' : 'Créer un nouveau trajet' }}</h2>
         </div>
-        <button type="button" class="btn-close-icon" (click)="closeForm()" title="Fermer">✕</button>
+        <button type="button" class="btn-close-icon" (click)="closeForm()" title="Fermer" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="close-svg">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
       </div>
 
       <form [formGroup]="form" (ngSubmit)="submit()">
@@ -128,7 +132,9 @@
               <td>
                 <div class="route-badge">
                   <span class="city-from">{{ trip.villeDepart }}</span>
-                  <span class="route-arrow">→</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="route-arrow-svg">
+                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                  </svg>
                   <span class="city-to">{{ trip.villeArrivee }}</span>
                 </div>
               </td>

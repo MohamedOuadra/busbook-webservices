@@ -113,7 +113,7 @@ export class AdminTrips implements OnInit {
   }
 
   deleteTrip(trip: Trip): void {
-    if (!confirm(`Supprimer le trajet ${trip.villeDepart} → ${trip.villeArrivee} ?`)) return;
+    if (!confirm(`Supprimer le trajet ${trip.villeDepart} vers ${trip.villeArrivee} ?`)) return;
 
     this.adminService.deleteTrip(trip.id).subscribe({
       next: () => {

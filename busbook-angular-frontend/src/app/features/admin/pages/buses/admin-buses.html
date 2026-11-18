@@ -39,7 +39,11 @@
           <span class="section-label">{{ editingBus() ? 'ÉDITION MATÉRIEL' : 'NOUVEL ENREGISTREMENT' }}</span>
           <h2>{{ editingBus() ? 'Modifier les données du bus' : 'Ajouter un autocar à la flotte' }}</h2>
         </div>
-        <button type="button" class="btn-close-icon" (click)="closeForm()" title="Fermer">✕</button>
+        <button type="button" class="btn-close-icon" (click)="closeForm()" title="Fermer" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="close-svg">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
       </div>
 
       <form [formGroup]="form" (ngSubmit)="submit()">

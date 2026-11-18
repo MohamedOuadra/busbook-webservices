@@ -149,15 +149,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
   cursor: pointer;
   color: var(--color-ink, #1d1d1b);
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-close-icon:hover {
   background: #ffffff;
   transform: rotate(90deg);
+}
+
+.close-svg {
+  width: 14px;
+  height: 14px;
 }
 
 .form-grid {
@@ -324,9 +328,11 @@
   color: var(--color-ink, #1d1d1b);
 }
 
-.route-arrow {
+.route-arrow-svg {
+  width: 14px;
+  height: 14px;
   color: var(--color-coral, #f99271);
-  font-weight: 800;
+  flex-shrink: 0;
 }
 
 .cell-datetime {

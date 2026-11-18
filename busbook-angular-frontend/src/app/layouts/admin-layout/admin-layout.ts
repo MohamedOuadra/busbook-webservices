@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Navbar } from '../../shared/components/navbar/navbar';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 interface AdminTab {
@@ -13,12 +12,14 @@ interface AdminTab {
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Navbar],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css',
 })
 export class AdminLayout {
   private authService = inject(AuthService);
+  private router = inject(Router);
+
   currentUser = this.authService.currentUser;
 
   readonly tabs: AdminTab[] = [
@@ -27,4 +28,9 @@ export class AdminLayout {
     { label: 'Flotte de Bus', route: '/admin/buses', icon: 'bus', exact: false },
     { label: 'Réservations', route: '/admin/reservations', icon: 'reservations', exact: false },
   ];
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
