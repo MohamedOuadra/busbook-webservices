@@ -3,15 +3,19 @@
   <!-- Logo -->
   <a routerLink="/" class="brand" aria-label="BusBook Home">
     <div class="brand-badge">
-      <svg viewBox="0 0 28 28" fill="none" class="brand-svg">
-        <rect width="28" height="28" rx="8" fill="#20201E"/>
-        <!-- Ticket voucher shape with side notches -->
-        <path d="M6 9C6 7.89 6.89 7 8 7H20C21.11 7 22 7.89 22 9V12.5C21.17 12.5 20.5 13.17 20.5 14C20.5 14.83 21.17 15.5 22 15.5V19C22 20.11 21.11 21 20 21H8C6.89 21 6 20.11 6 19V15.5C6.83 15.5 7.5 14.83 7.5 14C7.5 13.17 6.83 12.5 6 12.5V9Z" fill="#FDFBF7"/>
-        <!-- Sleek bus cabin silhouette -->
-        <path d="M10 10.5H18V13.5H10V10.5Z" fill="#20201E"/>
-        <circle cx="11" cy="17" r="1.1" fill="#F99271"/>
-        <circle cx="17" cy="17" r="1.1" fill="#F99271"/>
-        <rect x="13" y="16.5" width="2" height="1" rx="0.5" fill="#20201E"/>
+      <svg viewBox="0 0 32 32" fill="none" class="brand-svg">
+        <rect width="32" height="32" rx="9" fill="#B7D8A5"/>
+        <g transform="rotate(-24 16 16.5)">
+          <!-- Flap arrière du ticket -->
+          <path d="M 9.5 11.2 L 14.5 5.8 C 15.1 5.2 16.1 5.2 16.7 5.8 L 19.2 11.2 Z" fill="#1D1D1B"/>
+          <!-- Corps principal du ticket -->
+          <path d="M 8.5 11.2 L 23.5 11.2 C 24.6 11.2 25.5 12.1 25.5 13.2 L 25.5 14.2 A 2.3 2.3 0 0 0 25.5 18.8 L 25.5 19.8 C 25.5 20.9 24.6 21.8 23.5 21.8 L 8.5 21.8 C 7.4 21.8 6.5 20.9 6.5 19.8 L 6.5 18.8 A 2.3 2.3 0 0 0 6.5 14.2 L 6.5 13.2 C 6.5 12.1 7.4 11.2 8.5 11.2 Z" 
+                fill="#B7D8A5" stroke="#1D1D1B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Points de perforation -->
+          <circle cx="21" cy="14" r="1.1" fill="#1D1D1B"/>
+          <circle cx="21" cy="16.5" r="1.1" fill="#1D1D1B"/>
+          <circle cx="21" cy="19" r="1.1" fill="#1D1D1B"/>
+        </g>
       </svg>
     </div>
     <span class="brand-text">Bus<span class="brand-highlight">Book</span></span>
