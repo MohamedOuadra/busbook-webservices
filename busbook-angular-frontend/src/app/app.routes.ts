@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
+import { AdminLayout } from './layouts/admin-layout/admin-layout';
 import { Home } from './features/home/pages/home/home';
 import { Reservation } from './features/reservations/pages/reservation/reservation';
 import { PaymentPage } from './features/payment/pages/payment/payment';
@@ -10,71 +11,53 @@ import { VerifyTicketPage } from './features/tickets/pages/verify-ticket/verify-
 import { LoginPage } from './features/auth/pages/login/login';
 import { RegisterPage } from './features/auth/pages/register/register';
 import { SettingsPage } from './features/settings/pages/settings/settings';
+import { AdminDashboard } from './features/admin/pages/dashboard/dashboard';
+import { AdminTrips } from './features/admin/pages/trips/admin-trips';
+import { AdminBuses } from './features/admin/pages/buses/admin-buses';
+import { AdminReservations } from './features/admin/pages/reservations/admin-reservations';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
-  // Auth Layout dedicated to login & register
+  // ── Auth Layout (login & register) ──────────────────────────────────────
   {
     path: 'login',
     component: AuthLayout,
-    children: [
-      {
-        path: '',
-        component: LoginPage,
-      },
-    ],
+    children: [{ path: '', component: LoginPage }],
   },
   {
     path: 'register',
     component: AuthLayout,
+    children: [{ path: '', component: RegisterPage }],
+  },
+
+  // ── Admin Layout (protégé par adminGuard) ───────────────────────────────
+  {
+    path: 'admin',
+    component: AdminLayout,
+    canActivate: [adminGuard],
     children: [
-      {
-        path: '',
-        component: RegisterPage,
-      },
+      { path: '',             component: AdminDashboard,    title: 'Admin — Dashboard' },
+      { path: 'trips',        component: AdminTrips,        title: 'Admin — Trajets' },
+      { path: 'buses',        component: AdminBuses,        title: 'Admin — Bus' },
+      { path: 'reservations', component: AdminReservations, title: 'Admin — Réservations' },
     ],
   },
-  // Main Layout for all application pages
+
+  // ── Main Layout (toutes les pages publiques) ─────────────────────────────
   {
     path: '',
     component: MainLayout,
     children: [
-      {
-        path: '',
-        component: Home,
-      },
-      {
-        path: 'trips',
-        redirectTo: '',
-        pathMatch: 'full',
-      },
-      {
-        path: 'reservation/:tripId',
-        component: Reservation,
-      },
-      {
-        path: 'payment/:reservationId',
-        component: PaymentPage,
-      },
-      {
-        path: 'ticket/:ticketNumber',
-        component: TicketPage,
-      },
-      {
-        path: 'my-reservations',
-        component: MyReservationsPage,
-      },
-      {
-        path: 'verify-ticket',
-        component: VerifyTicketPage,
-      },
-      {
-        path: 'settings',
-        component: SettingsPage,
-      },
+      { path: '',                       component: Home },
+      { path: 'trips',                  redirectTo: '', pathMatch: 'full' },
+      { path: 'reservation/:tripId',    component: Reservation },
+      { path: 'payment/:reservationId', component: PaymentPage },
+      { path: 'ticket/:ticketNumber',   component: TicketPage },
+      { path: 'my-reservations',        component: MyReservationsPage },
+      { path: 'verify-ticket',          component: VerifyTicketPage },
+      { path: 'settings',               component: SettingsPage },
     ],
   },
-  {
-    path: '**',
-    redirectTo: '',
-  },
+
+  { path: '**', redirectTo: '' },
 ];

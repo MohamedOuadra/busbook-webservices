@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -17,6 +17,12 @@ export class Navbar {
 
   private authService = inject(AuthService);
   currentUser = this.authService.currentUser;
+
+  // Vrai uniquement si l'utilisateur connecté a le rôle ADMIN
+  isAdmin = computed(() => {
+    const role = this.currentUser()?.role?.toString().toUpperCase();
+    return role === 'ADMIN' || role === 'ROLE_ADMIN';
+  });
 
   logout(): void {
     this.authService.logout();

@@ -1,0 +1,182 @@
+<div class="dashboard-page">
+  <!-- En-tête -->
+  <div class="dashboard-header glass">
+    <div class="header-text">
+      <div class="badge-row">
+        <span class="section-label">SUPERVISION EN TEMPS RÉEL</span>
+        <span class="status-pill">
+          <span class="pulse-dot"></span>
+          Services connectés
+        </span>
+      </div>
+      <h1 class="header-title">Tableau de Bord</h1>
+      <p class="header-desc">
+        Indicateurs clés du réseau de transport interurbain BusBook à travers le Maroc.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <a routerLink="/admin/trips" class="btn-action-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-icon">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <span>Ajouter un trajet</span>
+      </a>
+      <a routerLink="/admin/buses" class="btn-action-secondary glass">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <rect x="2" y="6" width="20" height="12" rx="2.5"/>
+          <path d="M6 18v2M18 18v2M2 11h20"/>
+        </svg>
+        <span>Ajouter un bus</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Cartes de statistiques -->
+  <div class="stats-grid">
+    <div class="stat-card glass">
+      <div class="stat-top">
+        <span class="stat-tag">TRAJETS PLANIFIÉS</span>
+        <div class="stat-icon-wrap icon-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="17" x2="21" y2="17"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ totalTrips() }}</div>
+      <div class="stat-foot">
+        <span class="stat-meta">Lignes actives interurbaines</span>
+        <a routerLink="/admin/trips" class="stat-link">
+          <span>Gérer</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="link-svg">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="stat-card glass">
+      <div class="stat-top">
+        <span class="stat-tag">FLOTTE D'AUTOCARS</span>
+        <div class="stat-icon-wrap icon-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="6" width="20" height="12" rx="2.5"/>
+            <path d="M6 18v2M18 18v2M2 11h20"/>
+            <circle cx="6" cy="15" r="1.2" fill="currentColor"/>
+            <circle cx="18" cy="15" r="1.2" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ totalBuses() }}</div>
+      <div class="stat-foot">
+        <span class="stat-meta">Bus opérationnels</span>
+        <a routerLink="/admin/buses" class="stat-link">
+          <span>Voir la flotte</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="link-svg">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="stat-card glass">
+      <div class="stat-top">
+        <span class="stat-tag">RÉSERVATIONS TOTALES</span>
+        <div class="stat-icon-wrap icon-coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ totalReservations() }}</div>
+      <div class="stat-foot">
+        <span class="stat-meta">Réservations enregistrées</span>
+        <a routerLink="/admin/reservations" class="stat-link">
+          <span>Consulter</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="link-svg">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="stat-card glass">
+      <div class="stat-top">
+        <span class="stat-tag">TICKETS CONFIRMÉS</span>
+        <div class="stat-icon-wrap icon-leaf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ confirmedReservations() }}</div>
+      <div class="stat-foot">
+        <span class="stat-meta">Voyageurs confirmés</span>
+        <span class="stat-badge-confirmed">Succès</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Raccourcis de gestion -->
+  <div class="quick-nav glass">
+    <div class="quick-title">
+      <span class="section-label">ACCÈS DIRECT</span>
+      <h3>Modules de Gestion</h3>
+    </div>
+
+    <div class="quick-grid">
+      <a routerLink="/admin/trips" class="quick-card glass">
+        <div class="quick-icon-box box-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="quick-svg">
+            <path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="17" x2="21" y2="17"/>
+          </svg>
+        </div>
+        <div class="quick-info">
+          <h4>Catalogue des Trajets</h4>
+          <p>Créer, modifier les horaires, tarifs (MAD) et affecter les bus.</p>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="quick-arrow-svg">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+
+      <a routerLink="/admin/buses" class="quick-card glass">
+        <div class="quick-icon-box box-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="quick-svg">
+            <rect x="2" y="6" width="20" height="12" rx="2.5"/>
+            <path d="M6 18v2M18 18v2M2 11h20"/>
+            <circle cx="6" cy="15" r="1.2" fill="currentColor"/>
+            <circle cx="18" cy="15" r="1.2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="quick-info">
+          <h4>Flotte d'Autocars</h4>
+          <p>Gérer les bus : immatriculations, catégories (VIP, Confort) et capacités.</p>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="quick-arrow-svg">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+
+      <a routerLink="/admin/reservations" class="quick-card glass">
+        <div class="quick-icon-box box-coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="quick-svg">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+          </svg>
+        </div>
+        <div class="quick-info">
+          <h4>Gestion des Réservations</h4>
+          <p>Superviser les réservations, filtrer par statut et annuler si besoin.</p>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="quick-arrow-svg">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>

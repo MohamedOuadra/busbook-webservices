@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Contrôleur REST pour l'authentification et la gestion des comptes.
  * Routes publiques : /api/auth/register et /api/auth/login
- * Route protégée : /api/auth/me (nécessite un token JWT valide)
+ * Route protégée  : /api/auth/me (nécessite un Bearer token valide)
+ * Route admin     : /api/auth/make-admin (promouvoir un utilisateur en ADMIN)
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -29,9 +30,6 @@ public class AuthController {
     /**
      * Crée un nouveau compte utilisateur.
      * POST /api/auth/register
-     *
-     * @param request les données d'inscription (validées)
-     * @return 201 Created avec le token JWT et les infos utilisateur
      */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
@@ -42,9 +40,7 @@ public class AuthController {
     /**
      * Authentifie un utilisateur existant.
      * POST /api/auth/login
-     *
-     * @param request les identifiants (email + password)
-     * @return 200 OK avec le token JWT et les infos utilisateur
+     * La réponse contient le token JWT avec le rôle encodé.
      */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
@@ -55,13 +51,23 @@ public class AuthController {
     /**
      * Retourne les informations de l'utilisateur connecté.
      * GET /api/auth/me (nécessite un Bearer token valide)
-     *
-     * @param userDetails l'utilisateur extrait du token JWT
-     * @return 200 OK avec les infos de l'utilisateur (sans mot de passe)
      */
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         UserResponse response = authService.getUserProfile(userDetails.getUsername());
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Promeut un utilisateur au rôle ADMIN.
+     * POST /api/auth/make-admin?email=user@example.com
+     *
+     * Endpoint non protégé par Spring Security pour faciliter le développement.
+     * En production, cet endpoint devrait être protégé par un secret ou supprimé.
+     */
+    @PostMapping("/make-admin")
+    public ResponseEntity<UserResponse> makeAdmin(@RequestParam String email) {
+        UserResponse response = authService.makeAdmin(email);
         return ResponseEntity.ok(response);
     }
 }

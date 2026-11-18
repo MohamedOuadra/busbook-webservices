@@ -307,6 +307,17 @@ public class ReservationService {
     }
 
     /**
+     * Récupère toutes les réservations (pour l'administration).
+     */
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> getAllReservations() {
+        return reservationRepository.findAll()
+                .stream()
+                .map(ReservationResponse::fromEntity)
+                .toList();
+    }
+
+    /**
      * Récupère toutes les réservations d'un voyageur.
      */
     @Transactional(readOnly = true)

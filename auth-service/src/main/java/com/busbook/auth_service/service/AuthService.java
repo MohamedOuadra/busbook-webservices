@@ -26,18 +26,13 @@ public class AuthService {
 
     /**
      * Crée un nouveau compte utilisateur et retourne un token JWT.
-     *
-     * @param request les données d'inscription
-     * @return la réponse d'authentification avec le token
-     * @throws IllegalArgumentException si l'email est déjà utilisé
+     * Le rôle par défaut est USER.
      */
     public AuthResponse register(RegisterRequest request) {
-        // Vérification de l'unicité de l'email
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Cet email est déjà utilisé : " + request.getEmail());
         }
 
-        // Création et sauvegarde de l'utilisateur
         User user = User.builder()
                 .fullName(request.getFullName())
                 .email(request.getEmail())
@@ -47,41 +42,28 @@ public class AuthService {
                 .build();
 
         User savedUser = userRepository.save(user);
-
-        // Génération du token JWT
         String token = jwtUtils.generateToken(savedUser.getEmail());
-
         return buildAuthResponse(savedUser, token);
     }
 
     /**
-     * Authentifie un utilisateur existant et retourne un token JWT.
-     *
-     * @param request les identifiants de connexion
-     * @return la réponse d'authentification avec le token
-     * @throws BadCredentialsException si les identifiants sont incorrects
+     * Authentifie un utilisateur existant et retourne un token JWT
+     * avec ses informations incluant son rôle (USER ou ADMIN).
      */
     public AuthResponse login(LoginRequest request) {
-        // Recherche de l'utilisateur par email
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("Email ou mot de passe incorrect"));
 
-        // Vérification du mot de passe
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Email ou mot de passe incorrect");
         }
 
-        // Génération du token JWT
         String token = jwtUtils.generateToken(user.getEmail());
-
         return buildAuthResponse(user, token);
     }
 
     /**
      * Retourne le profil utilisateur à partir de son email.
-     *
-     * @param email l'email de l'utilisateur
-     * @return le profil UserResponse
      */
     public UserResponse getUserProfile(String email) {
         User user = userRepository.findByEmail(email)
@@ -93,6 +75,22 @@ public class AuthService {
                 .phoneNumber(user.getPhoneNumber())
                 .role(user.getRole())
                 .createdAt(user.getCreatedAt())
+                .build();
+    }
+
+    /**
+     * Promeut un utilisateur au rôle ADMIN.
+     */
+    public UserResponse makeAdmin(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé : " + email));
+        user.setRole(Role.ADMIN);
+        User savedUser = userRepository.save(user);
+        return UserResponse.builder()
+                .id(savedUser.getId())
+                .email(savedUser.getEmail())
+                .fullName(savedUser.getFullName())
+                .role(savedUser.getRole())
                 .build();
     }
 

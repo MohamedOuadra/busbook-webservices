@@ -15,7 +15,32 @@ export class AuthService {
   // Signal pour l'état réactif de l'utilisateur connecté
   currentUser = signal<AuthResponse | null>(this.getStoredUser());
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    if (this.isLoggedIn()) {
+      this.refreshUser();
+    }
+  }
+
+  refreshUser(): void {
+    if (!this.getToken()) return;
+    this.getProfile().subscribe({
+      next: (profile) => {
+        const current = this.currentUser();
+        if (current) {
+          const updated: AuthResponse = {
+            ...current,
+            role: profile.role,
+            fullName: profile.fullName || current.fullName,
+            email: profile.email || current.email
+          };
+          this.saveSession(updated);
+        }
+      },
+      error: () => {
+        // En cas d'erreur de token expiré par exemple
+      }
+    });
+  }
 
   register(request: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/register`, request).pipe(
