@@ -16,6 +16,7 @@ import { AdminTrips } from './features/admin/pages/trips/admin-trips';
 import { AdminBuses } from './features/admin/pages/buses/admin-buses';
 import { AdminReservations } from './features/admin/pages/reservations/admin-reservations';
 import { adminGuard } from './core/guards/admin.guard';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   // ── Auth Layout (login & register) ──────────────────────────────────────
@@ -43,19 +44,19 @@ export const routes: Routes = [
     ],
   },
 
-  // ── Main Layout (toutes les pages publiques) ─────────────────────────────
+  // ── Main Layout (pages publiques + routes protégées par authGuard) ──────
   {
     path: '',
     component: MainLayout,
     children: [
       { path: '',                       component: Home },
       { path: 'trips',                  redirectTo: '', pathMatch: 'full' },
-      { path: 'reservation/:tripId',    component: Reservation },
-      { path: 'payment/:reservationId', component: PaymentPage },
-      { path: 'ticket/:ticketNumber',   component: TicketPage },
-      { path: 'my-reservations',        component: MyReservationsPage },
+      { path: 'reservation/:tripId',    component: Reservation,        canActivate: [authGuard] },
+      { path: 'payment/:reservationId', component: PaymentPage,        canActivate: [authGuard] },
+      { path: 'ticket/:ticketNumber',   component: TicketPage,         canActivate: [authGuard] },
+      { path: 'my-reservations',        component: MyReservationsPage, canActivate: [authGuard] },
       { path: 'verify-ticket',          component: VerifyTicketPage },
-      { path: 'settings',               component: SettingsPage },
+      { path: 'settings',               component: SettingsPage,       canActivate: [authGuard] },
     ],
   },
 
