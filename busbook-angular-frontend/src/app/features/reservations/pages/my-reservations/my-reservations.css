@@ -625,3 +625,17 @@
     grid-template-columns: 1fr;
   }
 }
+.toast-banner {
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #1D1D1B;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid var(--color-leaf);
+}
+
+.toast-banner.toast-error {
+  border-left-color: #ef4444;
+}

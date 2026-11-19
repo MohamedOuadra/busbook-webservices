@@ -1,5 +1,11 @@
 <div class="my-reservations-page">
 
+  @if (toastMessage(); as toast) {
+    <div class="toast-banner" [class.toast-error]="toast.type === 'error'">
+      <span>{{ toast.text }}</span>
+    </div>
+  }
+
   <!-- Header Section with Passenger Details & Stats -->
   <div class="page-header glass">
     <div class="header-intro">
@@ -12,7 +18,7 @@
           </span>
         }
       </div>
-      <h2>My Bookings & E-Tickets</h2>
+      <h2>My Bookings &amp; E-Tickets</h2>
       <p>
         @if (currentUser(); as user) {
           Displaying reservations registered under <strong>{{ user.fullName }}</strong> ({{ user.email }}).
@@ -24,7 +30,6 @@
 
     @if (currentUser()) {
       <div class="header-right-actions">
-        <!-- Quick Stats Pill -->
         <div class="stats-pills">
           <div class="stat-pill" title="Confirmed Journeys">
             <span class="stat-number">{{ confirmedCount() }}</span>
@@ -54,7 +59,6 @@
   </div>
 
   @if (!currentUser()) {
-    <!-- Not logged in state -->
     <div class="state-card glass auth-prompt">
       <div class="auth-icon-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-lg">
@@ -91,7 +95,6 @@
       <button class="btn-retry" (click)="loadReservations()">Try Again</button>
     </div>
   } @else if (reservations().length === 0) {
-    <!-- Empty Bookings State -->
     <div class="state-card glass empty-card">
       <div class="empty-icon-circle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="empty-icon-svg">
@@ -107,7 +110,7 @@
           <circle cx="11" cy="11" r="8"/>
           <path d="m21 21-4.3-4.3"/>
         </svg>
-        Find & Book a Trip
+        Find &amp; Book a Trip
       </a>
     </div>
   } @else {
@@ -144,7 +147,7 @@
           [class.active]="activeFilter() === 'CANCELLED'"
           (click)="setFilter('CANCELLED')"
         >
-          Expired & Cancelled
+          Expired &amp; Cancelled
         </button>
       </div>
     </div>
@@ -170,7 +173,7 @@
               <h3 class="route-title">
                 @if (item.trip) {
                   {{ item.trip.villeDepart }}
-                  <span class="route-arrow">➔</span>
+                  <span class="route-arrow">&rarr;</span>
                   {{ item.trip.villeArrivee }}
                 } @else {
                   Trip Reference #{{ item.reservation.tripId }}
@@ -181,20 +184,20 @@
             <!-- Status badge -->
             <div
               class="status-badge"
-              [class.pending]="item.reservation.status === 'EN_ATTENTE' && !item.isExpired"
-              [class.confirmed]="item.reservation.status === 'CONFIRMEE'"
+              [class.pending]="item.normalizedStatus === 'PENDING' && !item.isExpired"
+              [class.confirmed]="item.normalizedStatus === 'CONFIRMED'"
               [class.expired]="item.isExpired"
-              [class.cancelled]="item.reservation.status === 'ANNULEE'"
+              [class.cancelled]="item.normalizedStatus === 'CANCELLED'"
             >
               @if (item.isExpired) {
                 <span class="badge-dot"></span>
                 EXPIRED HOLD
-              } @else if (item.reservation.status === 'EN_ATTENTE') {
+              } @else if (item.normalizedStatus === 'PENDING') {
                 <span class="badge-dot pulse"></span>
                 PENDING PAYMENT
-              } @else if (item.reservation.status === 'CONFIRMEE') {
+              } @else if (item.normalizedStatus === 'CONFIRMED') {
                 <span class="badge-dot"></span>
-                CONFIRMED & VALID
+                CONFIRMED &amp; VALID
               } @else {
                 CANCELLED
               }
@@ -245,12 +248,14 @@
             </div>
 
             <div class="detail-cell">
-              <span class="cell-label">HOLD EXPIRES</span>
+              <span class="cell-label">STATUS</span>
               <strong class="cell-val" [class.text-danger]="item.isExpired">
-                @if (item.reservation.status === 'CONFIRMEE') {
-                  Paid & Guaranteed
+                @if (item.normalizedStatus === 'CONFIRMED') {
+                  Paid &amp; Guaranteed
                 } @else if (item.isExpired) {
                   Expired
+                } @else if (item.normalizedStatus === 'CANCELLED') {
+                  Cancelled
                 } @else {
                   10 min window
                 }
@@ -260,35 +265,48 @@
 
           <!-- Actions Footer -->
           <div class="card-actions">
-            @if (item.reservation.status === 'EN_ATTENTE' && !item.isExpired) {
-              <a class="btn-action btn-pay" [routerLink]="['/payment', item.reservation.id]">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
-                  <rect x="2" y="5" width="20" height="14" rx="2"/>
-                  <line x1="2" y1="10" x2="22" y2="10"/>
-                </svg>
-                Complete Payment Now
-              </a>
-
-              <button class="btn-action btn-cancel" (click)="cancelReservation(item.reservation.id)">
-                Cancel Hold
+            @if (cancellingId() === item.reservation.id) {
+              <button class="btn-action btn-cancel" type="button" (click)="confirmCancel(item.reservation.id)">
+                Confirmer l'annulation
               </button>
-            }
-
-            @if (item.reservation.status === 'CONFIRMEE') {
-              <button class="btn-action btn-ticket" (click)="viewTicket(item.reservation.id)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
-                  <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
-                  <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
-                  <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
-                </svg>
-                View &amp; Print E-Ticket
+              <button class="btn-action btn-rebook" type="button" (click)="abortCancel()">
+                Garder
               </button>
-            }
+            } @else {
+              @if (item.normalizedStatus === 'PENDING' && !item.isExpired) {
+                <a class="btn-action btn-pay" [routerLink]="['/payment', item.reservation.id]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                  </svg>
+                  Complete Payment Now
+                </a>
 
-            @if (item.isExpired || item.reservation.status === 'ANNULEE') {
-              <a class="btn-action btn-rebook" routerLink="/">
-                Book Again
-              </a>
+                <button class="btn-action btn-cancel" type="button" (click)="requestCancel(item.reservation.id)">
+                  Cancel Hold
+                </button>
+              }
+
+              @if (item.normalizedStatus === 'CONFIRMED') {
+                <button class="btn-action btn-ticket" type="button" (click)="viewTicket(item.reservation.id)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
+                    <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3"/>
+                    <path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+                    <path d="M6 13h.01M10 13h.01M14 13h.01M18 13h.01"/>
+                  </svg>
+                  Voir &amp; Télécharger PDF
+                </button>
+
+                <button class="btn-action btn-cancel" type="button" (click)="requestCancel(item.reservation.id)">
+                  Annuler
+                </button>
+              }
+
+              @if (item.isExpired || item.normalizedStatus === 'CANCELLED') {
+                <a class="btn-action btn-rebook" routerLink="/">
+                  Book Again
+                </a>
+              }
             }
           </div>
 
