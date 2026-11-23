@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+,com.busbook.payment_service.entity,Payment,10,77,2,2,4,33,3,18,1,18
+,com.busbook.payment_service.client,HttpReservationClient,74,13,0,0,24,6,4,2,4,2
+,com.busbook.payment_service.dto,PaymentResponse,5,79,1,1,3,30,2,11,1,11
+,com.busbook.payment_service.dto,PaymentRequest,1,75,2,4,0,24,2,13,0,12
+,com.busbook.payment_service.service,PaymentService,11,197,7,19,3,47,7,13,0,7
+,com.busbook.payment_service.exception,PaymentProcessingException,5,4,0,0,2,2,1,1,1,1
+,com.busbook.payment_service.exception,GlobalExceptionHandler,8,67,3,3,2,20,4,6,1,6
+,com.busbook.payment_service.exception,ApiError,3,33,0,0,2,12,1,6,1,6
+,com.busbook.payment_service.exception,ResourceNotFoundException,0,4,0,0,0,2,0,1,0,1
+,com.busbook.payment_service.enums,PaymentStatus,0,21,0,0,0,4,0,1,0,1
+,com.busbook.payment_service.enums,PaymentMethod,0,21,0,0,0,4,0,1,0,1
+,com.busbook.payment_service,PaymentServiceApplication,5,5,0,0,2,2,1,2,1,2
+,com.busbook.payment_service.controller,PaymentController,0,32,0,0,0,9,0,4,0,4
