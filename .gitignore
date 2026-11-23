@@ -31,3 +31,7 @@ replay_pid*
 # OS files
 .DS_Store
 Thumbs.db
+
+# SonarQube cache
+.sonar/
+**/.sonar/

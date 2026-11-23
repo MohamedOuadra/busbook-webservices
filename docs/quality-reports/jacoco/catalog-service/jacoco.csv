@@ -1,0 +1,17 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+catalog-service,com.busbook.catalog.exception,GlobalExceptionHandler,119,3,2,0,22,1,4,1,3,1
+catalog-service,com.busbook.catalog.exception,ResourceNotFoundException,0,4,0,0,0,2,0,1,0,1
+catalog-service,com.busbook.catalog.controller,HealthController,0,9,0,0,0,2,0,2,0,2
+catalog-service,com.busbook.catalog.controller,BusController,28,6,0,0,6,3,4,1,4,1
+catalog-service,com.busbook.catalog.controller,TrajetController,33,23,3,3,6,6,6,3,3,3
+catalog-service,com.busbook.catalog.dto,BusResponseDTO,25,21,0,0,12,8,7,3,7,3
+catalog-service,com.busbook.catalog.dto,TrajetRequestDTO,27,39,0,0,14,14,7,7,7,7
+catalog-service,com.busbook.catalog.dto,TrajetResponseDTO,43,33,0,0,20,12,12,4,12,4
+catalog-service,com.busbook.catalog.dto,BusRequestDTO,15,21,0,0,8,8,4,4,4,4
+catalog-service,com.busbook.catalog.entity,Trajet,2,101,3,7,1,35,3,19,0,17
+catalog-service,com.busbook.catalog.entity,Bus,12,27,0,0,6,11,3,6,3,6
+catalog-service,com.busbook.catalog.config,WebConfig,0,61,0,0,0,8,0,2,0,2
+catalog-service,com.busbook.catalog.config,DataInitializer,1,200,1,1,1,31,1,3,0,3
+catalog-service,com.busbook.catalog.service,TrajetService,99,115,16,4,20,34,12,7,3,6
+catalog-service,com.busbook.catalog.service,BusService,18,83,3,3,4,25,3,7,1,6
+catalog-service,com.busbook.catalog,CatalogServiceApplication,5,3,0,0,2,1,1,1,1,1
