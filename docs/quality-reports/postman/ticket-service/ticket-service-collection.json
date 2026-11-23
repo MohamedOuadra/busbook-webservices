@@ -1,0 +1,53 @@
+{
+  "info": {
+    "name": "BusBook - Ticket Service API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8084",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Emission billet (POST /api/tickets)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"reservationId\": 1, \"tripId\": 1, \"seatNumber\": \"A1\", \"travelerName\": \"Mohamed\", \"travelerEmail\": \"mohamed@busbook.ma\"}"
+        },
+        "url": "{{baseUrl}}/api/tickets"
+      }
+    },
+    {
+      "name": "02 - Billet par ID (GET /api/tickets/1)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/tickets/1"
+      }
+    },
+    {
+      "name": "03 - Billet par reservationId (GET /api/tickets/reservation/1)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/tickets/reservation/1"
+      }
+    },
+    {
+      "name": "04 - Verification validite billet (GET /api/tickets/verify/SAMPLE)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/tickets/verify/SAMPLE"
+      }
+    }
+  ]
+}

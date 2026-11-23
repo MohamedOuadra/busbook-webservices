@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport d'Exécution API - Catalog Service (Port 8081)</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: auto; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 30px; }
+        h1 { color: #174a75; margin-top: 0; }
+        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #e9ecef; padding-bottom: 15px; margin-bottom: 25px; }
+        .kpis { display: flex; gap: 20px; margin-bottom: 25px; }
+        .kpi { flex: 1; padding: 15px; border-radius: 6px; background: #eaf2f8; text-align: center; }
+        .kpi b { display: block; font-size: 26px; color: #174a75; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #f1f3f5; padding: 12px 10px; border-bottom: 2px solid #dee2e6; color: #495057; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>BusBook &mdash; Rapport de Tests API : Catalog Service (Port 8081)</h1>
+                <p style="color:#666;margin:0;">Suite automatisée d'assertions Postman / Newman</p>
+            </div>
+            <div style="text-align:right;color:#888;font-size:14px;">
+                Date d'exécution : 2026-11-23 22:29:23<br>
+                Environnement : Localhost (Spring Boot 3 / PostgreSQL)
+            </div>
+        </div>
+
+        <div class="kpis">
+            <div class="kpi"><span>Total Tests</span><b>8</b></div>
+            <div class="kpi" style="background:#e8f4ec;"><span style="color:#28a745;">Tests Réussis</span><b style="color:#28a745;">8</b></div>
+            <div class="kpi" style="background:#ffebee;"><span style="color:#dc3545;">Échecs</span><b style="color:#dc3545;">0</b></div>
+            <div class="kpi"><span>Taux de Succès</span><b>100.0%</b></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Statut</th>
+                    <th>Nom du Test</th>
+                    <th>Requête HTTP</th>
+                    <th>Code Réponse</th>
+                    <th>Temps</th>
+                    <th>Détails & Assertions</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">01 - Probe de sante (GET /api/health)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">GET</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/health</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>200</b> (attendu: 200)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">364.41 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Statut: {'service': 'catalog-service', 'status': 'UP'}</td>
+        </tr>
+        
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">02 - Consultation de la flotte (GET /api/buses)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">GET</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/buses</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>200</b> (attendu: 200)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">151.81 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Nombre de bus trouves: 5</td>
+        </tr>
+        
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">03 - Ajout d un autobus (POST /api/buses)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">POST</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/buses</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>201</b> (attendu: 200/201)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">1174.74 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Bus cree avec ID: 6, Mat: BUS-5175-MA</td>
+        </tr>
+        
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">04 - Consultation d un bus par ID (GET /api/buses/6)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">GET</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/buses/6</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>200</b> (attendu: 200)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">31.1 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Immatriculation: BUS-5175-MA</td>
+        </tr>
+        
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">05 - Catalogue des trajets (GET /api/trips)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">GET</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/trips</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>200</b> (attendu: 200)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">32.72 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Nombre de trajets: 7</td>
+        </tr>
+        
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">06 - Creation d un trajet planifie (POST /api/trips)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">POST</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/trips</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>201</b> (attendu: 200/201)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">114.39 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Trajet cree ID: 9 (Casablanca -> Marrakech)</td>
+        </tr>
+        
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">07 - Recherche multicritere (GET /api/trips/search)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">GET</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/trips/search?villeDepart=Casablanca&villeArrivee=Marrakech</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>200</b> (attendu: 200)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">125.04 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Resultats filtres: 2</td>
+        </tr>
+        
+        <tr>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#28a745;color:white;padding:3px 8px;border-radius:4px;font-weight:bold;">PASS</span></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;font-weight:bold;">08 - [Erreur 400] Rejet trajet aux parametres invalides</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;"><span style="background:#17a2b8;color:white;padding:2px 6px;border-radius:3px;font-weight:bold;">POST</span> <code style="background:#f4f4f4;padding:2px 4px;border-radius:3px;">/api/trips</code></td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;"><b>400</b> (attendu: 400)</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;text-align:center;">61.39 ms</td>
+            <td style="padding:10px;border-bottom:1px solid #ddd;color:#555;">Validation Jakarta @DecimalMin et @NotBlank declenchees</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+{
+  "info": {
+    "name": "BusBook - Reservation Service API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8082",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Liste des reservations (GET /api/reservations)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/reservations"
+      }
+    },
+    {
+      "name": "02 - Plan sieges bus (GET /api/seats/bus/1)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/seats/bus/1"
+      }
+    },
+    {
+      "name": "03 - Creation reservation hold (POST /api/reservations)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"tripId\": 1, \"travelerId\": 1, \"seatId\": 1}"
+        },
+        "url": "{{baseUrl}}/api/reservations"
+      }
+    },
+    {
+      "name": "04 - Consultation reservation par ID (GET /api/reservations/1)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/reservations/1"
+      }
+    },
+    {
+      "name": "05 - Confirmation reservation (PATCH /api/reservations/1/confirm)",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/reservations/1/confirm"
+      }
+    },
+    {
+      "name": "06 - [Conflit 409] Double reservation siege",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"tripId\": 1, \"travelerId\": 2, \"seatId\": 1}"
+        },
+        "url": "{{baseUrl}}/api/reservations"
+      }
+    }
+  ]
+}

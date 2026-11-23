@@ -1,0 +1,89 @@
+{
+  "suite": "BusBook - Auth Service API Tests",
+  "timestamp": "2026-11-23T22:23:44.784537",
+  "total_tests": 8,
+  "passed_tests": 8,
+  "failed_tests": 0,
+  "tests": [
+    {
+      "name": "01 - Inscription voyageur valide (POST /api/auth/register)",
+      "method": "POST",
+      "endpoint": "/api/auth/register",
+      "expected_status": 201,
+      "actual_status": 201,
+      "duration_ms": 95.38,
+      "passed": true,
+      "details": "Token emis: True, Role: USER"
+    },
+    {
+      "name": "02 - Connexion voyageur avec credentials (POST /api/auth/login)",
+      "method": "POST",
+      "endpoint": "/api/auth/login",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 68.15,
+      "passed": true,
+      "details": "Role: USER"
+    },
+    {
+      "name": "03 - Consultation profil utilisateur (GET /api/auth/me)",
+      "method": "GET",
+      "endpoint": "/api/auth/me",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 14.55,
+      "passed": true,
+      "details": "Nom: Ahmed Testeur"
+    },
+    {
+      "name": "04 - Promotion en ADMIN (POST /api/auth/make-admin)",
+      "method": "POST",
+      "endpoint": "/api/auth/make-admin?email=voyager.54330@busbook.ma",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 35.74,
+      "passed": true,
+      "details": "Nouveau role: ADMIN"
+    },
+    {
+      "name": "05 - [Erreur 400/409] Rejet inscription email doublon",
+      "method": "POST",
+      "endpoint": "/api/auth/register",
+      "expected_status": 400,
+      "actual_status": 409,
+      "duration_ms": 33.7,
+      "passed": true,
+      "details": "Conflit d unicite de l email correctement detecte"
+    },
+    {
+      "name": "06 - [Erreur 400] Validation mot de passe trop court (<6 car)",
+      "method": "POST",
+      "endpoint": "/api/auth/register",
+      "expected_status": 400,
+      "actual_status": 400,
+      "duration_ms": 10.76,
+      "passed": true,
+      "details": "Jakarta Validation @Size(min=6) activee"
+    },
+    {
+      "name": "07 - [Erreur 400/401] Rejet connexion mot de passe errone",
+      "method": "POST",
+      "endpoint": "/api/auth/login",
+      "expected_status": 401,
+      "actual_status": 401,
+      "duration_ms": 67.87,
+      "passed": true,
+      "details": "Bad credentials proteges"
+    },
+    {
+      "name": "08 - [Securite 401/403] Rejet consultation profil sans Authorization",
+      "method": "GET",
+      "endpoint": "/api/auth/me",
+      "expected_status": "401/403",
+      "actual_status": 403,
+      "duration_ms": 8.93,
+      "passed": true,
+      "details": "Filtre JwtAuthenticationFilter / Spring Security actif (Acces refuse)"
+    }
+  ]
+}

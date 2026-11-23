@@ -1,0 +1,69 @@
+{
+  "suite": "BusBook - Reservation Service API Tests",
+  "timestamp": "2026-11-23T22:29:35.522200",
+  "total_tests": 6,
+  "passed_tests": 6,
+  "failed_tests": 0,
+  "tests": [
+    {
+      "name": "01 - Liste des reservations (GET /api/reservations)",
+      "method": "GET",
+      "endpoint": "/api/reservations",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 1762.16,
+      "passed": true,
+      "details": "Reservations existantes: 5"
+    },
+    {
+      "name": "02 - Plan des sieges du bus (GET /api/seats/bus/1)",
+      "method": "GET",
+      "endpoint": "/api/seats/bus/1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 237.5,
+      "passed": true,
+      "details": "Sieges retournes: 40"
+    },
+    {
+      "name": "03 - Reservation avec blocage siege (POST /api/reservations)",
+      "method": "POST",
+      "endpoint": "/api/reservations",
+      "expected_status": "200/201",
+      "actual_status": 201,
+      "duration_ms": 545.84,
+      "passed": true,
+      "details": "Reservation ID: 6, Statut: EN_ATTENTE"
+    },
+    {
+      "name": "04 - Consultation reservation par ID (GET /api/reservations/6)",
+      "method": "GET",
+      "endpoint": "/api/reservations/6",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 35.65,
+      "passed": true,
+      "details": "Statut: EN_ATTENTE"
+    },
+    {
+      "name": "05 - Confirmation de reservation (PATCH /api/reservations/6/confirm)",
+      "method": "PATCH",
+      "endpoint": "/api/reservations/6/confirm",
+      "expected_status": "200/204",
+      "actual_status": 200,
+      "duration_ms": 64.25,
+      "passed": true,
+      "details": "Transition d etat vers CONFIRMED reussie"
+    },
+    {
+      "name": "06 - [Conflit 409/400] Rejet double reservation du meme siege",
+      "method": "POST",
+      "endpoint": "/api/reservations",
+      "expected_status": "409/400",
+      "actual_status": 409,
+      "duration_ms": 45.53,
+      "passed": true,
+      "details": "Verrouillage et integrite des sieges garantis"
+    }
+  ]
+}
