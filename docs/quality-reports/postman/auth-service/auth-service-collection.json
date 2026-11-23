@@ -1,0 +1,320 @@
+{
+  "info": {
+    "_postman_id": "busbook-auth-service-collection-v1",
+    "name": "BusBook - Auth Service API Test Suite",
+    "description": "Suite de tests automatisés pour Auth Service (Port 8085) couvrant les cas nominaux et d'erreurs (200, 201, 400, 401, 409).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8085",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_email",
+      "value": "test.voyager@busbook.ma",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Inscription réussie (POST /api/auth/register)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const randomSuffix = Math.floor(Math.random() * 100000);",
+              "const email = 'user' + randomSuffix + '@busbook.ma';",
+              "pm.collectionVariables.set('user_email', email);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code est 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test('Le corps de réponse contient le token et le profil', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('token');",
+              "    pm.expect(jsonData.type).to.eql('Bearer');",
+              "    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get('user_email'));",
+              "    pm.expect(jsonData.role).to.eql('PASSENGER');",
+              "    pm.collectionVariables.set('jwt_token', jsonData.token);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Ahmed El Idrissi\",\n  \"email\": \"{{user_email}}\",\n  \"password\": \"password123\",\n  \"phoneNumber\": \"0612345678\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "02 - Connexion réussie (POST /api/auth/login)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code est 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Token JWT régénéré et valide', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.token).to.be.a('string').and.not.empty;",
+              "    pm.expect(jsonData.role).to.eql('PASSENGER');",
+              "    pm.collectionVariables.set('jwt_token', jsonData.token);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "03 - Profil utilisateur avec JWT (GET /api/auth/me)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code est 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Profil correspond à l utilisateur connecté', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get('user_email'));",
+              "    pm.expect(jsonData.fullName).to.eql('Ahmed El Idrissi');",
+              "    pm.expect(jsonData.phoneNumber).to.eql('0612345678');",
+              "    pm.expect(jsonData).to.not.have.property('password');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "me"]
+        }
+      }
+    },
+    {
+      "name": "04 - Promotion en ADMIN (POST /api/auth/make-admin)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code est 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Rôle mis à jour en ADMIN', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get('user_email'));",
+              "    pm.expect(jsonData.role).to.eql('ADMIN');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/make-admin?email={{user_email}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "make-admin"],
+          "query": [
+            {
+              "key": "email",
+              "value": "{{user_email}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "05 - [Erreur 400/409] Inscription avec email doublon",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Rejet avec code 400 Bad Request ou 409 Conflict', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([400, 409]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Autre Voyageur\",\n  \"email\": \"{{user_email}}\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "06 - [Erreur 400] Validation password trop court",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code est 400 Bad Request pour mot de passe invalide', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Test Invalid\",\n  \"email\": \"invalid.pass@busbook.ma\",\n  \"password\": \"123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "07 - [Erreur 400/401] Connexion mauvais mot de passe",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Rejet avec 400 ou 401 pour identifiants incorrects', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([400, 401]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"mauvais_mot_de_passe\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "08 - [Securite 401/403] Profil sans jeton JWT",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Rejet acces securise avec 401 Unauthorized ou 403 Forbidden', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "me"]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "suite": "BusBook - Catalog Service API Tests",
+  "timestamp": "2026-11-23T22:29:23.075732",
+  "total_tests": 8,
+  "passed_tests": 8,
+  "failed_tests": 0,
+  "tests": [
+    {
+      "name": "01 - Probe de sante (GET /api/health)",
+      "method": "GET",
+      "endpoint": "/api/health",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 364.41,
+      "passed": true,
+      "details": "Statut: {'service': 'catalog-service', 'status': 'UP'}"
+    },
+    {
+      "name": "02 - Consultation de la flotte (GET /api/buses)",
+      "method": "GET",
+      "endpoint": "/api/buses",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 151.81,
+      "passed": true,
+      "details": "Nombre de bus trouves: 5"
+    },
+    {
+      "name": "03 - Ajout d un autobus (POST /api/buses)",
+      "method": "POST",
+      "endpoint": "/api/buses",
+      "expected_status": "200/201",
+      "actual_status": 201,
+      "duration_ms": 1174.74,
+      "passed": true,
+      "details": "Bus cree avec ID: 6, Mat: BUS-5175-MA"
+    },
+    {
+      "name": "04 - Consultation d un bus par ID (GET /api/buses/6)",
+      "method": "GET",
+      "endpoint": "/api/buses/6",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 31.1,
+      "passed": true,
+      "details": "Immatriculation: BUS-5175-MA"
+    },
+    {
+      "name": "05 - Catalogue des trajets (GET /api/trips)",
+      "method": "GET",
+      "endpoint": "/api/trips",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 32.72,
+      "passed": true,
+      "details": "Nombre de trajets: 7"
+    },
+    {
+      "name": "06 - Creation d un trajet planifie (POST /api/trips)",
+      "method": "POST",
+      "endpoint": "/api/trips",
+      "expected_status": "200/201",
+      "actual_status": 201,
+      "duration_ms": 114.39,
+      "passed": true,
+      "details": "Trajet cree ID: 9 (Casablanca -> Marrakech)"
+    },
+    {
+      "name": "07 - Recherche multicritere (GET /api/trips/search)",
+      "method": "GET",
+      "endpoint": "/api/trips/search?villeDepart=Casablanca&villeArrivee=Marrakech",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 125.04,
+      "passed": true,
+      "details": "Resultats filtres: 2"
+    },
+    {
+      "name": "08 - [Erreur 400] Rejet trajet aux parametres invalides",
+      "method": "POST",
+      "endpoint": "/api/trips",
+      "expected_status": 400,
+      "actual_status": 400,
+      "duration_ms": 61.39,
+      "passed": true,
+      "details": "Validation Jakarta @DecimalMin et @NotBlank declenchees"
+    }
+  ]
+}

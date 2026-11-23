@@ -1,0 +1,101 @@
+{
+  "info": {
+    "name": "BusBook - Catalog Service API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Health probe (GET /api/health)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/health"
+      }
+    },
+    {
+      "name": "02 - Liste des bus (GET /api/buses)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/buses"
+      }
+    },
+    {
+      "name": "03 - Creation bus (POST /api/buses)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"immatriculation\": \"BUS-999-MA\", \"capacite\": 50, \"type\": \"CONFORT\"}"
+        },
+        "url": "{{baseUrl}}/api/buses"
+      }
+    },
+    {
+      "name": "04 - Consultation bus par ID (GET /api/buses/1)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/buses/1"
+      }
+    },
+    {
+      "name": "05 - Liste des trajets (GET /api/trips)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/trips"
+      }
+    },
+    {
+      "name": "06 - Recherche trajets (GET /api/trips/search)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/trips/search?villeDepart=Casablanca&villeArrivee=Marrakech"
+      }
+    },
+    {
+      "name": "07 - Creation trajet (POST /api/trips)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"villeDepart\": \"Rabat\", \"villeArrivee\": \"Fes\", \"dateDepart\": \"2026-12-01T10:00:00\", \"dateArrivee\": \"2026-12-01T12:30:00\", \"prix\": 95.0, \"busId\": 1}"
+        },
+        "url": "{{baseUrl}}/api/trips"
+      }
+    },
+    {
+      "name": "08 - [Erreur 400] Validation trajet invalide",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"villeDepart\": \"\", \"prix\": -10}"
+        },
+        "url": "{{baseUrl}}/api/trips"
+      }
+    }
+  ]
+}

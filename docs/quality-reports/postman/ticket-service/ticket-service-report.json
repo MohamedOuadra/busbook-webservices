@@ -1,0 +1,49 @@
+{
+  "suite": "BusBook - Ticket Service API Tests",
+  "timestamp": "2026-11-23T22:30:12.569773",
+  "total_tests": 4,
+  "passed_tests": 4,
+  "failed_tests": 0,
+  "tests": [
+    {
+      "name": "01 - Generation et emission de billet (POST /api/tickets)",
+      "method": "POST",
+      "endpoint": "/api/tickets",
+      "expected_status": "200/201",
+      "actual_status": 201,
+      "duration_ms": 777.82,
+      "passed": true,
+      "details": "Billet genere: TCK-20261123-B1271B1E, QR Code: True"
+    },
+    {
+      "name": "02 - Consultation billet par ID (GET /api/tickets/5)",
+      "method": "GET",
+      "endpoint": "/api/tickets/5",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 13.03,
+      "passed": true,
+      "details": "Numero billet: TCK-20261123-B1271B1E"
+    },
+    {
+      "name": "03 - Consultation billet par reservation (GET /api/tickets/reservation/3039)",
+      "method": "GET",
+      "endpoint": "/api/tickets/reservation/3039",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 58.54,
+      "passed": true,
+      "details": "Siege attribue: B12"
+    },
+    {
+      "name": "04 - Verification validite billet (GET /api/tickets/verify/TCK-20261123-B1271B1E)",
+      "method": "GET",
+      "endpoint": "/api/tickets/verify/TCK-20261123-B1271B1E",
+      "expected_status": 200,
+      "actual_status": 200,
+      "duration_ms": 85.13,
+      "passed": true,
+      "details": "Statut validite: True"
+    }
+  ]
+}
