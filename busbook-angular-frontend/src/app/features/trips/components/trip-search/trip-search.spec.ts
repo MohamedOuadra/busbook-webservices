@@ -7,6 +7,7 @@ describe('TripSearch', () => {
   let fixture: ComponentFixture<TripSearch>;
 
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [TripSearch],
     }).compileComponents();
@@ -34,5 +35,31 @@ describe('TripSearch', () => {
     component.date = '2099-12-02';
     component.selectRoute('Agadir', 'Marrakech');
     expect(component.date).toBe('2099-12-02');
+  });
+
+  it('replays stale searches using today and records the updated date', () => {
+    const emit = vi.spyOn(component.search, 'emit');
+    component.repeatSearch({ departure: 'Agadir', destination: 'Rabat', date: '2020-01-01' });
+    expect(emit).toHaveBeenCalledWith({ departure: 'Agadir', destination: 'Rabat', date: todayDate() });
+    expect(component.history.recent()[0].date).toBe(todayDate());
+  });
+
+  it('continues emitting searches when history cannot be saved', () => {
+    vi.spyOn(component.history, 'remember').mockReturnValue(false);
+    const emit = vi.spyOn(component.search, 'emit');
+    component.selectRoute('Agadir', 'Rabat');
+    expect(emit).toHaveBeenCalled();
+    expect(component.storageMessage()).toContain('could not be saved');
+  });
+
+  it('renders recent searches and clears them from the UI', () => {
+    component.selectRoute('Agadir', 'Casablanca');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Recent searches');
+    const clear = Array.from(fixture.nativeElement.querySelectorAll('button'))
+      .find((button: any) => button.textContent.trim() === 'Clear history') as HTMLButtonElement;
+    clear.click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).not.toContain('Recent searches');
   });
 });

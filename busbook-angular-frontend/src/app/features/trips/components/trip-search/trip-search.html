@@ -124,5 +124,23 @@
         Agadir → Marrakech
       </button>
     </div>
+    @if (history.recent().length) {
+      <div class="saved-searches" aria-label="Recent searches">
+        <div class="saved-searches-heading">
+          <strong>Recent searches</strong>
+          <button type="button" class="chip-route" (click)="clearHistory()">Clear history</button>
+        </div>
+        <div class="saved-searches-list">
+          @for (entry of history.recent(); track $index) {
+            <button type="button" class="chip-route" (click)="repeatSearch(entry)">
+              {{ entry.departure }} → {{ entry.destination }} · {{ entry.date }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+    @if (storageMessage()) {
+      <p role="status">{{ storageMessage() }}</p>
+    }
   </form>
 </div>
