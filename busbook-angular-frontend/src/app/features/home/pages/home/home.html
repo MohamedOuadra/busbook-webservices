@@ -39,6 +39,17 @@
         </div>
       </div>
 
+      <div class="trip-controls glass">
+        <label for="trip-sort">Sort trips
+          <select id="trip-sort" [ngModel]="sortOrder()" (ngModelChange)="sortOrder.set($event)">
+            <option value="default">Recommended order</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="departure">Earliest departure</option>
+          </select>
+        </label>
+      </div>
+
       @if (isLoading()) {
         <div class="loading-state glass">
           <div class="spinner"></div>
@@ -46,7 +57,7 @@
         </div>
       } @else if (trips.length > 0) {
         <div class="trip-results-list">
-          @for (trip of trips; track trip.id) {
+          @for (trip of visibleTrips(); track trip.id) {
             <app-trip-card [trip]="trip" (tripSelected)="onTripSelected($event)" />
           }
         </div>

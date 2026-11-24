@@ -1,5 +1,6 @@
 
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { TripSearch } from '../../../trips/components/trip-search/trip-search';
@@ -14,6 +15,7 @@ import { TripSearch as TripSearchCriteria } from '../../../trips/models/trip-sea
   imports: [
     TripSearch,
     TripCard,
+    FormsModule,
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -22,6 +24,16 @@ export class Home implements OnInit {
 
   private readonly _trips = signal<Trip[]>([]);
   readonly isLoading = signal(false);
+  readonly sortOrder = signal('default');
+  readonly visibleTrips = computed(() => {
+    const trips = [...this._trips()];
+    switch (this.sortOrder()) {
+      case 'price-asc': return trips.sort((a, b) => a.prix - b.prix);
+      case 'price-desc': return trips.sort((a, b) => b.prix - a.prix);
+      case 'departure': return trips.sort((a, b) => Date.parse(a.dateDepart) - Date.parse(b.dateDepart));
+      default: return trips;
+    }
+  });
 
   get trips(): Trip[] {
     return this._trips();
