@@ -35,3 +35,7 @@ Thumbs.db
 # SonarQube cache
 .sonar/
 **/.sonar/
+
+# Documentation LaTeX build files
+docs/report/
+scripts/
