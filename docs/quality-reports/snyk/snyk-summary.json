@@ -1,0 +1,102 @@
+{
+  "audit_date": "2026-11-24T00:54:36.374518",
+  "tool": "Snyk CLI 1.1309.0",
+  "results": [
+    {
+      "name": "auth-service",
+      "type": "maven",
+      "project_name": "com.busbook:auth-service",
+      "dependency_count": 108,
+      "unique_vulns": 23,
+      "total_vulns": 23,
+      "severities": {
+        "critical": 5,
+        "high": 5,
+        "medium": 11,
+        "low": 2
+      },
+      "html_report": "auth-service-snyk-report.html",
+      "json_report": "auth-service-snyk-report.json"
+    },
+    {
+      "name": "catalog-service",
+      "type": "maven",
+      "project_name": "com.busbook:catalog-service",
+      "dependency_count": 84,
+      "unique_vulns": 14,
+      "total_vulns": 14,
+      "severities": {
+        "critical": 1,
+        "high": 4,
+        "medium": 8,
+        "low": 1
+      },
+      "html_report": "catalog-service-snyk-report.html",
+      "json_report": "catalog-service-snyk-report.json"
+    },
+    {
+      "name": "reservation-service",
+      "type": "maven",
+      "project_name": "com.busbook:reservation-service",
+      "dependency_count": 96,
+      "unique_vulns": 18,
+      "total_vulns": 18,
+      "severities": {
+        "critical": 1,
+        "high": 5,
+        "medium": 11,
+        "low": 1
+      },
+      "html_report": "reservation-service-snyk-report.html",
+      "json_report": "reservation-service-snyk-report.json"
+    },
+    {
+      "name": "payment-service",
+      "type": "maven",
+      "project_name": "com.busbook:payment-service",
+      "dependency_count": 96,
+      "unique_vulns": 18,
+      "total_vulns": 18,
+      "severities": {
+        "critical": 1,
+        "high": 5,
+        "medium": 11,
+        "low": 1
+      },
+      "html_report": "payment-service-snyk-report.html",
+      "json_report": "payment-service-snyk-report.json"
+    },
+    {
+      "name": "ticket-service",
+      "type": "maven",
+      "project_name": "com.busbook:ticket-service",
+      "dependency_count": 96,
+      "unique_vulns": 18,
+      "total_vulns": 18,
+      "severities": {
+        "critical": 1,
+        "high": 5,
+        "medium": 11,
+        "low": 1
+      },
+      "html_report": "ticket-service-snyk-report.html",
+      "json_report": "ticket-service-snyk-report.json"
+    },
+    {
+      "name": "busbook-frontend",
+      "type": "npm",
+      "project_name": "busbook-frontend",
+      "dependency_count": 54,
+      "unique_vulns": 0,
+      "total_vulns": 0,
+      "severities": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "html_report": "busbook-frontend-snyk-report.html",
+      "json_report": "busbook-frontend-snyk-report.json"
+    }
+  ]
+}
