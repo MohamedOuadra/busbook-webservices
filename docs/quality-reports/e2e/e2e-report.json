@@ -1,0 +1,64 @@
+{
+  "test_suite": "BusBook E2E Automated Browser Suite",
+  "framework": "Selenium WebDriver 4.54.0 (Google Chrome Headless)",
+  "timestamp": "2026-11-24T01:08:37.809750",
+  "target": "http://localhost:4200",
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "success_rate": "100.0%"
+  },
+  "tests": [
+    {
+      "id": "E2E-01",
+      "name": "Page d'accueil & Catalogue des trajets",
+      "url": "http://localhost:4200/",
+      "status": "PASSED",
+      "duration_ms": 2610.5,
+      "screenshot": "01_home_trips_search.png",
+      "description": "Verification du chargement de la vitrine, du bandeau hero et de la grille des trajets",
+      "error": null
+    },
+    {
+      "id": "E2E-02",
+      "name": "Authentification - Formulaire de Connexion",
+      "url": "http://localhost:4200/login",
+      "status": "PASSED",
+      "duration_ms": 2362.86,
+      "screenshot": "02_auth_login.png",
+      "description": "Validation du formulaire de login avec controles d'email et mot de passe",
+      "error": null
+    },
+    {
+      "id": "E2E-03",
+      "name": "Authentification - Formulaire d'Inscription",
+      "url": "http://localhost:4200/register",
+      "status": "PASSED",
+      "duration_ms": 2332.06,
+      "screenshot": "03_auth_register.png",
+      "description": "Validation de l'interface d'inscription d'un nouveau voyageur",
+      "error": null
+    },
+    {
+      "id": "E2E-04",
+      "name": "Tunnel de Réservation - Plan des Sièges (Trajet #1)",
+      "url": "http://localhost:4200/reservation/1",
+      "status": "PASSED",
+      "duration_ms": 2242.68,
+      "screenshot": "04_seat_reservation_plan.png",
+      "description": "Affichage interactif du plan des 40 sieges avec disponibilite temps reel",
+      "error": null
+    },
+    {
+      "id": "E2E-05",
+      "name": "Service Billetterie - Vérification de Billet",
+      "url": "http://localhost:4200/verify-ticket",
+      "status": "PASSED",
+      "duration_ms": 2365.49,
+      "screenshot": "05_ticket_verification.png",
+      "description": "Controle d'authenticite du billet electronique et validation QR Code",
+      "error": null
+    }
+  ]
+}
