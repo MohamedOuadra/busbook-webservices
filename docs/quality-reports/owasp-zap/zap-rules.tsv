@@ -1,0 +1,20 @@
+# Fichier de configuration des regles OWASP ZAP pour BusBook
+# Format: ID<TAB>ACTION<TAB>THRESHOLD<TAB>RULE_NAME
+# IGNORE = ignorer completement | WARN = avertissement | FAIL = echec
+# Les regles ci-dessous sont desactivees pour eviter de modifier les donnees en BDD
+
+# Desactiver les scans actifs qui modifient les donnees (SQL Injection active, etc.)
+# On conserve le mode PASSIF uniquement pour ne pas corrompre la BDD de test
+
+# Active Scan rules a risque eleve (desactivees)
+40012	IGNORE	(ignore)	Cross Site Scripting (Reflected)
+40014	IGNORE	(ignore)	Cross Site Scripting (Persistent)
+40018	IGNORE	(ignore)	SQL Injection
+40019	IGNORE	(ignore)	SQL Injection - MySQL
+40020	IGNORE	(ignore)	SQL Injection - Hypersonic SQL
+40021	IGNORE	(ignore)	SQL Injection - Oracle
+40022	IGNORE	(ignore)	SQL Injection - PostgreSQL
+90020	IGNORE	(ignore)	Remote OS Command Injection
+90021	IGNORE	(ignore)	XPath Injection
+40008	IGNORE	(ignore)	Parameter Tampering
+40009	IGNORE	(ignore)	Server Side Include

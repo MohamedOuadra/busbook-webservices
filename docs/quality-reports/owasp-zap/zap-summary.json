@@ -1,0 +1,167 @@
+{
+  "tool": "OWASP ZAP Baseline Scan",
+  "version": "ghcr.io/zaproxy/zaproxy:stable",
+  "timestamp": "2026-11-24T00:20:40",
+  "mode": "Passive scan only (zap-baseline.py)",
+  "network": "busbook-webservices_default",
+  "spider_minutes": 1,
+  "total_timeout_minutes": 5,
+  "total_services": 5,
+  "global_summary": {
+    "total_pass": 329,
+    "total_warn": 11,
+    "total_fail": 0,
+    "verdict": "AUCUNE VULNERABILITE CRITIQUE DETECTEE"
+  },
+  "results": [
+    {
+      "service": "auth-service",
+      "port": 8085,
+      "url": "http://busbook-auth-service:8085",
+      "exit_code": 0,
+      "urls_scanned": 3,
+      "pass": 67,
+      "warn": 1,
+      "fail": 0,
+      "html_report": "auth-service-zap-report.html",
+      "json_report": "auth-service-zap-report.json",
+      "warnings": [
+        {
+          "id": "10049",
+          "name": "Non-Storable Content",
+          "severity": "WARN",
+          "cause": "HTTP 403 sur route racine (Spring Security - attendu)",
+          "critical": false
+        }
+      ]
+    },
+    {
+      "service": "catalog-service",
+      "port": 8081,
+      "url": "http://busbook-catalog-service:8081",
+      "exit_code": 0,
+      "urls_scanned": 3,
+      "pass": 67,
+      "warn": 1,
+      "fail": 0,
+      "html_report": "catalog-service-zap-report.html",
+      "json_report": "catalog-service-zap-report.json",
+      "warnings": [
+        {
+          "id": "10049",
+          "name": "Storable and Cacheable Content",
+          "severity": "WARN",
+          "cause": "HTTP 404 sur route racine (aucune route / definie - attendu)",
+          "critical": false
+        }
+      ]
+    },
+    {
+      "service": "reservation-service",
+      "port": 8082,
+      "url": "http://busbook-reservation-service:8082",
+      "exit_code": 0,
+      "urls_scanned": 3,
+      "pass": 65,
+      "warn": 3,
+      "fail": 0,
+      "html_report": "reservation-service-zap-report.html",
+      "json_report": "reservation-service-zap-report.json",
+      "warnings": [
+        {
+          "id": "10023",
+          "name": "Information Disclosure - Debug Error Messages",
+          "severity": "WARN",
+          "cause": "HTTP 500 sur route racine - absence de gestionnaire global d'erreurs",
+          "critical": false,
+          "recommendation": "Ajouter @RestControllerAdvice renvoyant 404 pour les routes non definies"
+        },
+        {
+          "id": "10049",
+          "name": "Non-Storable Content",
+          "severity": "WARN",
+          "cause": "HTTP 500 non cacheable",
+          "critical": false
+        },
+        {
+          "id": "90022",
+          "name": "Application Error Disclosure",
+          "severity": "WARN",
+          "cause": "HTTP 500 peut exposer des details techniques",
+          "critical": false,
+          "recommendation": "Configurer spring.mvc.throw-exception-if-no-handler-found=false"
+        }
+      ]
+    },
+    {
+      "service": "payment-service",
+      "port": 8083,
+      "url": "http://busbook-payment-service:8083",
+      "exit_code": 0,
+      "urls_scanned": 3,
+      "pass": 65,
+      "warn": 3,
+      "fail": 0,
+      "html_report": "payment-service-zap-report.html",
+      "json_report": "payment-service-zap-report.json",
+      "warnings": [
+        {
+          "id": "10023",
+          "name": "Information Disclosure - Debug Error Messages",
+          "severity": "WARN",
+          "cause": "HTTP 500 sur route racine - meme cause que reservation-service",
+          "critical": false
+        },
+        {
+          "id": "10049",
+          "name": "Non-Storable Content",
+          "severity": "WARN",
+          "cause": "HTTP 500 non cacheable",
+          "critical": false
+        },
+        {
+          "id": "90022",
+          "name": "Application Error Disclosure",
+          "severity": "WARN",
+          "cause": "HTTP 500 peut exposer des details techniques",
+          "critical": false
+        }
+      ]
+    },
+    {
+      "service": "ticket-service",
+      "port": 8084,
+      "url": "http://busbook-ticket-service:8084",
+      "exit_code": 0,
+      "urls_scanned": 3,
+      "pass": 65,
+      "warn": 3,
+      "fail": 0,
+      "html_report": "ticket-service-zap-report.html",
+      "json_report": "ticket-service-zap-report.json",
+      "warnings": [
+        {
+          "id": "10023",
+          "name": "Information Disclosure - Debug Error Messages",
+          "severity": "WARN",
+          "cause": "HTTP 500 sur route racine - meme cause que reservation-service",
+          "critical": false
+        },
+        {
+          "id": "10049",
+          "name": "Non-Storable Content",
+          "severity": "WARN",
+          "cause": "HTTP 500 non cacheable",
+          "critical": false
+        },
+        {
+          "id": "90022",
+          "name": "Application Error Disclosure",
+          "severity": "WARN",
+          "cause": "HTTP 500 peut exposer des details techniques",
+          "critical": false
+        }
+      ]
+    }
+  ]
+}
