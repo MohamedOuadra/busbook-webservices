@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { TripSearch as TripSearchCriteria } from '../../models/trip-search';
+import { isTravelDate, todayDate } from '../../../../shared/utils/travel-date';
 
 @Component({
   selector: 'app-trip-search',
@@ -39,8 +40,8 @@ export class TripSearch {
   selectRoute(dep: string, dest: string): void {
     this.departure = dep;
     this.destination = dest;
-    if (!this.date) {
-      this.date = '2026-11-20';
+    if (!isTravelDate(this.date) || this.date < todayDate()) {
+      this.date = todayDate();
     }
     this.onSearch();
   }
