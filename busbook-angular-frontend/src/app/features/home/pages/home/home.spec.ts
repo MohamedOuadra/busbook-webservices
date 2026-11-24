@@ -54,4 +54,38 @@ describe('Home', () => {
     component.onTripSelected(trips[0]);
     expect(navigate).toHaveBeenCalledWith(['/reservation', 1]);
   });
+
+  it('combines inclusive price and bus filters before sorting', () => {
+    component.trips = trips;
+    component.maxPrice.set(150);
+    component.busType.set('VIP');
+    component.sortOrder.set('price-asc');
+    expect(component.visibleTrips().map(t => t.id)).toEqual([3]);
+    component.maxPrice.set(0);
+    expect(component.visibleTrips()).toEqual([]);
+    component.clearResultFilters();
+    expect(component.visibleTrips().map(t => t.id)).toEqual([2, 3, 1]);
+  });
+
+  it('clears result filters without requesting a new catalog', () => {
+    component.trips = trips;
+    component.maxPrice.set(1);
+    component.clearResultFilters();
+    expect(component.trips).toBe(trips);
+    expect(component.visibleTrips()).toEqual(trips);
+    expect(component.busTypes()).toEqual(['Standard', 'VIP']);
+  });
+
+  it('shows a recoverable empty state and updates the rendered count', () => {
+    component.trips = trips;
+    component.maxPrice.set(1);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('0 of 3 trips available');
+    expect(fixture.nativeElement.textContent).toContain('No trips match these filters');
+    const clearButton = Array.from(fixture.nativeElement.querySelectorAll('button'))
+      .find((button: any) => button.textContent.trim() === 'Clear filters') as HTMLButtonElement;
+    clearButton.click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('app-trip-card')).toHaveLength(3);
+  });
 });

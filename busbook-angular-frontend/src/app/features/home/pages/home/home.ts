@@ -25,8 +25,15 @@ export class Home implements OnInit {
   private readonly _trips = signal<Trip[]>([]);
   readonly isLoading = signal(false);
   readonly sortOrder = signal('default');
+  readonly maxPrice = signal<number | null>(null);
+  readonly busType = signal('');
+  readonly busTypes = computed(() => [...new Set(this._trips().map(trip => trip.bus.type))].sort());
   readonly visibleTrips = computed(() => {
-    const trips = [...this._trips()];
+    const maximum = this.maxPrice();
+    const trips = this._trips().filter(trip =>
+      (maximum === null || !Number.isFinite(maximum) || maximum < 0 || trip.prix <= maximum) &&
+      (!this.busType() || trip.bus.type === this.busType())
+    );
     switch (this.sortOrder()) {
       case 'price-asc': return trips.sort((a, b) => a.prix - b.prix);
       case 'price-desc': return trips.sort((a, b) => b.prix - a.prix);
@@ -81,6 +88,13 @@ export class Home implements OnInit {
   }
 
   resetFilters(): void {
+    this.clearResultFilters();
+    this.sortOrder.set('default');
     this.loadTrips();
+  }
+
+  clearResultFilters(): void {
+    this.maxPrice.set(null);
+    this.busType.set('');
   }
 }

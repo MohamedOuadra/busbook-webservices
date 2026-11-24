@@ -27,9 +27,9 @@
         </div>
 
         <div class="results-actions">
-          <span class="results-count-pill">
+          <span class="results-count-pill" role="status">
             <span class="active-dot"></span>
-            {{ trips.length }} trips available
+            {{ visibleTrips().length }} of {{ trips.length }} trips available
           </span>
           @if (trips.length < 3) {
             <button type="button" class="btn-show-all" (click)="resetFilters()">
@@ -48,6 +48,19 @@
             <option value="departure">Earliest departure</option>
           </select>
         </label>
+        <label for="trip-price">Maximum price (MAD)
+          <input id="trip-price" type="number" min="0" step="1" placeholder="Any price"
+            [ngModel]="maxPrice()" (ngModelChange)="maxPrice.set($event)" />
+        </label>
+        <label for="trip-bus-type">Bus type
+          <select id="trip-bus-type" [ngModel]="busType()" (ngModelChange)="busType.set($event)">
+            <option value="">All bus types</option>
+            @for (type of busTypes(); track type) {
+              <option [value]="type">{{ type }}</option>
+            }
+          </select>
+        </label>
+        <button type="button" (click)="clearResultFilters()">Clear filters</button>
       </div>
 
       @if (isLoading()) {
@@ -55,7 +68,7 @@
           <div class="spinner"></div>
           <p>Connecting to catalog database...</p>
         </div>
-      } @else if (trips.length > 0) {
+      } @else if (visibleTrips().length > 0) {
         <div class="trip-results-list">
           @for (trip of visibleTrips(); track trip.id) {
             <app-trip-card [trip]="trip" (tripSelected)="onTripSelected($event)" />
@@ -69,8 +82,14 @@
               <path d="m21 21-4.3-4.3"/>
             </svg>
           </div>
-          <h3>No direct journeys found</h3>
-          <p>We couldn't find any bus scheduled matching your exact departure, destination or date.</p>
+          @if (trips.length > 0) {
+            <h3>No trips match these filters</h3>
+            <p>Try a higher maximum price or another bus type.</p>
+            <button type="button" class="btn-reset-search" (click)="clearResultFilters()">Clear filters</button>
+          } @else {
+            <h3>No direct journeys found</h3>
+            <p>We couldn't find any bus scheduled matching your exact departure, destination or date.</p>
+          }
           <div class="empty-actions">
             <button type="button" class="btn-reset-search" (click)="resetFilters()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon-svg">
