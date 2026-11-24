@@ -265,3 +265,5 @@
 .saved-searches-heading { justify-content: space-between; margin-bottom: 12px; }
 .saved-searches button { white-space: normal; text-align: left; }
 .saved-searches button:focus-visible { outline: 3px solid #278245; outline-offset: 2px; }
+.favorite-route { display: flex; flex-wrap: wrap; gap: 4px; }
+.saved-searches button:disabled { opacity: 0.55; cursor: not-allowed; }

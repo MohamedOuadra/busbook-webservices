@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TripSearch as TripSearchCriteria } from '../../models/trip-search';
 import { isTravelDate, todayDate } from '../../../../shared/utils/travel-date';
 import { SearchHistoryService } from '../../../../core/services/search-history.service';
+import { FavoriteRoute, FavoriteRoutesService } from '../../../../core/services/favorite-routes.service';
 
 @Component({
   selector: 'app-trip-search',
@@ -13,7 +14,9 @@ import { SearchHistoryService } from '../../../../core/services/search-history.s
 })
 export class TripSearch {
   readonly history = inject(SearchHistoryService);
+  readonly favorites = inject(FavoriteRoutesService);
   readonly storageMessage = signal('');
+  readonly favoriteMessage = signal('');
 
   @Output() search = new EventEmitter<TripSearchCriteria>();
 
@@ -42,6 +45,16 @@ export class TripSearch {
 
   clearHistory(): void {
     this.storageMessage.set(this.history.clear() ? '' : 'Search history could not be cleared in this browser.');
+  }
+
+  saveFavorite(): void {
+    const saved = this.favorites.add({ departure: this.departure, destination: this.destination });
+    this.favoriteMessage.set(saved ? 'Route saved in this browser.' :
+      'Could not save this route. Check both cities, browser storage, and the limit of 20 favorites.');
+  }
+
+  removeFavorite(route: FavoriteRoute): void {
+    this.favoriteMessage.set(this.favorites.remove(route) ? 'Favorite removed.' : 'Could not remove this favorite in this browser.');
   }
 
   onSwap(): void {

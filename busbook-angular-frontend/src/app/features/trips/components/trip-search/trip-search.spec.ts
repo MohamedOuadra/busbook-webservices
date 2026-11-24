@@ -62,4 +62,24 @@ describe('TripSearch', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).not.toContain('Recent searches');
   });
+
+  it('saves, reuses and removes a favorite route through the UI', async () => {
+    for (const [id, value] of [['departure', 'Agadir'], ['destination', 'Rabat'], ['date', '2099-12-02']]) {
+      const input = fixture.nativeElement.querySelector(`#${id}`) as HTMLInputElement;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    await fixture.whenStable();
+    const buttons = () => Array.from(fixture.nativeElement.querySelectorAll('button')) as HTMLButtonElement[];
+    buttons().find(button => button.textContent.trim() === 'Save this route')!.click();
+    fixture.detectChanges();
+    const emit = vi.spyOn(component.search, 'emit');
+    const favorite = fixture.nativeElement.querySelector('.favorite-route button') as HTMLButtonElement;
+    favorite.click();
+    expect(emit).toHaveBeenCalledWith({ departure: 'Agadir', destination: 'Rabat', date: '2099-12-02' });
+    (fixture.nativeElement.querySelector('.favorite-route button[aria-label]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(component.favorites.routes()).toEqual([]);
+    expect(fixture.nativeElement.querySelector('.favorite-route')).toBeNull();
+  });
 });
