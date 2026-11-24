@@ -287,3 +287,47 @@
     justify-content: space-between;
   }
 }
+
+/* Home page visual improvements */
+.hero-headline {
+  gap: 14px;
+  padding: 18px 0 12px;
+}
+
+.hero-tag-pill {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hero-tag-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.hero-title {
+  max-width: 850px;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.15;
+  letter-spacing: -1.2px;
+}
+
+.hero-sub {
+  max-width: 680px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .hero-headline {
+    gap: 12px;
+    padding: 10px 0;
+  }
+
+  .hero-title {
+    font-size: 29px;
+    line-height: 1.2;
+  }
+
+  .hero-sub {
+    font-size: 13.5px;
+  }
+}

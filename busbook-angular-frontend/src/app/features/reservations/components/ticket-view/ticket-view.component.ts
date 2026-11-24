@@ -8,7 +8,7 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
   standalone: true,
   imports: [QrCodeComponent],
   template: `
-    <div class="ticket-container">
+    <div class="ticket-container printable-ticket">
       <div class="ticket-card glass">
 
         <!-- Ticket Top Banner -->
@@ -48,7 +48,7 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
               </div>
 
               <div class="journey-arrow">
-                <span class="bus-info">{{ trip.bus.type || 'Confort' }} • {{ trip.bus.immatriculation || 'Standard' }}</span>
+                <span class="bus-info">{{ trip.bus.type || 'Confort' }} &bull; {{ trip.bus.immatriculation || 'Standard' }}</span>
                 <div class="arrow-visual">
                   <div class="arrow-dot start"></div>
                   <div class="arrow-line"></div>
@@ -115,9 +115,9 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
           <!-- Ticket Right: QR Code & Verification -->
           <div class="ticket-right">
             <div class="qr-wrapper">
-              <app-qr-code [value]="ticket.qrCode" [size]="145" />
+              <app-qr-code [value]="verificationUrl" [size]="145" />
             </div>
-            <span class="scan-instruction">Scan for fast boarding validation</span>
+            <span class="scan-instruction">Scan to verify at /verify-ticket</span>
             <div class="barcode-stub">
               <span class="security-code">REF: #{{ ticket.reservationId }}</span>
               <span class="security-hash">{{ ticket.ticketNumber }}</span>
@@ -129,11 +129,11 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
         <div class="ticket-footer no-print">
           <button class="btn-action btn-print" (click)="onPrint()" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-btn-svg">
-              <polyline points="6 9 6 2 18 2 18 9"/>
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-              <rect x="6" y="14" width="12" height="8"/>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Print / Save Ticket PDF
+            Télécharger / Imprimer le billet (PDF)
           </button>
 
           <button class="btn-action btn-home" (click)="onNewBooking.emit()" type="button">
@@ -141,7 +141,7 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
               <circle cx="11" cy="11" r="8"/>
               <path d="m21 21-4.3-4.3"/>
             </svg>
-            Find Another Trip
+            Nouvelle réservation
           </button>
         </div>
 
@@ -557,15 +557,26 @@ import { QrCodeComponent } from '../../../../shared/components/qr-code/qr-code.c
     }
 
     @media print {
+      :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
       .no-print {
         display: none !important;
       }
+      .ticket-container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
       .ticket-card {
         box-shadow: none !important;
-        border: 1px solid #000000 !important;
-      }
-      body {
+        border: 1px solid #d1d5db !important;
         background: #ffffff !important;
+      }
+      .ticket-banner {
+        background: #1D1D1B !important;
+        color: #ffffff !important;
       }
     }
   `]
@@ -575,8 +586,16 @@ export class TicketViewComponent {
   @Input({ required: true }) trip!: Trip;
   @Output() onNewBooking = new EventEmitter<void>();
 
+  get verificationUrl(): string {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:4200';
+    return `${origin}/verify-ticket?ticketNumber=${encodeURIComponent(this.ticket.ticketNumber)}`;
+  }
+
   onPrint(): void {
+    const originalTitle = document.title;
+    document.title = `BusBook-Ticket-${this.ticket.ticketNumber}`;
     window.print();
+    document.title = originalTitle;
   }
 
   formatTime(isoString: string): string {
@@ -587,7 +606,6 @@ export class TicketViewComponent {
 
   formatDate(isoString: string): string {
     if (!isoString) return '';
-    const datePart = isoString.split('T')[0];
-    return datePart;
+    return isoString.split('T')[0];
   }
 }

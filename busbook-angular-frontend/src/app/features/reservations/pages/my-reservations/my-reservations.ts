@@ -13,6 +13,7 @@ export interface ReservationWithTrip {
   reservation: ReservationResponse;
   trip?: Trip;
   isExpired: boolean;
+  normalizedStatus: 'CONFIRMED' | 'PENDING' | 'CANCELLED' | 'EXPIRED';
 }
 
 export type BookingFilter = 'ALL' | 'CONFIRMED' | 'PENDING' | 'CANCELLED';
@@ -25,42 +26,36 @@ export type BookingFilter = 'ALL' | 'CONFIRMED' | 'PENDING' | 'CANCELLED';
   styleUrl: './my-reservations.css',
 })
 export class MyReservationsPage implements OnInit {
-  // Reactive state signals
   readonly reservations = signal<ReservationWithTrip[]>([]);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly activeFilter = signal<BookingFilter>('ALL');
+  readonly toastMessage = signal<{ text: string; type: 'success' | 'error' } | null>(null);
+  readonly cancellingId = signal<number | null>(null);
 
-  // Expose current auth user
   readonly currentUser = computed(() => this.authService.currentUser());
 
-  // Filtered reservations computed
   readonly filteredReservations = computed(() => {
     const list = this.reservations();
     const filter = this.activeFilter();
 
     switch (filter) {
       case 'CONFIRMED':
-        return list.filter((item) => item.reservation.status === 'CONFIRMEE');
+        return list.filter((item) => item.normalizedStatus === 'CONFIRMED');
       case 'PENDING':
-        return list.filter(
-          (item) => item.reservation.status === 'EN_ATTENTE' && !item.isExpired
-        );
+        return list.filter((item) => item.normalizedStatus === 'PENDING' && !item.isExpired);
       case 'CANCELLED':
-        return list.filter(
-          (item) => item.reservation.status === 'ANNULEE' || item.isExpired
-        );
+        return list.filter((item) => item.normalizedStatus === 'CANCELLED' || item.isExpired);
       default:
         return list;
     }
   });
 
-  // Summary counts
   readonly confirmedCount = computed(
-    () => this.reservations().filter((i) => i.reservation.status === 'CONFIRMEE').length
+    () => this.reservations().filter((i) => i.normalizedStatus === 'CONFIRMED').length
   );
   readonly pendingCount = computed(
-    () => this.reservations().filter((i) => i.reservation.status === 'EN_ATTENTE' && !i.isExpired).length
+    () => this.reservations().filter((i) => i.normalizedStatus === 'PENDING' && !i.isExpired).length
   );
 
   constructor(
@@ -81,6 +76,19 @@ export class MyReservationsPage implements OnInit {
     this.activeFilter.set(filter);
   }
 
+  private normalizeStatus(status: string): 'CONFIRMED' | 'PENDING' | 'CANCELLED' | 'EXPIRED' {
+    const upper = (status || '').toUpperCase();
+    if (upper === 'CONFIRMEE' || upper === 'CONFIRMED') return 'CONFIRMED';
+    if (upper === 'ANNULEE' || upper === 'CANCELLED') return 'CANCELLED';
+    if (upper === 'EXPIREE' || upper === 'EXPIRED') return 'EXPIRED';
+    return 'PENDING';
+  }
+
+  private showToast(text: string, type: 'success' | 'error' = 'success'): void {
+    this.toastMessage.set({ text, type });
+    setTimeout(() => this.toastMessage.set(null), 4000);
+  }
+
   loadReservations(): void {
     const user = this.currentUser();
     if (!user) {
@@ -95,13 +103,16 @@ export class MyReservationsPage implements OnInit {
     this.reservationApi.getReservationsByTravelerId(user.id).subscribe({
       next: (list: ReservationResponse[]) => {
         const now = new Date();
-        const items: ReservationWithTrip[] = (list || []).map((res: ReservationResponse) => {
+        const sorted = [...(list || [])].sort((a, b) => b.id - a.id);
+
+        const items: ReservationWithTrip[] = sorted.map((res: ReservationResponse) => {
+          const normalizedStatus = this.normalizeStatus(res.status);
           const expires = res.expiresAt ? new Date(res.expiresAt) : null;
           const isExpired =
-            res.status === 'EXPIREE' ||
-            (res.status === 'EN_ATTENTE' && expires !== null && expires <= now);
+            normalizedStatus === 'EXPIRED' ||
+            (normalizedStatus === 'PENDING' && expires !== null && expires <= now);
 
-          const item: ReservationWithTrip = { reservation: res, isExpired };
+          const item: ReservationWithTrip = { reservation: res, isExpired, normalizedStatus };
 
           this.tripService.getTripById(res.tripId).subscribe((trip) => {
             item.trip = trip;
@@ -127,22 +138,28 @@ export class MyReservationsPage implements OnInit {
         this.router.navigate(['/ticket', ticket.ticketNumber]);
       },
       error: () => {
-        alert('Ticket not yet generated for this reservation.');
+        this.showToast('Billet introuvable ou en cours de génération pour cette réservation.', 'error');
       },
     });
   }
 
-  cancelReservation(id: number): void {
-    if (!confirm('Are you sure you want to cancel this reservation?')) {
-      return;
-    }
+  requestCancel(id: number): void {
+    this.cancellingId.set(id);
+  }
 
+  abortCancel(): void {
+    this.cancellingId.set(null);
+  }
+
+  confirmCancel(id: number): void {
+    this.cancellingId.set(null);
     this.reservationApi.cancelReservation(id).subscribe({
       next: () => {
+        this.showToast(`Réservation #${id} annulée avec succès.`, 'success');
         this.loadReservations();
       },
       error: (err) => {
-        alert(err.error?.message || 'Error cancelling reservation.');
+        this.showToast(err.error?.message || "Impossible d'annuler cette réservation.", 'error');
       },
     });
   }

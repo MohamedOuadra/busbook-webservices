@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "85cf2794-8bfb-47e2-8ed8-eec354121893"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -38,7 +39,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "600kB",
+                  "maximumWarning": "1MB",
                   "maximumError": "1.5MB"
                 },
                 {
