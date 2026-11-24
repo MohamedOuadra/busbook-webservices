@@ -1,0 +1,63 @@
+{
+  "info": {
+    "name": "BusBook - Payment Service API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8083",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Traitement paiement (POST /api/payments)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"reservationId\": 1, \"amount\": 120.0, \"paymentMethod\": \"CARTE_BANCAIRE\"}"
+        },
+        "url": "{{baseUrl}}/api/payments"
+      }
+    },
+    {
+      "name": "02 - Consultation paiement par ID (GET /api/payments/1)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/payments/1"
+      }
+    },
+    {
+      "name": "03 - Paiement par reservationId (GET /api/payments/reservation/1)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/payments/reservation/1"
+      }
+    },
+    {
+      "name": "04 - [Simulation echec] Rejet anomalie bancaire",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"reservationId\": 999, \"amount\": 120.0, \"simulateFailure\": true}"
+        },
+        "url": "{{baseUrl}}/api/payments"
+      }
+    }
+  ]
+}
