@@ -5,7 +5,7 @@
     <div class="header-content">
       <span class="section-label">ACCOUNT CONFIGURATION</span>
       <h2>Account & Preferences</h2>
-      <p>Manage your passenger profile, travel habits, notifications and security settings.</p>
+      <p>View your passenger profile and remember travel choices on this device.</p>
     </div>
 
     @if (currentUser(); as user) {
@@ -58,11 +58,11 @@
           </div>
           <div>
             <h3>Personal Information</h3>
-            <p>Your identity as printed on e-tickets and boarding passes</p>
+            <p>Account details are shown for reference. Saving preferences does not change your account.</p>
           </div>
         </div>
 
-        <form (ngSubmit)="saveProfile()" class="settings-form">
+        <form class="settings-form">
           <div class="form-group">
             <label for="fullName">Full Name</label>
             <div class="input-with-icon">
@@ -75,6 +75,7 @@
                 type="text"
                 name="fullName"
                 [(ngModel)]="fullName"
+                readonly
                 placeholder="e.g. Anass Mansouri"
                 required
               />
@@ -93,6 +94,7 @@
                 type="email"
                 name="email"
                 [(ngModel)]="email"
+                readonly
                 placeholder="anass@example.com"
                 required
               />
@@ -111,27 +113,13 @@
                 type="tel"
                 name="phoneNumber"
                 [(ngModel)]="phoneNumber"
-                placeholder="+212 600-000000"
+                readonly
+                placeholder="Not available"
               />
             </div>
-            <span class="field-hint">Used for instant SMS updates regarding bus departure delay.</span>
+            <span class="field-hint">Contact details are managed by your account.</span>
           </div>
 
-          <div class="form-actions">
-            <button type="submit" class="btn-save" [disabled]="isSaving()">
-              @if (isSaving()) {
-                <span class="mini-spinner"></span>
-                Saving...
-              } @else {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-svg">
-                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                  <polyline points="17 21 17 13 7 13 7 21"/>
-                  <polyline points="7 3 7 8 15 8"/>
-                </svg>
-                Save Profile
-              }
-            </button>
-          </div>
         </form>
       </section>
 
@@ -150,7 +138,7 @@
           </div>
           <div>
             <h3>Travel Preferences</h3>
-            <p>Customize your seat selection and default journey parameters</p>
+            <p>Remember your seat and departure choices for future visits to settings.</p>
           </div>
         </div>
 
@@ -201,7 +189,7 @@
           </div>
           <div>
             <h3>Notifications & Alerts</h3>
-            <p>Choose how BusBook informs you about journeys</p>
+            <p>Saved choices only. Notification delivery is not activated by these settings.</p>
           </div>
         </div>
 
@@ -244,7 +232,7 @@
           </div>
           <div>
             <h3>Regional & Language</h3>
-            <p>Currency and display language</p>
+            <p>Remember your choices. Prices remain in MAD and the interface language is unchanged.</p>
           </div>
         </div>
 
@@ -308,4 +296,10 @@
 
   </div>
 
+  <div class="form-actions">
+    <button type="button" class="btn-save" (click)="savePreferences()" [disabled]="isSaving()">
+      Save Preferences
+    </button>
+    <p>Preferences are remembered on this device for your account.</p>
+  </div>
 </div>
