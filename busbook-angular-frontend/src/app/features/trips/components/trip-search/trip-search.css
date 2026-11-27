@@ -260,3 +260,10 @@
     grid-column: span 1;
   }
 }
+.saved-searches { margin-top: 20px; padding-top: 16px; border-top: 1px solid #d0ddd4; }
+.saved-searches-heading, .saved-searches-list { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.saved-searches-heading { justify-content: space-between; margin-bottom: 12px; }
+.saved-searches button { white-space: normal; text-align: left; }
+.saved-searches button:focus-visible { outline: 3px solid #278245; outline-offset: 2px; }
+.favorite-route { display: flex; flex-wrap: wrap; gap: 4px; }
+.saved-searches button:disabled { opacity: 0.55; cursor: not-allowed; }

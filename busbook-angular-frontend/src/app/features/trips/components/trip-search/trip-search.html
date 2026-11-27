@@ -124,5 +124,44 @@
         Agadir → Marrakech
       </button>
     </div>
+    <div class="saved-searches" aria-label="Favorite routes">
+      <div class="saved-searches-heading">
+        <strong>Favorite routes</strong>
+        <button type="button" class="chip-route" (click)="saveFavorite()"
+          [disabled]="!departure.trim() || !destination.trim()">Save this route</button>
+      </div>
+      <div class="saved-searches-list">
+        @for (route of favorites.routes(); track $index) {
+          <div class="favorite-route">
+            <button type="button" class="chip-route" (click)="selectRoute(route.departure, route.destination)">
+              {{ route.departure }} → {{ route.destination }}
+            </button>
+            <button type="button" class="chip-route" (click)="removeFavorite(route)"
+              [attr.aria-label]="'Remove favorite ' + route.departure + ' to ' + route.destination">Remove</button>
+          </div>
+        } @empty {
+          <p>Save a route to search it again with your selected travel date.</p>
+        }
+      </div>
+      @if (favoriteMessage()) { <p role="status">{{ favoriteMessage() }}</p> }
+    </div>
+    @if (history.recent().length) {
+      <div class="saved-searches" aria-label="Recent searches">
+        <div class="saved-searches-heading">
+          <strong>Recent searches</strong>
+          <button type="button" class="chip-route" (click)="clearHistory()">Clear history</button>
+        </div>
+        <div class="saved-searches-list">
+          @for (entry of history.recent(); track $index) {
+            <button type="button" class="chip-route" (click)="repeatSearch(entry)">
+              {{ entry.departure }} → {{ entry.destination }} · {{ entry.date }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+    @if (storageMessage()) {
+      <p role="status">{{ storageMessage() }}</p>
+    }
   </form>
 </div>
